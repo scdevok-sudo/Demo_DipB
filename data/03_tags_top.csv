@@ -1,0 +1,401 @@
+term_id,name,slug,count
+33,Diputados,diputados,4473
+8217,coronavirus,coronavirus,3923
+8152,"Provincia de Buenos Aires",provincia_de_buenos_aires,3767
+2415,"Axel Kicillof",axel_kicillof,3758
+40,"Legislatura bonaerense",legislatura_bonaerense,3670
+15557,"Javier Milei",javier_milei,2796
+67,Kicillof,kicillof,2792
+8791,pandemia.,pandemia,2490
+2780,"Alberto Fernández",alberto_fernandez,2348
+20,"La Plata",la_plata,2344
+19112,Milei,milei,2249
+221,"Mar del Plata",mar_del_plata,1942
+8472,covid-19,covid_19,1922
+61,Legislatura,legislatura,1787
+6329,"Juntos por el Cambio",juntos_por_el_cambio,1775
+20629,"la libertad avanza",la-libertad-avanza,1741
+52,"Senado bonaerense",senado_bonaerense,1688
+1665,"Gobierno nacional",gobierno_nacional,1605
+307,"Cristina Kirchner",cristina_kirchner,1426
+31,Vidal,vidal,1393
+37,Congreso,congreso,1371
+86,Senado,senado,1109
+2347,PRO,pro,1104
+6341,"Frente de Todos",frente_de_todos,1083
+32,Macri,macri,1012
+24856,"Unión por la Patria",union-por-la-patria,986
+1089,Massa,massa,969
+25,Provincia,provincia,962
+677,Inflación,inflacion,924
+38,"Bahía Blanca",bahia_blanca,898
+66,Senadores,senadores,878
+4545,PASO,paso,877
+8842,Cuarentena,cuarentena,862
+13589,"Elecciones 2023",elecciones_2023,855
+4132,"Sergio Massa",sergio_massa,803
+1327,FMI,fmi,773
+1781,UCR,ucr,769
+3281,elecciones,elecciones,740
+588,Indec,indec,628
+1128,"Patricia Bullrich",patricia_bullrich,626
+429,Intendentes,intendentes,620
+63,Salud,salud,612
+798,IOMA,ioma,604
+134,Gobierno,gobierno,598
+289,"Mauricio Macri",mauricio_macri,597
+106,CGT,cgt,576
+2327,"Gobierno bonaerense",gobierno_bonaerense,572
+28631,"Elecciones 2025",elecciones-2025,557
+153,Cambiemos,cambiemos,554
+33130,"Fuerza Patria",fuerza-patria,528
+114,Bullrich,bullrich,520
+997,Paritarias,paritarias,519
+3410,AMBA,amba,510
+69,Justicia,justicia,496
+938,Anses,anses,496
+418,Paro,paro,492
+110,docentes,docentes,491
+1102,Argentina,argentina,483
+167,despidos,despidos,460
+82,Economía,economia,453
+8799,contagios,contagios,449
+848,Dólar,dolar,441
+906,ATE,ate,421
+203,Berisso,berisso,411
+102,"Violencia de Género",violencia_de_genero,406
+8938,aislamiento,aislamiento,404
+237,"La Costa",la_costa,393
+543,Policiales,policiales,393
+80,Jubilados,jubilados,392
+220,escuelas,escuelas,387
+325,Ley,ley,384
+50,Radicalismo,radicalismo,382
+2401,"Luis Caputo",luis_caputo,382
+4838,"Sergio Berni",sergio_berni,381
+185,Aumento,aumento,371
+288,"Cámara de Diputados",camara_de_diputados,371
+7905,"Carlos Bianco",carlos_bianco,360
+7872,"Daniel Gollan",daniel_gollan,357
+445,Ensenada,ensenada,352
+619,"Máximo Kirchner",maximo_kirchner,348
+296,deuda,deuda,346
+378,"María Eugenia Vidal",maria_eugenia_vidal,344
+173,aumentos,aumentos,342
+693,"Julio Garro",julio_garro,340
+969,"Frente Renovador",frente_renovador,338
+17465,Juntos,juntos,327
+456,Seguridad,seguridad,326
+2463,"Estatales bonaerenses",estatales_bonaerenses,319
+56,Educación,educacion,316
+111,paritaria,paritaria,316
+1986,"Ministerio de Salud",ministerio_de_salud,315
+169,Municipios,municipios,312
+2843,"Corte Suprema",corte_suprema,312
+1087,crisis,crisis,307
+47,pymes,pymes,302
+585,Inseguridad,inseguridad,302
+27239,"manuel adorni",manuel-adorni,300
+447,"Diputados bonaerenses",diputados_bonaerenses,297
+1927,"Horacio Rodríguez Larreta",horacio_rodriguez_larreta,296
+1095,salarios,salarios,294
+44,"Reforma laboral",reforma_laboral,292
+121,marcha,marcha,292
+833,Turismo,turismo,288
+634,"policía bonaerense",policia_bonaerense,286
+2369,"Guillermo Montenegro",guillermo_montenegro,285
+1360,Campo,campo,284
+865,"La Matanza",la_matanza,283
+13071,"Ministerio de Salud de la Nación",ministerio_de_salud_de_la_nacion,283
+624,Moreno,moreno,280
+148,"Banco Central",banco_central,278
+574,policía,policia,275
+129,gobernadores,gobernadores,274
+458,DNU,dnu,274
+11881,"Elecciones 2021",elecciones_2021,272
+27,Garro,garro,271
+25936,"Karina Milei",karina-milei,271
+2393,"Docentes bonaerenses",docentes_bonaerenses,270
+27160,"Ley Omnibus",ley-omnibus,269
+25920,LLA,lla,268
+5234,"La Cámpora",la_campora,265
+465,"Banco Provincia",banco_provincia,263
+2711,Caputo,caputo,263
+10040,"Diego Santilli",diego_santilli,261
+836,"Villa Gesell",villa_gesell,253
+1035,Peronismo,peronismo,252
+654,Obras,obras,250
+2771,endeudamiento,endeudamiento,250
+39,Presupuesto,presupuesto,247
+369,proyecto,proyecto,242
+5773,"Espionaje ilegal",espionaje_ilegal,242
+76,nación,nacion,239
+1400,oposición,oposicion,238
+1016,PJ,pj,237
+4963,"Ley Impositiva",ley_impositiva,236
+1756,"Maximiliano Abad",maximiliano_abad,234
+310,estatales,estatales,232
+577,tarifas,tarifas,232
+586,pobreza,pobreza,232
+1088,precios,precios,232
+8469,"Julio Alak",julio_alak,229
+22232,"atentado a Cristina Kirchner",atentado-a-cristina-kirchner,229
+103,género,genero,228
+1928,Larreta,larreta,227
+11711,"UCR bonaerense",ucr_bonaerense,224
+864,"Lomas de Zamora",lomas_de_zamora,223
+15707,"segunda ola",segunda_ola,223
+4555,"Ministerio de Economía",ministerio_de_economia,219
+77,"Ara San Juan",ara_san_juan,217
+3240,Alimentos,alimentos,217
+402,bonaerenses,bonaerenses,216
+12188,"Pandemia de coronavirus",pandemia_de_coronavirus,216
+649,"Concejo Deliberante",concejo_deliberante,215
+2861,"Verónica Magario",veronica_magario,215
+177,Gas,gas,214
+1144,YPF,ypf,213
+740,médicos,medicos,212
+17231,"causa vialidad",causa_vialidad,212
+122,sesión,sesion,211
+1216,comisiones,comisiones,210
+25747,"Guillermo Francos",guillermo-francos,210
+27499,"UCR + Cambio Federal",ucr-cambio-federal,210
+3703,Fernández,fernandez,209
+1017,"pj bonaerense",pj_bonaerense,204
+1769,Emergencia,emergencia,202
+870,Lanús,lanus,201
+128,"Congreso de la Nación",congreso_de_la_nacion,200
+176,Luz,luz,200
+1652,Aborto,aborto,200
+9089,"Crisis sanitaria",crisis_sanitaria,197
+24657,"Victoria Villarruel",victoria-villarruel,196
+23041,Índec,indec-2,193
+793,Pensionados,pensionados,192
+14084,"Mauricio Macri ",mauricio_macri_nbsp,192
+801,"Buenos Aires",buenos_aires,187
+1050,Campana,campana,187
+2007,"Asamblea legislativa",asamblea_legislativa,187
+8086,"Nicolás Kreplak",nicolas_kreplak,186
+256,"derechos humanos",derechos_humanos,185
+742,hospitales,hospitales,184
+2856,coparticipación,coparticipacion,184
+2142,Magario,magario,183
+431,Quilmes,quilmes,181
+11173,"Sputnik V",sputnik_v,181
+1460,ARBA,arba,179
+11126,"clases presenciales",clases_presenciales,179
+136,bonaerense,bonaerense,178
+27811,"Ley Bases",ley-bases,178
+65,Ritondo,ritondo,175
+8141,"Martín Guzmán",martin_guzman,174
+371,Trabajadores,trabajadores,173
+9905,"Aislamiento social",aislamiento_social,173
+1236,AFIP,afip,171
+5713,Alak,alak,170
+309,Gremios,gremios,168
+502,Suteba,suteba,168
+744,Cicop,cicop,167
+2935,muertes,muertes,167
+249,intendente,intendente,166
+8028,"Homero Giles",homero_giles,166
+79,jubilaciones,jubilaciones,165
+467,denuncia,denuncia,165
+4682,"Crisis económica",crisis_economica,165
+25890,"Diego Garciarena",diego-garciarena,164
+1672,Asesinato,asesinato,163
+32024,"Coalicion Civica",coalicion-civica-2,163
+2512,"Teresa García",teresa_garcia,162
+2250,AJB,ajb,161
+1034,Consumo,consumo,160
+5080,"impuesto a las Ganancias",impuesto_a_las_ganancias,160
+6468,Balotaje,balotaje,159
+11904,"Diputados bonaerense",diputados_bonaerense,157
+10117,COVID,covid,156
+485,Balcarce,balcarce,155
+993,Tandil,tandil,155
+494,UNLP,unlp,154
+1814,CAME,came,154
+10771,"Coronavirus en Argentina",coronavirus_en_argentina,153
+527,transporte,transporte,152
+1757,Abad,abad,152
+5314,Montenegro,montenegro,152
+8421,"Estados Unidos",estados_unidos,152
+232,"Congreso nacional",congreso_nacional,151
+6890,"Facundo Manes",facundo_manes,151
+109,Kirchnerismo,kirchnerismo,150
+896,"Monte Hermoso",monte_hermoso,149
+2447,"aborto legal",aborto_legal,149
+4159,"Ley de alquileres",ley_de_alquileres,148
+591,Conurbano,conurbano,147
+1561,"Casa Rosada",casa_rosada,147
+238,Pinamar,pinamar,146
+19005,Inflacion,inflacion-2,146
+32383,"Estados Únidos",estados-unidos,146
+2298,femicidio,femicidio,145
+8280,"Santiago Cafiero",santiago_cafiero,145
+8975,"Conurbano bonaerense",conurbano_bonaerense,145
+267,colectivos,colectivos,144
+1516,Industria,industria,143
+1908,vacuna,vacuna,143
+236,"Partido de La Costa",partido_de_la_costa,142
+1268,subsidios,subsidios,142
+461,Saintout,saintout,141
+876,CABA,caba,140
+5972,"Consejo de la Magistratura",consejo_de_la_magistratura,140
+1904,diputado,diputado,139
+3909,"Aerolíneas Argentinas",aerolineas_argentinas,139
+6439,Cagliardi,cagliardi,138
+14136,"campaña de vacunación",campana_de_vacunacion,138
+178,Tarifazos,tarifazos,137
+4367,vacunas,vacunas,137
+444,Secco,secco,136
+489,Temporal,temporal,135
+1068,Necochea,necochea,135
+3385,Carbap,carbap,135
+11037,"Temporada de verano",temporada_de_verano,135
+12868,"Corte Suprema de Justicia",corte_suprema_de_justicia,135
+33523,"Presupuesto 2026",presupuesto-2026,135
+2245,Avellaneda,avellaneda,134
+2739,Femicidios,femicidios,134
+3614,Berni,berni,134
+459,"Mayra Mendoza",mayra_mendoza,133
+921,retenciones,retenciones,133
+5818,AFI,afi,133
+204,Nedela,nedela,132
+3155,Cárceles,carceles,132
+8900,"Carla Vizzotti",carla_vizzotti,132
+13549,"acuerdo con el fmi",acuerdo_con_el_fmi,132
+279,Castello,castello,130
+1598,"Susana González",susana_gonzalez,129
+1914,encuesta,encuesta,129
+3968,casos,casos,129
+8068,"Pablo López",pablo_lopez,129
+723,parte,parte,128
+1692,UTA,uta,128
+25739,"Sebastián Pareja",sebastian-pareja,128
+26676,"Gustavo Pulti",gustavo-pulti,128
+862,Edesur,edesur,127
+26423,"Martín Menem",martin-menem,127
+27276,Adorni,adorni,127
+319,Agua,agua,126
+453,Massismo,massismo,126
+1703,"Ministerio de Seguridad",ministerio_de_seguridad,126
+4594,"Donald Trump",donald_trump,126
+12993,"Judiciales bonaerenses",judiciales_bonaerenses,126
+955,CTA,cta,125
+1218,mujeres,mujeres,125
+9626,Kreplak,kreplak,125
+320,ABSA,absa,124
+712,Junín,junin,124
+866,Tigre,tigre,124
+104,"Ni Una Menos",ni_una_menos,122
+315,"Papa Francisco",papa_francisco,122
+7967,"Augusto Costa",augusto_costa,122
+9484,"Mesa Judicial",mesa_judicial,122
+750,"Senadores bonaerenses",senadores_bonaerenses,121
+1799,"Unidad Ciudadana",unidad_ciudadana,121
+594,"Ministerio de Trabajo",ministerio_de_trabajo,120
+917,Municipales,municipales,120
+26123,"Silvina Vaccarezza",silvina-vaccarezza,120
+277,muertos,muertos,119
+779,"Senado de la Nación",senado_de_la_nacion,119
+2530,Malvinas,malvinas,119
+184,Combustibles,combustibles,118
+440,Bapro,bapro,118
+905,Rusia,rusia,118
+1171,Alquileres,alquileres,118
+1923,Rechazo,rechazo,118
+5954,"aumento salarial",aumento_salarial,118
+25746,Francos,francos,118
+878,Tarifazo,tarifazo,117
+5352,"Coalición Cívica",coalicion_civica,117
+113,sindicatos,sindicatos,116
+146,Impuestos,impuestos,116
+292,Protesta,protesta,116
+589,Trabajo,trabajo,116
+3367,empresas,empresas,116
+8188,"Gabriel Katopodis",gabriel_katopodis,116
+30502,"Presupuesto 2025",presupuesto-2025,116
+6168,Santilli,santilli,114
+8133,"Fernando Báez Sosa",fernando_baez_sosa,114
+8882,restricciones,restricciones,114
+2371,"Guillermo Castello",guillermo_castello,113
+6738,Grindetti,grindetti,113
+7227,"Unión Cívica Radical",union_civica_radical,113
+7534,"reelecciones indefinidas",reelecciones_indefinidas,113
+611,Robo,robo,112
+733,Conflicto,conflicto,112
+893,"Tres de Febrero",tres_de_febrero,112
+1764,Gabinete,gabinete,112
+2586,judiciales,judiciales,112
+3156,Susbielles,susbielles,112
+7472,"Luciano Bugallo",luciano_bugallo,112
+7497,Bianco,bianco,112
+7779,"Cristian Cardozo",cristian_cardozo,112
+324,Cierre,cierre,111
+547,Bono,bono,111
+959,"Florencio Varela",florencio_varela,111
+4967,China,china,111
+26180,villarruel,villarruel,111
+627,"Carolina Piparo",carolina_piparo,110
+867,Pilar,pilar,110
+1154,docente,docente,110
+3282,Interna,interna,110
+14142,"legisladores bonaerenses",legisladores_bonaerenses,110
+643,supermercados,supermercados,109
+3505,"Fernanda Raverta",fernanda_raverta,109
+90,Córdoba,cordoba,108
+1724,"Fin de semana largo",fin_de_semana_largo,108
+3778,"Paro general",paro_general,108
+6335,Todos,todos,108
+27241,"javier alonso",javier-alonso,108
+30559,"Ley de Financiamiento Universitario",ley-de-financiamiento-universitario,108
+3587,"Jorge Macri",jorge_macri,107
+4722,Brasil,brasil,107
+4957,construcción,construccion,107
+849,"Federico Sturzenegger",federico_sturzenegger,106
+7935,"Mesa de Enlace",mesa_de_enlace,106
+287,Legisladores,legisladores,105
+2519,"Facundo Tignanelli",facundo_tignanelli,105
+119,Cristina,cristina,104
+8203,"Agustina Vila",agustina_vila,104
+27008,"Sandra Pettovello",sandra-pettovello,104
+376,IPS,ips,103
+3219,FUDB,fudb,103
+4035,VTV,vtv,103
+6539,"Malena Galmarini",malena_galmarini,102
+26835,"rodolfo aguiar",rodolfo-aguiar,102
+361,Informe,informe,101
+1367,"Planes Sociales",planes_sociales,100
+1530,Salarial,salarial,100
+8878,"Ministerio de Transporte",ministerio_de_transporte,100
+12416,"actividad industrial",actividad_industrial,100
+28398,"Carlos Curestis",carlos-curestis,100
+117,"Alejandra Lorden",alejandra_lorden,99
+226,"Senado nacional",senado_nacional,99
+549,"Boletín Oficial",boletin_oficial,99
+1213,Universidades,universidades,99
+1532,Clases,clases,99
+1826,Salvador,salvador,99
+5146,"Frente de Izquierda",frente_de_izquierda,99
+8126,Rugbiers,rugbiers,99
+10286,"Servicio Meteorológico Nacional",servicio_meteorologico_nacional,99
+229,"San Nicolás",san_nicolas,98
+3083,presos,presos,98
+8056,"Federico Otermín",federico_otermin,98
+9313,IFE,ife,98
+21531,"Presupuesto 2023",presupuesto-2023,98
+24091,"Jose Luis Espert",jose-luis-espert,98
+653,Inundaciones,inundaciones,97
+910,Azul,azul,97
+1601,"Pablo Moyano",pablo_moyano,97
+2090,Sequía,sequia,97
+2378,"Juicio Político",juicio_politico,97
+25021,UxP,uxp,97
+29145,"Marcelo Leguizamon",marcelo-leguizamon-2,97
+1368,"Organizaciones sociales",organizaciones_sociales,96
+10016,"Distanciamiento Social",distanciamiento_social,96
+5232,"Abuso Sexual",abuso_sexual,95
+6542,"Aníbal Fernández",anibal_fernandez,95
+7772,"Ginés González García",gines_gonzalez_garcia,95
+13154,"Paro de Colectivos",paro_de_colectivos,95

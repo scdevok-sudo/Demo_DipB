@@ -1,0 +1,22 @@
+--- menu 16390
+db_id,title,link,menu_item_parent,position
+42719,Home,https://diputadosbsas.com.ar/,0,1
+42722,"Legislatura Bonaerense",https://diputadosbsas.com.ar/seccion/legislatura/,0,2
+42721,Congreso,https://diputadosbsas.com.ar/seccion/congreso/,0,3
+42724,Nación,https://diputadosbsas.com.ar/seccion/nacion/,0,4
+42726,Provincia,https://diputadosbsas.com.ar/seccion/provincia/,0,5
+42723,Municipios,https://diputadosbsas.com.ar/seccion/municipios/,0,6
+310919,"Colegios Profesionales",https://diputadosbsas.com.ar/seccion/colegios-profesionales/,0,7
+42725,Opinión,https://diputadosbsas.com.ar/seccion/opinion/,0,8
+42720,"Diputados Bonaerenses",https://diputadosbsas.com.ar/diputados-bonaerenses/,0,9
+--- menu 16388
+db_id,title,link,menu_item_parent,position
+4554,Inicio,/,0,1
+4556,"Legislatura Bonaerense",https://diputadosbsas.com.ar/seccion/legislatura/,0,2
+4555,Congreso,https://diputadosbsas.com.ar/seccion/congreso/,0,3
+4558,Nación,https://diputadosbsas.com.ar/seccion/nacion/,0,4
+4560,Provincia,https://diputadosbsas.com.ar/seccion/provincia/,0,5
+4557,Municipios,https://diputadosbsas.com.ar/seccion/municipios/,0,6
+4559,Opinión,https://diputadosbsas.com.ar/seccion/opinion/,0,7
+310920,"Colegios Profesionales",https://diputadosbsas.com.ar/seccion/colegios-profesionales/,0,8
+42760,"Soy tu candidato",https://diputadosbsas.com.ar/seccion/soy_tu_candidato/,0,9
