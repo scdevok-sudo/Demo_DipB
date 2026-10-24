@@ -1,0 +1,18 @@
+term_id,name,slug,parent,count
+16389,Cables,cables,0,6461
+32945,"Colegios profesionales",colegios-profesionales,0,150
+16382,Congreso,congreso,0,2855
+2,Destacada,destacada,0,4
+18780,"Destacada Inferior",destacada-inferior,0,3
+19127,"Elecciones 2021",elecciones-2021,0,47
+24926,"Elecciones 2023",elecciones-2023,0,1286
+33134,"Elecciones 2025",elecciones-2025,0,584
+16383,"Legislatura Bonaerense",legislatura,0,12577
+16380,Municipios,municipios,0,7430
+16381,Nación,nacion,0,19346
+16384,Opinión,opinion,0,166
+19380,Presupuesto,presupuesto,16383,70
+16379,Provincia,provincia,0,11331
+16386,"Radio Alquimia",radio_alquimia,0,24
+1,"Sin categoría",sin-categoria,0,17
+16391,"Soy tu candidato",soy_tu_candidato,0,68

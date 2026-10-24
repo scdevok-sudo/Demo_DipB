@@ -1,0 +1,105 @@
+== Bloques en la Home (conteo)
+     45 [vc_column
+     35 [td_block_ad_box
+     24 [vc_row
+      8 [td_flex_block_1
+      6 [td_block_big_grid_flex_1
+      2 [vc_separator
+      1 [vc_row_inner
+      1 [vc_raw_html
+      1 [vc_column_inner
+      1 [tdc_zone
+      1 [td_block_slide
+      1 [td_block_big_grid_flex_2
+      1 [td_block_14
+
+== Bloques de noticias (primeros 60)
+[td_block_big_grid_flex_1 grid_layout="1" image_height="eyJhbGwiOiI3MCIsInBob25lIjoiMTMzIn0=" meta_info_vert="content-vert-bottom" modules_category="above" overlay_general="eyJ0eXBlIjoiZ3JhZGllbnQiLCJjb2xvcjEiOiJyZ2JhKDAsMCwwLDApIiwiY29sb3IyIjoicmdiYSgwLDAsMCwwLjcpIiwibWl4ZWRDb2xvcnMiOlt7ImNvbG9yIjo
+[td_flex_block_1 modules_on_row="" limit="2" hide_audio="yes" modules_gap="" show_btn="none" show_excerpt="none" show_com="none" show_review="none" show_date="none" show_author="none" tdc_css="eyJhbGwiOnsibWFyZ2luLWJvdHRvbSI6IjIwIiwiZGlzcGxheSI6IiJ9fQ==" video_popup="" meta_padding="eyJwaG9uZSI6IjEz
+[td_block_big_grid_flex_1 grid_layout="1" image_height="eyJhbGwiOiIxMTAiLCJwaG9uZSI6IjgwIn0=" meta_info_vert="content-vert-bottom" modules_category="above" overlay_general="eyJ0eXBlIjoiZ3JhZGllbnQiLCJjb2xvcjEiOiJyZ2JhKDAsMCwwLDApIiwiY29sb3IyIjoicmdiYSgwLDAsMCwwLjcpIiwibWl4ZWRDb2xvcnMiOlt7ImNvbG9yIjo
+[td_block_big_grid_flex_1 grid_layout="1" image_height="eyJhbGwiOiIxMTAiLCJwaG9uZSI6IjgwIn0=" meta_info_vert="content-vert-bottom" modules_category="above" overlay_general="eyJ0eXBlIjoiZ3JhZGllbnQiLCJjb2xvcjEiOiJyZ2JhKDAsMCwwLDApIiwiY29sb3IyIjoicmdiYSgwLDAsMCwwLjcpIiwibWl4ZWRDb2xvcnMiOlt7ImNvbG9yIjo
+[td_block_big_grid_flex_1 grid_layout="1" image_height="eyJhbGwiOiIxMTAiLCJwaG9uZSI6IjgwIn0=" meta_info_vert="content-vert-bottom" modules_category="above" overlay_general="eyJ0eXBlIjoiZ3JhZGllbnQiLCJjb2xvcjEiOiJyZ2JhKDAsMCwwLDApIiwiY29sb3IyIjoicmdiYSgwLDAsMCwwLjcpIiwibWl4ZWRDb2xvcnMiOlt7ImNvbG9yIjo
+[td_block_ad_box spot_img_horiz="content-horiz-center" media_size_image_height="23" media_size_image_width="300"]
+[td_block_ad_box spot_img_horiz="content-horiz-center" media_size_image_height="23" media_size_image_width="300"]
+[td_block_ad_box spot_img_horiz="content-horiz-center" tdc_css="eyJhbGwiOnsibWFyZ2luLWJvdHRvbSI6IjIwIiwiZGlzcGxheSI6Im5vbmUifSwicG9ydHJhaXQiOnsiZGlzcGxheSI6Im5vbmUifSwicG9ydHJhaXRfbWF4X3dpZHRoIjoxMDE4LCJwb3J0cmFpdF9taW5fd2lkdGgiOjc2OCwibGFuZHNjYXBlIjp7ImRpc3BsYXkiOiJub25lIn0sImxhbmRzY2FwZV9tYXhfd2lk
+[td_block_big_grid_flex_2 meta_info_vert="content-vert-bottom" show_author2="none" show_date2="none" modules_category="above" overlay_general="eyJ0eXBlIjoiZ3JhZGllbnQiLCJjb2xvcjEiOiJyZ2JhKDAsMCwwLDApIiwiY29sb3IyIjoicmdiYSgwLDAsMCwwLjcpIiwibWl4ZWRDb2xvcnMiOlt7ImNvbG9yIjoicmdiYSgwLDAsMCwwKSIsInBlcmNlb
+[td_block_ad_box spot_img_horiz="content-horiz-center" tdc_css="eyJhbGwiOnsibWFyZ2luLWJvdHRvbSI6IjIwIiwiZGlzcGxheSI6IiJ9LCJwaG9uZSI6eyJkaXNwbGF5Ijoibm9uZSJ9LCJwaG9uZV9tYXhfd2lkdGgiOjc2N30=" media_size_image_height="28" media_size_image_width="300" spot_title="- Publicidad -" spot_url_rel="noreferrer
+[td_block_big_grid_flex_1 meta_info_vert="content-vert-bottom" modules_category="above" overlay_general="eyJ0eXBlIjoiZ3JhZGllbnQiLCJjb2xvcjEiOiJyZ2JhKDAsMCwwLDApIiwiY29sb3IyIjoicmdiYSgwLDAsMCwwLjcpIiwibWl4ZWRDb2xvcnMiOlt7ImNvbG9yIjoicmdiYSgwLDAsMCwwKSIsInBlcmNlbnRhZ2UiOjYwfV0sImNzcyI6ImJhY2tncm91bmQ
+[td_block_14 tdc_css="eyJwaG9uZSI6eyJtYXJnaW4tYm90dG9tIjoiMCIsImRpc3BsYXkiOiIifSwicGhvbmVfbWF4X3dpZHRoIjo3NjcsImFsbCI6eyJkaXNwbGF5Ijoibm9uZSJ9LCJsYW5kc2NhcGUiOnsiZGlzcGxheSI6Im5vbmUifSwibGFuZHNjYXBlX21heF93aWR0aCI6MTE0MCwibGFuZHNjYXBlX21pbl93aWR0aCI6MTAxOSwicG9ydHJhaXQiOnsiZGlzcGxheSI6Im5vbmUifSwicG
+[td_flex_block_1 modules_on_row="" limit="4" hide_audio="yes" modules_gap="" show_cat="none" show_author="none" show_date="none" show_review="none" show_com="none" show_excerpt="none" show_btn="none" tdc_css="eyJwaG9uZSI6eyJtYXJnaW4tdG9wIjoiMCIsIm1hcmdpbi1ib3R0b20iOiIwIiwiZGlzcGxheSI6Im5vbmUifSwicGh
+[td_flex_block_1 modules_on_row="eyJhbGwiOiI1MCUiLCJwaG9uZSI6IjEwMCUifQ==" limit="2" hide_audio="yes" modules_gap="eyJhbGwiOiIxLjYlIiwicG9ydHJhaXQiOiIyJSJ9" category_id="" video_popup="" meta_info_align="" modules_category="image" show_com="none" show_review="none" show_btn="none" modules_category_p
+[td_flex_block_1 modules_on_row="eyJhbGwiOiI1MCUiLCJwaG9uZSI6IjEwMCUifQ==" limit="2" hide_audio="yes" modules_gap="1.4%" category_id="" video_popup="" meta_info_align="" modules_category="image" show_com="none" show_review="none" show_btn="none" modules_category_padding="5px" f_cat_font_family="" f_
+[td_block_ad_box spot_img_horiz="content-horiz-center" tdc_css="eyJhbGwiOnsibWFyZ2luLXRvcCI6IjAiLCJtYXJnaW4tYm90dG9tIjoiMjAiLCJkaXNwbGF5IjoiIn0sInBob25lIjp7ImRpc3BsYXkiOiJub25lIn0sInBob25lX21heF93aWR0aCI6NzY3fQ==" media_size_image_height="23" media_size_image_width="300" spot_url="https://www.bancop
+[td_block_big_grid_flex_1 grid_layout="3" image_height="eyJhbGwiOiI2MCIsInBob25lIjoiODAifQ==" image_zoom="yes" meta_info_vert="content-vert-bottom" modules_category="above" overlay_general="eyJ0eXBlIjoiZ3JhZGllbnQiLCJjb2xvcjEiOiJyZ2JhKDAsMCwwLDApIiwiY29sb3IyIjoicmdiYSgwLDAsMCwwLjcpIiwibWl4ZWRDb2xvcn
+[td_block_ad_box spot_img_horiz="content-horiz-center" tdc_css="eyJhbGwiOnsibWFyZ2luLXRvcCI6IjAiLCJtYXJnaW4tYm90dG9tIjoiMjAiLCJkaXNwbGF5IjoiIn0sInBob25lIjp7ImRpc3BsYXkiOiJub25lIn0sInBob25lX21heF93aWR0aCI6NzY3fQ==" media_size_image_height="90" media_size_image_width="970" spot_url="https://www.bna.co
+[td_block_slide image_size="" meta_info_vert="content-vert-bottom" nav_icon_size="eyJhbGwiOiI1NSIsInBvcnRyYWl0IjoiMzgifQ==" color_overlay="eyJ0eXBlIjoiZ3JhZGllbnQiLCJjb2xvcjEiOiJyZ2JhKDAsMCwwLDApIiwiY29sb3IyIjoicmdiYSgwLDAsMCwwLjgpIiwibWl4ZWRDb2xvcnMiOlt7ImNvbG9yIjoicmdiYSgwLDAsMCwwKSIsInBlcmNlbnRhZ
+[td_block_ad_box spot_img_horiz="content-horiz-center" tdc_css="eyJhbGwiOnsibWFyZ2luLWJvdHRvbSI6IjIwIiwiZGlzcGxheSI6Im5vbmUifSwicGhvbmUiOnsiZGlzcGxheSI6IiJ9LCJwaG9uZV9tYXhfd2lkdGgiOjc2NywicG9ydHJhaXQiOnsiZGlzcGxheSI6Im5vbmUifSwicG9ydHJhaXRfbWF4X3dpZHRoIjoxMDE4LCJwb3J0cmFpdF9taW5fd2lkdGgiOjc2OCwibGFu
+[td_flex_block_1 modules_on_row="eyJhbGwiOiI1MCUiLCJwaG9uZSI6IjEwMCUifQ==" limit="4" hide_audio="yes" modules_gap="eyJhbGwiOiIxLjYlIiwicG9ydHJhaXQiOiIyJSJ9" show_author="none" show_date="none" show_review="none" show_com="none" show_excerpt="none" show_btn="none" category_ids="-2,-16383,-18780,-1938
+[td_block_ad_box spot_img_horiz="content-horiz-center" tdc_css="eyJhbGwiOnsibWFyZ2luLWJvdHRvbSI6IjIwIiwiZGlzcGxheSI6Im5vbmUifSwicG9ydHJhaXQiOnsiZGlzcGxheSI6Im5vbmUifSwicG9ydHJhaXRfbWF4X3dpZHRoIjoxMDE4LCJwb3J0cmFpdF9taW5fd2lkdGgiOjc2OCwibGFuZHNjYXBlIjp7ImRpc3BsYXkiOiJub25lIn0sImxhbmRzY2FwZV9tYXhfd2lk
+[td_block_ad_box spot_img_horiz="content-horiz-center" spot_title="- Publicidad -" spot_code="JTNDZGl2JTIwc3R5bGUlM0QlMjJ3aWR0aCUzQSUyMDMwMHB4JTNCJTIwaGVpZ2h0JTNBJTIwMjUwcHglM0IlMjBiYWNrZ3JvdW5kJTNBJTIwJTIzNDI4YmNhJTNCJTIwY29sb3IlM0ElMjAlMjNmZmYlM0IlMjBsaW5lLWhlaWdodCUzQSUyMDI1MHB4JTNCJTIwdGV4dC1hbG
+[td_block_ad_box spot_img_horiz="content-horiz-center" tdc_css="eyJhbGwiOnsibWFyZ2luLWJvdHRvbSI6IjIwIiwiZGlzcGxheSI6Im5vbmUifSwicGhvbmUiOnsiZGlzcGxheSI6IiJ9LCJwaG9uZV9tYXhfd2lkdGgiOjc2NywicG9ydHJhaXQiOnsiZGlzcGxheSI6Im5vbmUifSwicG9ydHJhaXRfbWF4X3dpZHRoIjoxMDE4LCJwb3J0cmFpdF9taW5fd2lkdGgiOjc2OCwibGFu
+[td_block_ad_box spot_img_horiz="content-horiz-center" media_size_image_height="23" media_size_image_width="300" spot_url="https://ucalp.edu.ar" spot_url_rel="noreferrer" spot_img_all="393450"]
+[td_block_ad_box spot_img_horiz="content-horiz-center" spot_title="- Publicidad -" spot_code="JTNDZGl2JTIwc3R5bGUlM0QlMjJ3aWR0aCUzQSUyMDMwMHB4JTNCJTIwaGVpZ2h0JTNBJTIwMjUwcHglM0IlMjBiYWNrZ3JvdW5kJTNBJTIwJTIzNDI4YmNhJTNCJTIwY29sb3IlM0ElMjAlMjNmZmYlM0IlMjBsaW5lLWhlaWdodCUzQSUyMDI1MHB4JTNCJTIwdGV4dC1hbG
+[td_block_ad_box spot_img_horiz="content-horiz-center" tdc_css="eyJhbGwiOnsibWFyZ2luLWJvdHRvbSI6IjIwIiwiZGlzcGxheSI6IiJ9LCJwaG9uZSI6eyJkaXNwbGF5Ijoibm9uZSJ9LCJwaG9uZV9tYXhfd2lkdGgiOjc2N30=" media_size_image_height="300" media_size_image_width="300" spot_img_all="249091" spot_title="- Publicidad -"]
+[td_block_ad_box spot_img_horiz="content-horiz-center" tdc_css="eyJhbGwiOnsibWFyZ2luLWJvdHRvbSI6IjIwIiwiZGlzcGxheSI6IiJ9LCJwaG9uZSI6eyJkaXNwbGF5Ijoibm9uZSJ9LCJwaG9uZV9tYXhfd2lkdGgiOjc2N30=" media_size_image_height="1080" media_size_image_width="1080" spot_img_all="91110" spot_title="- Publicidad -" 
+[td_block_ad_box spot_img_horiz="content-horiz-center" tdc_css="eyJhbGwiOnsibWFyZ2luLWJvdHRvbSI6IjIwIiwiZGlzcGxheSI6IiJ9LCJwaG9uZSI6eyJkaXNwbGF5Ijoibm9uZSJ9LCJwaG9uZV9tYXhfd2lkdGgiOjc2N30=" media_size_image_height="300" media_size_image_width="300" spot_title="- Publicidad -" spot_img_all="402118" s
+[td_flex_block_1 modules_on_row="eyJhbGwiOiIzMy4zMzMzMzMzMyUiLCJwaG9uZSI6IjEwMCUifQ==" limit="3" hide_audio="yes" modules_gap="eyJhbGwiOiIxLjYlIiwicG9ydHJhaXQiOiIyJSJ9" category_id="" video_popup="" meta_info_align="" modules_category="image" show_com="none" show_review="none" show_btn="none" module
+[td_block_ad_box spot_img_horiz="content-horiz-center" media_size_image_height="90" media_size_image_width="970" spot_img_all="260405"]
+[td_block_ad_box spot_img_horiz="content-horiz-center" spot_title="- Publicidad -" spot_code="JTNDZGl2JTIwc3R5bGUlM0QlMjJ3aWR0aCUzQSUyMDMwMHB4JTNCJTIwaGVpZ2h0JTNBJTIwMjUwcHglM0IlMjBiYWNrZ3JvdW5kJTNBJTIwJTIzNDI4YmNhJTNCJTIwY29sb3IlM0ElMjAlMjNmZmYlM0IlMjBsaW5lLWhlaWdodCUzQSUyMDI1MHB4JTNCJTIwdGV4dC1hbG
+[td_block_ad_box spot_img_horiz="content-horiz-center" tdc_css="eyJhbGwiOnsibWFyZ2luLWJvdHRvbSI6IjIwIiwiZGlzcGxheSI6IiJ9LCJwaG9uZSI6eyJkaXNwbGF5IjoiIn0sInBob25lX21heF93aWR0aCI6NzY3fQ==" media_size_image_height="300" media_size_image_width="300" spot_url="http://www.ensenada.gov.ar/" spot_title="- Pu
+[td_block_ad_box spot_img_horiz="content-horiz-center" tdc_css="eyJhbGwiOnsibWFyZ2luLWJvdHRvbSI6IjIwIiwiZGlzcGxheSI6IiJ9LCJwaG9uZSI6eyJkaXNwbGF5Ijoibm9uZSJ9LCJwaG9uZV9tYXhfd2lkdGgiOjc2N30=" media_size_image_height="300" media_size_image_width="300" spot_img_all="55182" spot_title="- Publicidad -"]
+[td_block_ad_box spot_img_horiz="content-horiz-center" media_size_image_height="300" media_size_image_width="300" spot_img_all="377709" spot_url="https://www.chivilcoy.gob.ar/" spot_title="- Publicidad -" tdc_css="eyJhbGwiOnsibWFyZ2luLWJvdHRvbSI6IjIwIiwiZGlzcGxheSI6IiJ9LCJwaG9uZSI6eyJkaXNwbGF5Ijoibm
+[td_flex_block_1 modules_on_row="eyJhbGwiOiI1MCUiLCJwaG9uZSI6IjEwMCUifQ==" limit="4" hide_audio="yes" modules_gap="1.4%" category_id="" video_popup="" meta_info_align="" modules_category="image" show_com="none" show_review="none" show_btn="none" modules_category_padding="5px" f_cat_font_family="" f_
+[td_block_ad_box spot_img_horiz="content-horiz-center" spot_title="- Publicidad -" spot_code="JTNDZGl2JTIwc3R5bGUlM0QlMjJ3aWR0aCUzQSUyMDMwMHB4JTNCJTIwaGVpZ2h0JTNBJTIwMjUwcHglM0IlMjBiYWNrZ3JvdW5kJTNBJTIwJTIzNDI4YmNhJTNCJTIwY29sb3IlM0ElMjAlMjNmZmYlM0IlMjBsaW5lLWhlaWdodCUzQSUyMDI1MHB4JTNCJTIwdGV4dC1hbG
+[td_block_ad_box spot_img_horiz="content-horiz-center" media_size_image_height="300" media_size_image_width="300" spot_url="https://www.edelap.com.ar/robo-de-energia/" tdc_css="eyJhbGwiOnsibWFyZ2luLXRvcCI6IjAiLCJtYXJnaW4tYm90dG9tIjoiMjAiLCJkaXNwbGF5IjoiIn19" spot_title="- Publicidad -" spot_img_all=
+[td_block_ad_box spot_img_horiz="content-horiz-center" tdc_css="eyJhbGwiOnsibWFyZ2luLWJvdHRvbSI6IjIwIiwiZGlzcGxheSI6IiJ9LCJwaG9uZSI6eyJkaXNwbGF5Ijoibm9uZSJ9LCJwaG9uZV9tYXhfd2lkdGgiOjc2N30=" media_size_image_height="300" media_size_image_width="300" spot_img_all="400244" spot_url="https://montehermos
+[td_block_ad_box spot_img_horiz="content-horiz-center" media_size_image_height="250" media_size_image_width="300" tdc_css="eyJhbGwiOnsibWFyZ2luLWJvdHRvbSI6IjIwIiwiZGlzcGxheSI6IiJ9fQ==" spot_title="- Publicidad -" spot_url="https://laplata.gob.ar/" spot_img_all="368520"]
+[td_block_ad_box spot_img_horiz="content-horiz-center" tdc_css="eyJhbGwiOnsibWFyZ2luLWJvdHRvbSI6IjIwIiwiZGlzcGxheSI6IiJ9LCJwaG9uZSI6eyJkaXNwbGF5Ijoibm9uZSJ9LCJwaG9uZV9tYXhfd2lkdGgiOjc2N30=" media_size_image_height="23" media_size_image_width="300" spot_url="https://www.provinciavida.com/solicitud?ut
+[td_flex_block_1 hide_audio="yes" video_popup="" meta_info_align="" modules_category="image" show_com="none" show_review="none" show_btn="none" modules_category_padding="5px" f_cat_font_family="" f_cat_font_transform="uppercase" f_cat_font_weight="100" meta_padding="13px 0 10px 0" tdc_css="eyJhbGwiO
+[td_block_ad_box spot_img_horiz="content-horiz-center" tdc_css="eyJhbGwiOnsibWFyZ2luLXRvcCI6IjAiLCJtYXJnaW4tYm90dG9tIjoiMjAiLCJkaXNwbGF5IjoiIn0sInBob25lIjp7ImRpc3BsYXkiOiJub25lIn0sInBob25lX21heF93aWR0aCI6NzY3fQ==" media_size_image_height="23" media_size_image_width="300" spot_url="https://www.provin
+[td_block_ad_box spot_img_horiz="content-horiz-center" media_size_image_height="300" media_size_image_width="300" spot_url_rel="noreferrer" spot_img_all="404165"]
+[td_block_ad_box spot_img_horiz="content-horiz-center" media_size_image_height="250" media_size_image_width="300" spot_url="https://www.malvinasargentinas.gob.ar/jaur" spot_url_rel="noreferrer" spot_img_all="411202"]
+[td_block_ad_box spot_img_horiz="content-horiz-center" media_size_image_height="207" media_size_image_width="300" spot_img_all="353806" spot_url="https://www.merlo.gob.ar/talleresculturales"]
+[td_block_ad_box spot_img_horiz="content-horiz-center" media_size_image_height="300" media_size_image_width="300" spot_img_all="376002" spot_url="https://pergamino.ar/"]
+[td_block_ad_box spot_img_horiz="content-horiz-center" media_size_image_height="250" media_size_image_width="250" spot_url="http://bitly.ws/Jjgw" tdc_css="eyJwaG9uZSI6eyJkaXNwbGF5Ijoibm9uZSJ9LCJwaG9uZV9tYXhfd2lkdGgiOjc2N30=" spot_url_rel="noreferrer" spot_img_all="372543"]
+[td_block_ad_box spot_img_horiz="content-horiz-center" media_size_image_height="250" media_size_image_width="300" spot_url="https://legislatura.gob.ar" tdc_css="eyJwaG9uZSI6eyJkaXNwbGF5Ijoibm9uZSJ9LCJwaG9uZV9tYXhfd2lkdGgiOjc2N30=" spot_url_rel="noreferrer" spot_img_all="374019"]
+[td_block_ad_box spot_img_horiz="content-horiz-center" tdc_css="eyJhbGwiOnsibWFyZ2luLXRvcCI6IjAiLCJtYXJnaW4tYm90dG9tIjoiMjAiLCJkaXNwbGF5IjoiIn0sInBob25lIjp7ImRpc3BsYXkiOiJub25lIn0sInBob25lX21heF93aWR0aCI6NzY3fQ==" media_size_image_height="191" media_size_image_width="281" spot_url="https://sanmartin
+[td_block_ad_box spot_img_horiz="content-horiz-center" media_size_image_height="300" media_size_image_width="300" spot_img_all="376635"]
+[td_block_ad_box spot_img_horiz="content-horiz-center" media_size_image_height="300" media_size_image_width="300" spot_img_all="402336" spot_url="https://provinciavida.com/solicitud?utm_source=diputadosbonaerenses&amp;utm_medium=300x300_multiplataforma&amp;utm_campaign=latranquilidadquetemereces&amp
+
+== Banners en la Home: id_imagen | destino | url_imagen
+ |  | 
+ |  | 
+ |  | 
+ | "https://bahia.gob.ar" | 
+410410 | "https://www.bancoprovincia.com.ar/soluciones_vivienda" | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2026/10/13191808/CFuturo_1180x90.gif
+266148 | "https://www.bna.com.ar/Personas/Promociones/SEMANA" | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2024/09/10151652/970x90-alcohol-0-MODIFICADO.gif
+187724 | "http://www.ensenada.gov.ar/" | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2023/07/25003002/WhatsApp-Image-2023-07-04-at-12.45.26.jpeg
+55182 |  | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2021/10/15154835/20201006212353_whatsapp_image_2020_10_06_at_12_45_21.jpeg
+55189 | "https://tordillomunicipio.com/" | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2021/10/15154835/20210422185154_banner.png
+55192 |  | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2021/10/15154834/20210918012405_580x90_01.jpg
+393450 | "https://ucalp.edu.ar" | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2026/06/26090924/ucalp-1180x90px.gif
+292095 | "https://www.hcdiputados-ba.gov.ar/" | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2025/02/27114454/Banner-HCD_300x300.gif
+249091 |  | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2024/06/15133751/Banner-web-300x300-1.jpg
+91110 | "https://www.senado-ba.gov.ar/" | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2022/04/02093657/WhatsApp-Image-2022-04-18-at-3.53.53-PM.jpeg
+402118 | "https://www.provinciart.com.ar/30aniversario?utm_source=diputadosbsas&amp;utm_medium=home_multiscreen_300x300&amp;utm_campaign=aniversario&amp;utm_content=1" | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2026/08/18195220/PART_30aniversario_300_300.gif
+260405 |  | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2024/08/15124050/Imagen-de-WhatsApp-2024-08-07-a-las-09.50.15_e79bdd3f.jpg
+259651 | "https://www.defensorba.org.ar/" | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2024/08/15124159/300x250gif-nuevo2024-defensoria.gif
+385481 | "http://www.ensenada.gov.ar/" | https://diputadosbsas.com.ar/wp-content/uploads/2026/05/ensenada.jpg
+55182 |  | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2021/10/15154835/20201006212353_whatsapp_image_2020_10_06_at_12_45_21.jpeg
+377709 | "https://www.chivilcoy.gob.ar/" | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2026/04/10100023/chivilcoy.jpeg
+55189 | "https://tordillomunicipio.com/" | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2021/10/15154835/20210422185154_banner.png
+391142 | "https://www.edelap.com.ar/robo-de-energia/" | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2026/06/12153514/EDELAP_Banners_FRAUDE_Medios_300x300.gif
+400244 | "https://montehermoso.gov.ar/sitio/eventos/30primaveras/" | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2026/08/06123403/WhatsApp-Image-2026-07-30-at-20.54.05.jpeg
+368520 | "https://laplata.gob.ar/" | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2026/02/12134012/AvisoCOLFARMA270126.gif
+404361 | "https://www.provinciavida.com/solicitud?utm_source=diputadosbsas&amp;utm_medium=display&amp;utm_campaign=latranquilidadquetemereces&amp;utm_content=1180x90_multiplataforma_home" | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2026/09/02232319/1180-x-90-px.gif
+402121 | "https://www.provinciart.com.ar/30aniversario?utm_source=diputadosbsas&amp;utm_medium=home_multiscreen_1180x90&amp;utm_campaign=aniversario&amp;utm_content=1" | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2026/08/18195412/PART_30Aniversario_1180_90.gif
+404165 |  | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2026/09/01185933/300x300-1.gif
+411202 | "https://www.malvinasargentinas.gob.ar/jaur" | https://diputadosbsas.com.ar/wp-content/uploads/2026/10/banner-malvi-nuevo.jpeg
+353806 | "https://www.merlo.gob.ar/talleresculturales" | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2025/11/03090839/Asfaltos2-1.jpg
+376002 | "https://pergamino.ar/" | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2026/03/30120055/300x300-inverti-en-pergamino.gif
+372543 | "http://bitly.ws/Jjgw" | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2026/03/09100722/WhatsApp-Image-2026-03-05-at-15.52.31.jpeg
+374019 | "https://legislatura.gob.ar" | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2026/03/17100324/300x250_Tasa-Automotor.gif
+294290 | "https://sanmartin.gov.ar" | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2025/03/12102422/MGD_paginas-web-medios.jpg
+376635 |  | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2026/04/02093922/Banner-300x300-1.gif
+402336 | "https://provinciavida.com/solicitud?utm_source=diputadosbonaerenses&amp;utm_medium=300x300_multiplataforma&amp;utm_campaign=latranquilidadquetemereces&amp;utm_content=chicas" | http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2026/08/19223537/300x300-3.gif
