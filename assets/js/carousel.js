@@ -36,16 +36,18 @@
     if (cnt) cnt.textContent = `1 de ${n}`;
   });
 
-  /* ---- Rotador de Anunciantes: un slot, grupos de N, pausa al tocar ---- */
-  $$('.adr').forEach(r => {
-    const slides = $$('.adr__slide', r), n = slides.length, g = +r.dataset.group || n;
-    const ms = +r.dataset.interval || 5000, dots = $('.adr__dots', r);
+  /* ---- Anunciantes: los slots de la zona rotan juntos (cada ~5 s), un solo juego de puntos, pausa al tocar/hover ---- */
+  $$('.adz').forEach(z => {
+    const slots = $$('.adr', z).map(r => ({ r, slides: $$('.adr__slide', r) }));
+    const n = Math.max(...slots.map(s => s.slides.length)), g = +z.dataset.group || n;
+    const ms = +z.dataset.interval || 5000, dots = $('.adz__dots', z);
     let i = 0, hold = 0, seen = false;
-    const load = k => { if (!seen) return; const im = $('img', slides[k % n]); if (im && im.dataset.src) { im.src = im.dataset.src; delete im.dataset.src; } };
+    const vis = () => slots.filter(s => s.r.offsetParent);
+    const load = k => { if (!seen) return; vis().forEach(s => { const im = $('img', s.slides[k % s.slides.length]); if (im && im.dataset.src) { im.src = im.dataset.src; delete im.dataset.src; } }); };
     const go = k => {
-      slides[i].classList.remove('is-active'); slides[i].setAttribute('aria-hidden', 'true');
-      i = (k + n) % n; if (r.offsetParent) { load(i); load(i + 1); }
-      slides[i].classList.add('is-active'); slides[i].removeAttribute('aria-hidden');
+      i = (k + n) % n;
+      slots.forEach(s => s.slides.forEach((sl, q) => { const on = q === i % s.slides.length; sl.classList.toggle('is-active', on); sl.setAttribute('aria-hidden', !on); }));
+      load(i); load(i + 1);
       if (dots) {
         const gi = Math.floor(i / g), pos = i % g, size = Math.min(g, n - gi * g);
         dots.innerHTML = '';
@@ -57,12 +59,11 @@
         }
       }
     };
-    slides.forEach((s, k) => k && s.setAttribute('aria-hidden', 'true'));
     go(0);
-    new IntersectionObserver((e, io) => { if (e[0].isIntersecting) { seen = true; load(i); load(i + 1); io.disconnect(); } }, { rootMargin: '300px' }).observe(r);
-    if (!r.offsetParent) addEventListener('resize', () => { if (r.offsetParent) load(i); }, { passive: true });
-    if (!reduce && n > 1) setInterval(() => { if (!r.offsetParent || Date.now() < hold || document.hidden || !seen) return; if ($('img[data-src]', slides[i])) { load(i); return; } go(i + 1); }, ms);
+    new IntersectionObserver((e, io) => { if (e[0].isIntersecting) { seen = true; load(i); load(i + 1); io.disconnect(); } }, { rootMargin: '300px' }).observe(z);
+    addEventListener('resize', () => load(i), { passive: true });
+    if (!reduce && n > 1) setInterval(() => { if (!z.offsetParent || Date.now() < hold || document.hidden || !seen) return; go(i + 1); }, ms);
     const pause = () => { hold = Date.now() + 12000; };
-    ['pointerdown', 'mouseenter', 'focusin'].forEach(ev => r.addEventListener(ev, pause, { passive: true }));
+    ['pointerdown', 'mouseenter', 'focusin'].forEach(ev => z.addEventListener(ev, pause, { passive: true }));
   });
 })();
