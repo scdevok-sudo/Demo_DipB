@@ -1,5 +1,13 @@
 [
  {
+  "id": "430001",
+  "dest": "https://colpsiba.com.ar/",
+  "src": "https://diputados-fotos-scdev.nyc3.digitaloceanspaces.com/wp-content/uploads/2026/10/28155722/banner-colpsiba-400x400-1.png",
+  "file": "assets/img/ads/430001.webp",
+  "w": 400,
+  "h": 400
+ },
+ {
   "id": "410410",
   "dest": "https://www.bancoprovincia.com.ar/soluciones_vivienda",
   "src": "http://dptdsbsas.nyc3.digitaloceanspaces.com/wp-content/uploads/2026/10/13191808/CFuturo_1180x90.gif",
