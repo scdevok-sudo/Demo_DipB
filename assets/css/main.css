@@ -184,20 +184,32 @@ body.show-lasthour .lasthour{display:block}
 body.show-topbanner .topbanner{display:block}
 .topbanner a{display:block;max-width:970px;margin:0 auto;height:90px;background:var(--bg-2)}
 .topbanner img{width:100%;height:90px;object-fit:contain}
-.adr__label{display:block;font:600 10.5px/14px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin:0 0 6px;text-align:center}
-.adr{position:relative}
-.adr__view{position:relative;background:var(--bg-2);border-radius:3px;overflow:hidden;width:300px;height:300px;max-width:100%;margin:0 auto}
-.adr__slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .5s ease,visibility .5s;background:#fff}
+/* Anunciantes: panel con una sola etiqueta, slots cuadrados fijos, puntos centrados debajo del bloque */
+.adz{container-type:inline-size;background:var(--bg-2);padding:var(--s2);border-top:3px solid var(--brand)}
+.adz .sec-head{border-top:0;padding-top:0;margin-bottom:var(--s2)}
+.adz .sec-head h2{font-size:20px}
+.adz__label{font:600 10.5px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.adcol{display:flex}.adcol>.adz{flex:1;min-width:0}
+.adz__in{position:sticky;top:96px}
+.adz__slots{display:grid;grid-template-columns:minmax(0,300px);justify-content:center;gap:var(--s2)}
+.adz__slots .adr+.adr{display:none}
+@container (min-width:496px){@media (min-width:768px){.adz__slots{grid-template-columns:repeat(2,minmax(0,300px))}.adz__slots .adr+.adr{display:block}}}
+.adr{min-width:0}
+.adr__view{position:relative;aspect-ratio:1/1;width:100%;max-width:300px;margin:0 auto;background:#fff;border-radius:3px;overflow:hidden}
+.adr__slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .5s ease,visibility .5s;overflow:hidden}
 .adr__slide.is-active{opacity:1;visibility:visible}
-.adr__slide img{width:100%;height:100%;object-fit:contain}
-.adr__dots{height:28px;display:flex;justify-content:center;align-items:center;margin-top:4px}
-.adr__dot{width:36px;height:28px;border:0;background:transparent;cursor:pointer;display:grid;place-items:center;padding:0}
+.adr__slide img{max-width:100%;max-height:100%;width:100%;height:100%;object-fit:contain;object-position:center}
+.adz__dots{display:flex;justify-content:center;align-items:center;min-height:44px;margin-top:var(--s1)}
+.adr__dot{width:44px;height:44px;border:0;background:transparent;cursor:pointer;display:grid;place-items:center;padding:0}
 .adr__dot::before{content:"";width:8px;height:8px;border-radius:50%;background:#b9c6d3;transition:all .2s}
 .adr__dot[aria-current="true"]::before{background:var(--brand-ink);width:20px;border-radius:6px}
-.adz{min-height:372px}
-.adz__slots{display:grid;gap:var(--s2);grid-template-columns:1fr}
-.adz__slots .adr+.adr{display:none}
-@media (min-width:768px){.adz__slots{grid-template-columns:1fr 1fr}.adz__slots .adr+.adr{display:block}}
+.topbanner a{position:relative}
+/* Lo último de Legislatura: 1 con foto + 4 con miniatura, separadores finos */
+.lastleg .card--med{margin-bottom:var(--s1)}
+.lastleg__list{display:grid}
+.lastleg__list .card--sm{padding:14px 0;border-top:1px solid var(--line)}
+.lastleg__more{display:inline-flex;align-items:center;min-height:44px;font:600 14px var(--sans);color:var(--brand-ink)}
+.lastleg h2{font-size:24px;font-weight:800}
 .ph{display:grid;place-items:center;text-align:center;background:repeating-linear-gradient(45deg,#f1f5f9,#f1f5f9 10px,#e8eef4 10px,#e8eef4 20px);color:var(--ink-3);font:600 13px var(--sans);width:100%;height:100%}
 
 /* ============ Legisladores: la estrella del home ============ */
@@ -305,7 +317,6 @@ body.show-topbanner .topbanner{display:block}
 .aside-b{display:none}
 body[data-aside="b"] .aside-b{display:block}
 @media (min-width:1024px){.aside{display:block}}
-.aside h2{font-size:20px;font-weight:800;border-top:3px solid var(--brand);padding-top:var(--s1);margin-bottom:var(--s1)}
 .ad-end{margin-top:var(--s5)}
 @media (min-width:1024px){.ad-end{display:none}}
 

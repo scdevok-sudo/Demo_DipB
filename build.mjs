@@ -68,14 +68,15 @@ const ROT = uniq.filter(b => b.id !== TOP_BANNER_ID).sort((a, b) => isH(a) - isH
 const SLOT_A = ROT.filter((_, i) => i % 2 === 0), SLOT_B = ROT.filter((_, i) => i % 2 === 1);
 const adLink = b => b.dest ? `href="${esc(b.dest)}" target="_blank" rel="noopener sponsored"` : 'href="#" data-stub="Banner sin destino cargado en el sitio actual."';
 const adSlide = (b, first) => `<a class="adr__slide" ${adLink(b)} aria-label="Publicidad"><img ${first ? `src="${b.file}"` : `data-src="${b.file}"`} alt="Banner publicitario" width="${b.w}" height="${b.h}"></a>`;
-const rotSq = (id, list) => `<div class="adr" data-group="${BANNERS_POR_CICLO}" data-interval="${SEGUNDOS_POR_BANNER * 1000}" id="${id}" role="region" aria-label="Publicidad">
-  <span class="adr__label">Publicidad</span>
-  <div class="adr__view">${list.map((b, i) => adSlide(b, false)).join('')}</div>
-  <div class="adr__dots"></div>
-</div>`;
-// Zona "Anunciantes": 1 slot en mobile, 2 slots (2 columnas de la grilla) en tablet y desktop
-const adZone = (p = 'a') => `<section class="adz" aria-label="Anunciantes"><div class="sec-head"><h2>Anunciantes</h2></div><div class="adz__slots">${rotSq(p + '-1', SLOT_A)}${rotSq(p + '-2', SLOT_B)}</div></section>`;
-const adOne = id => `<section class="adz" aria-label="Anunciantes"><div class="sec-head"><h2>Anunciantes</h2></div>${rotSq(id, ROT)}</section>`;
+// Slot: caja cuadrada fija (max 300px); la imagen va "contain" y centrada, nunca se sale de la caja
+const adSlot = list => `<div class="adr"><div class="adr__view">${list.map(b => adSlide(b, false)).join('')}</div></div>`;
+// Zona "Anunciantes": UNA etiqueta "Publicidad", slots que rotan juntos y UN solo juego de puntos centrado debajo
+const adZone = (lists = [SLOT_A, SLOT_B]) => `<section class="adz" data-group="${BANNERS_POR_CICLO}" data-interval="${SEGUNDOS_POR_BANNER * 1000}" aria-label="Anunciantes"><div class="adz__in">
+  <div class="sec-head"><h2>Anunciantes</h2><span class="adz__label">Publicidad</span></div>
+  <div class="adz__slots">${lists.map(adSlot).join('')}</div>
+  <div class="adz__dots"></div>
+</div></section>`;
+const adOne = () => adZone([ROT]);
 const topBanner = () => `<div class="topbanner" aria-label="Publicidad"><div class="wrap"><a ${adLink(topB)} aria-label="Publicidad"><img src="${topB.file}" alt="Banner publicitario superior" width="${topB.w}" height="${topB.h}" loading="lazy"></a></div></div>`;
 
 /* ------------------------------------------------------------ legisladores (MUESTRA: no hay 11_funcionarios.json) */
@@ -121,6 +122,11 @@ const card = (n, { t = 'med', span = 1, dek = false, mob = 'big', eager = false,
 const list = (ns, span, extraCls = '') => `<div class="list ${extraCls} col-${span}">${ns.map(n => card(n, { t: 'txt', span: 1 })).join('')}</div>`;
 const secHead = (label, href, lg = false) => `<div class="sec-head${lg ? ' sec-head--lg' : ''}"><h2>${label}</h2>${href ? `<a href="${href}">Ver más</a>` : ''}</div>`;
 
+/* "Lo último de Legislatura": 1 con foto 16:10 + 4 con miniatura 96×96, sin autor */
+const lastLeg = (ns, span) => `<section class="lastleg" aria-labelledby="t-ll${span}"><div class="sec-head"><h2 id="t-ll${span}">Lo último de Legislatura</h2></div>
+  ${card(ns[0], { t: 'med', span })}
+  <div class="lastleg__list">${ns.slice(1, 5).map(n => card(n, { t: 'sm' })).join('')}</div>
+  <a class="lastleg__more" href="seccion.html">Ver toda la Legislatura</a></section>`;
 const NAV = [['Home', 'index.html'], ['Legislatura Bonaerense', 'seccion.html'], ['Congreso', null], ['Nación', null], ['Provincia', null], ['Municipios', null], ['Diputados Bonaerenses', 'legisladores.html']];
 const LOGO = '<img src="assets/img/logo-dark.png" alt="Diputados Bonaerenses" width="500" height="68">';
 const I = {
@@ -231,9 +237,9 @@ ${legModule()}
   </div>
  </section>
 
- <div class="sec grid">
-  <div class="col-2">${adZone('ad')}</div>
-  <div class="col-2 hide-m"><div class="sec-head"><h2>Lo último de Legislatura</h2></div>${list(legLast, 2, '').replace(' col-2', '')}</div>
+ <div class="sec grid adrow">
+  <div class="col-2 adcol">${adZone()}</div>
+  <div class="col-2">${lastLeg(legLast, 2)}</div>
  </div>
 
  <section class="sec" aria-label="Otras secciones"><div class="grid">${mods.map(modulito).join('')}</div></section>
@@ -278,8 +284,8 @@ const leeTambien = n => {
   <div class="grid">${ns.map((x, i) => card(x, { t: 'med', span: 2, mob: mp(i) }).replace('col-2', 'col-lee')).join('')}</div></section>`;
 };
 const asideBlock = n => `<aside class="aside col-1" aria-label="Columna lateral"><div class="aside__sticky">
-  <div class="aside-b"><h2>Lo último de Legislatura</h2>${list(legPool.filter(x => x.id !== n.id).slice(0, 5), 1).replace(' col-1', '')}</div>
-  ${adOne('adn-d')}
+  <div class="aside-b">${lastLeg(legPool.filter(x => x.id !== n.id).slice(0, 5), 1)}</div>
+  ${adOne()}
 </div></aside>`;
 
 const notaPage = n => {
@@ -304,7 +310,7 @@ ${header('seccion.html')}
   ${asideBlock(n)}
  </div>
  ${leeTambien(n)}
- <div class="ad-end">${adOne('adn-m')}</div>
+ <div class="ad-end">${adOne()}</div>
 </div>
 </main>
 <div class="sharebar" role="group" aria-label="Compartir"><a class="btn btn--wa" href="https://wa.me/?text=${shareText(n)}" target="_blank" rel="noopener">${I.wa}WhatsApp</a><button class="btn btn--ghost js-copy" type="button" data-url="${esc(n.url)}">${I.link}Copiar link</button></div>
@@ -336,7 +342,7 @@ ${header('seccion.html')}
  <div class="sec-hero"><h1>Legislatura Bonaerense</h1><p>Sesiones, proyectos y la actividad de ambas cámaras de la Provincia de Buenos Aires. ${fmtN(secTotal)} notas en el archivo.</p></div>
  <div class="grid" style="margin-top:24px" id="sec-grid">${secRows}</div>
  <div class="morebar"><button class="btn btn--ghost js-more" type="button" data-target="#sec-grid" data-step="12">Ver más notas</button></div>
- <div class="sec">${adOne('ads-1')}</div>
+ <div class="sec">${adOne()}</div>
 </div>
 </main>
 ${footer()}`);
@@ -355,7 +361,7 @@ ${header('legisladores.html')}
    <div style="display:flex;gap:12px;align-items:center"><button class="btn btn--ghost" id="f-reset" type="button">Limpiar</button><span id="f-count" class="meta" role="status"></span></div></form>
   <div class="legs" id="legs">${legs.map(l => `<a class="leg" href="${l.file}" data-bloque="${l.bloque}" data-partido="${l.partido}"><div class="avatar" aria-hidden="true">${l.ini}</div><h3>${l.nombre}</h3><small>${l.cam} · ${l.bloque} · ${l.partido}</small></a>`).join('')}</div>
  </div>
- <div class="sec">${adOne('adl-1')}</div>
+ <div class="sec">${adOne()}</div>
 </div>
 </main>
 ${footer()}`);
@@ -384,7 +390,7 @@ ${header('legisladores.html')}
   <div class="grid" id="nv-grid">${linked.map((n, i) => { const c = card(n, { t: 'med', span: 1, mob: mp(i) }); return i >= 4 ? c.replace('<article class="card', '<article class="is-extra card') : c; }).join('')}</div>
   <div class="morebar"><button class="btn btn--ghost js-more" type="button" data-target="#nv-grid" data-step="4">Ver más</button></div>
  </section>
- <div class="sec">${adOne('adp-1')}</div>
+ <div class="sec">${adOne()}</div>
 </div>
 </main>
 ${footer()}`;
