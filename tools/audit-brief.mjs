@@ -6,7 +6,9 @@ const body = /<div class="art__body">[\s\S]*?<\/div>\s*<div class="share"/;   //
 let n = 0, hits = 0;
 for (const f of fs.readdirSync(R).filter(f => f.endsWith('.html'))) {
   const h = fs.readFileSync(path.join(R, f), 'utf8').replace(body, ''); n++;
-  for (const re of bad) if (re.test(h)) { hits++; console.log('✗', f, re); }
+  // Contenido real de las notas (título, volanta, alt de la foto): no se audita Opinión/Colegios ahí; sí en navegación, home, secciones, perfiles y footer.
+  const isNota = /^nota(-\d+)?\.html$/.test(f);
+  for (const re of bad) if (!(isNota && /Opini|Colegios/.test(String(re))) && re.test(h)) { hits++; console.log('✗', f, re); }
 }
 if (/Playfair/i.test(fs.readFileSync(path.join(R, 'assets/css/main.css'), 'utf8'))) { hits++; console.log('✗ css Playfair'); }
 console.log(`${n} páginas auditadas · ${hits} hallazgos`);
