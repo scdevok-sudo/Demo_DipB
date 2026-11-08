@@ -110,7 +110,8 @@
   if (sflow && tpl && more) {
     const pending = [...tpl.content.children]; const chunk = +more.dataset.chunk || 10;
     let busy = false;
-    const sk = () => { const d = document.createElement('div'); d.className = 'srow srow--skel'; d.setAttribute('aria-hidden', 'true'); d.innerHTML = '<div><span class="skel skel--t"></span><span class="skel skel--l"></span><span class="skel skel--l" style="width:60%"></span></div><span class="skel skel--i"></span>'; return d; };
+    /* esqueleto de UN BLOQUE COMPLETO (misma cantidad de filas, misma altura mínima): el footer se corre de una vez, fuera de pantalla, y al reemplazar casi no hay salto */
+    const sk = () => { const d = document.createElement('div'); d.className = 'sflow-skel'; d.setAttribute('aria-hidden', 'true'); d.innerHTML = Array(chunk).fill('<div class="srow srow--skel"><div><span class="skel skel--t"></span><span class="skel skel--l"></span><span class="skel skel--l" style="width:60%"></span></div><span class="skel skel--i"></span></div>').join(''); return d; };
     const load = () => {
       if (busy || !pending.length) return; busy = true;
       const s1 = sk(); sflow.appendChild(s1);
