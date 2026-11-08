@@ -369,7 +369,7 @@ html[data-fotos="iniciales"] .on-ej,html:not([data-fotos="iniciales"]) .on-ini{d
 @media (min-width:1024px){.lcar__item .avatar{width:96px}}
 .legs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s4) var(--s2)}
 .leg{text-align:center;display:block}
-.leg .avatar{max-width:132px;margin:0 auto 12px;font-size:36px;border-radius:6px;box-shadow:none}
+.leg .avatar{max-width:96px;margin:0 auto 12px;font-size:30px}
 .leg h3{font:700 18px/1.2 var(--font-title)}
 .leg small{display:block;color:var(--muted);font:400 13px var(--font-ui);margin-top:3px}
 .leg:hover h3{color:var(--accent-text)}
@@ -501,7 +501,7 @@ html[data-diario="off"] .srow:first-child{border-top-color:var(--rule-hair)}
 .bio__txt p{margin:0 0 1em}
 .bio__btn{margin-top:var(--s1)}
 .bio--empty p{color:var(--muted);font:italic 400 16px var(--font-title);margin:0}
-@media (min-width:768px){.prof{grid-template-columns:auto 1fr;justify-items:start;text-align:left;gap:var(--s4);align-items:center}.prof .avatar{width:200px;font-size:64px;border-radius:6px}.prof__facts,.prof__share{justify-content:flex-start}.prof h1{font-size:44px}.bio{margin-left:0}}
+@media (min-width:768px){.prof{grid-template-columns:auto 1fr;justify-items:start;text-align:left;gap:var(--s4);align-items:center}.prof .avatar{width:128px;font-size:42px}.prof__facts,.prof__share{justify-content:flex-start}.prof h1{font-size:44px}.bio{margin-left:0}}
 
 /* ============ Footer ============ */
 .rule-double--ftr{margin:var(--s6) 0 0;max-width:none}

@@ -175,7 +175,7 @@ const card = (n, { t = 'med', dek = false, h = 3, tf = false, cap = false, eager
 const secTitle = (label, href, id) => `<div class="sec-head"><h2 class="sec-title"${id ? ` id="${id}"` : ''}><span>${label}</span></h2>${href ? `<a href="${href}">Ver más</a>` : ''}</div>`;
 const ruleDouble = (cls = '') => `<div class="rule-double ${cls}" role="presentation"></div>`;
 const NAV = [['Home', 'index.html'], ['Legislatura Bonaerense', 'seccion.html'], ['Congreso', null], ['Nación', null], ['Provincia', null], ['Municipios', null], ['Diputados Bonaerenses', 'legisladores.html']];
-const LOGO = '<img src="assets/img/logo-dark.png" alt="Diputados Bonaerenses" width="500" height="68">';
+const LOGO = '<img src="assets/img/logo-dark.png" alt="Diputados Bonaerenses" width="781" height="100">';
 const I = {
   search: '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
   burger: '<svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
@@ -226,7 +226,7 @@ ${topBanner()}
 
 const footer = () => `${ruleDouble('rule-double--ftr')}<footer class="ftr"><div class="wrap">
   <div class="ftr__grid">
-    <div><img class="ftr__logo" src="assets/img/logo-dark.png" alt="Diputados Bonaerenses" width="500" height="68" loading="lazy">
+    <div><img class="ftr__logo" src="assets/img/logo-dark.png" alt="Diputados Bonaerenses" width="781" height="100" loading="lazy">
       <p>Todas las noticias de la Legislatura Bonaerense, Congreso Nacional, Nación, Provincia y Municipios.</p></div>
     <div><h2>Secciones</h2><ul>${NAV.slice(1).map(([t, h]) => `<li><a ${h ? `href="${h}"` : 'href="#" data-stub="Sección no incluida en la maqueta."'}>${t}</a></li>`).join('')}</ul></div>
     <div><h2>Institucional</h2><ul>
