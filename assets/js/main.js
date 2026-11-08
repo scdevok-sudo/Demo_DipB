@@ -40,11 +40,17 @@
     matchMedia('(min-width:1024px)').addEventListener('change', e => { if (e.matches) { nav.classList.remove('is-open'); body.style.overflow = ''; } });
   }
 
-  /* Buscador */
-  $('.js-search')?.addEventListener('click', e => {
-    const o = search.classList.toggle('is-open'); e.currentTarget.setAttribute('aria-expanded', o);
-    if (o) $('input', search).focus();
+  /* Fecha del día en la franja de la cabecera (se actualiza sola, en español) */
+  $$('[data-hoy]').forEach(t => {
+    const f = new Intl.DateTimeFormat('es-AR', { dateStyle: 'full' }).format(new Date()).replace(',', '');
+    t.textContent = f.charAt(0).toUpperCase() + f.slice(1);
   });
+
+  /* Buscador */
+  $$('.js-search').forEach(b => b.addEventListener('click', () => {
+    const o = search.classList.toggle('is-open'); $$('.js-search').forEach(x => x.setAttribute('aria-expanded', o));
+    if (o) $('input', search).focus();
+  }));
   $$('form[role=search]').forEach(f => f.addEventListener('submit', e => { e.preventDefault(); toast('El buscador real se conecta en el Hito 2.'); }));
 
   /* Última hora (apagada por defecto): un titular por vez */
@@ -52,7 +58,7 @@
   if (tl) {
     const items = $$('.lasthour__item', tl); let i = 0;
     items[0]?.classList.add('is-active');
-    if (!reduce) setInterval(() => { if (!body.classList.contains('show-lasthour')) return; items[i].classList.remove('is-active'); i = (i + 1) % items.length; items[i].classList.add('is-active'); }, 4500);
+    if (!reduce) setInterval(() => { if (document.documentElement.dataset.hora !== 'on') return; items[i].classList.remove('is-active'); i = (i + 1) % items.length; items[i].classList.add('is-active'); }, 4500);
   }
 
   /* Copiar link */
@@ -85,11 +91,6 @@
     });
   });
 
-  /* Modulitos: abiertos en tablet/desktop, acordeón cerrado en mobile */
-  const mods = $$('details.mod'), mq = matchMedia('(min-width:768px)');
-  const setMods = () => mods.forEach(d => { d.open = mq.matches; });
-  setMods(); mq.addEventListener('change', setMods);
-
   /* Filtros de legisladores */
   const fb = $('#f-bloque'), fp = $('#f-partido'), grid = $('#legs');
   if (grid) {
@@ -104,29 +105,69 @@
     apply();
   }
 
-  /* Panel de decisiones: ?demo=1 (queda activo durante la sesión para recorrer los flujos) */
+  /* Scroll infinito de la sección interna: IntersectionObserver + esqueleto con altura reservada + botón de respaldo */
+  const sflow = $('#sflow'), tpl = $('#sec-tpl'), more = $('#sec-more');
+  if (sflow && tpl && more) {
+    const pending = [...tpl.content.children]; const chunk = +more.dataset.chunk || 10;
+    let busy = false;
+    const sk = () => { const d = document.createElement('div'); d.className = 'srow srow--skel'; d.setAttribute('aria-hidden', 'true'); d.innerHTML = '<div><span class="skel skel--t"></span><span class="skel skel--l"></span><span class="skel skel--l" style="width:60%"></span></div><span class="skel skel--i"></span>'; return d; };
+    const load = () => {
+      if (busy || !pending.length) return; busy = true;
+      const s1 = sk(); sflow.appendChild(s1);
+      setTimeout(() => {
+        let n = 0; const frag = document.createDocumentFragment();
+        while (pending.length && n < chunk) { const el = pending.shift(); frag.appendChild(el); if (!el.classList.contains('srow-ad')) n++; }
+        while (pending[0] && pending[0].classList.contains('srow-ad')) frag.appendChild(pending.shift());
+        s1.replaceWith(frag); busy = false;
+        if (!pending.length) { more.hidden = true; io.disconnect(); } else if (more.getBoundingClientRect().top < innerHeight + 600) load();
+      }, reduce ? 0 : 450);
+    };
+    const io = new IntersectionObserver(e => { if (e[0].isIntersecting) load(); }, { rootMargin: '600px 0px' });
+    io.observe(more);
+    $('.js-infinite', more).addEventListener('click', load);
+  }
+
+  /* Panel de variantes: ?demo=1 (queda activo durante la sesión). Cada control cambia <html data-*> y se recuerda; "Copiar link" arma la URL con la variante. */
   let demo = new URLSearchParams(location.search).get('demo') === '1';
   try { if (demo) sessionStorage.setItem('demo', '1'); else demo = sessionStorage.getItem('demo') === '1'; } catch (e) {}
   if (demo) {
-    let st = {}; try { st = JSON.parse(sessionStorage.getItem('demoState') || '{}'); } catch (e) {}
-    const save = () => { try { sessionStorage.setItem('demoState', JSON.stringify(st)); } catch (e) {} };
+    const root = document.documentElement;
     const rows = [
-      ['font', 'Fuente de titulares', [['a', 'Source Serif 4'], ['b', 'Merriweather']], v => body.dataset.font = v, 'a'],
-      ['lh', 'Franja "Última hora"', [['0', 'Ocultar'], ['1', 'Mostrar']], v => body.classList.toggle('show-lasthour', v === '1'), '0'],
-      ['tb', 'Banner superior', [['0', 'Apagado'], ['1', 'Encendido']], v => body.classList.toggle('show-topbanner', v === '1'), '0'],
-      ['aside', 'Columna lateral de la nota', [['a', 'A · Anunciantes'], ['b', 'B · + Lo último']], v => body.dataset.aside = v, 'a'],
-      ['lee', '"Leé también"', [['2', '2 columnas'], ['4', '4 columnas']], v => body.dataset.lee = v, '2'],
+      ['super', 'Superdestacada', [['off', 'Sin ella'], ['foto', 'A · foto'], ['texto', 'B · texto'], ['2', '2'], ['3', '3']]],
+      ['tapa', 'Foto de la nota fuerte', [['izq', 'Izquierda'], ['der', 'Derecha']]],
+      ['legis', 'Diputados y Senadores', [['a', 'A · tras la tapa'], ['b', 'B · en el medio']]],
+      ['m1', 'Módulo 1', [['2x2', '2×2'], ['4x1', '4 en fila']]],
+      ['m1bajada', 'Módulo 1: bajada', [['on', 'Con'], ['off', 'Sin']]],
+      ['m2', 'Módulo 2', [['1', 'Posibilidad 1'], ['2', 'Posibilidad 2'], ['alt', 'Alternar']]],
+      ['ad', 'Banner 1180×90', [['on', 'Sí'], ['off', 'No']]],
+      ['fondos', 'Fondos alternados', [['on', 'Sí'], ['off', 'No']]],
+      ['fotos', 'Fotos de legisladores', [['ejemplo', 'Ejemplo'], ['iniciales', 'Iniciales']]],
+      ['font', 'Tipografía', [['a', 'Source Serif 4'], ['b', 'Merriweather']]],
+      ['hora', '"Última hora"', [['off', 'No'], ['on', 'Sí']]],
+      ['diario', 'Detalles de diario', [['on', 'Con'], ['off', 'Sin']]],
+      ['credito', 'Crédito de foto', [['on', 'Sí'], ['off', 'No']]],
     ];
     const box = document.createElement('div'); box.className = 'demo';
-    box.innerHTML = '<div class="demo__box" id="demo-box"><h2>Panel de decisiones</h2></div><button class="demo__btn" type="button" aria-expanded="false" aria-controls="demo-box">Decisiones</button>';
+    box.innerHTML = '<div class="demo__box" id="demo-box"><h2>Variantes</h2></div><button class="demo__btn" type="button" aria-expanded="false" aria-controls="demo-box">Variantes</button>';
     const inner = $('.demo__box', box);
-    rows.forEach(([k, label, opts, fn, def]) => {
-      const row = document.createElement('div'); row.className = 'demo__row'; row.innerHTML = `<span>${label}</span><div class="demo__opts">${opts.map(([v, t]) => `<button type="button" data-v="${v}">${t}</button>`).join('')}</div>`;
-      const apply = v => { st[k] = v; fn(v); $$('button', row).forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v)); save(); };
-      row.addEventListener('click', e => { const b = e.target.closest('button'); if (b) apply(b.dataset.v); });
-      apply(st[k] ?? def); inner.appendChild(row);
+    const sync = () => $$('.demo__row', inner).forEach(r => $$('button', r).forEach(b => b.setAttribute('aria-pressed', root.getAttribute('data-' + r.dataset.k) === b.dataset.v)));
+    const store = () => { try { const S = {}; rows.forEach(([k]) => { S[k] = root.getAttribute('data-' + k); }); sessionStorage.setItem('dbv', JSON.stringify(S)); } catch (e) {} };
+    rows.forEach(([k, label, opts]) => {
+      const row = document.createElement('div'); row.className = 'demo__row'; row.dataset.k = k;
+      row.innerHTML = '<span>' + label + '</span><div class="demo__opts">' + opts.map(([v, t]) => '<button type="button" data-v="' + v + '">' + t + '</button>').join('') + '</div>';
+      row.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; root.setAttribute('data-' + k, b.dataset.v); store(); sync(); });
+      inner.appendChild(row);
     });
+    const acts = document.createElement('div'); acts.className = 'demo__acts';
+    acts.innerHTML = '<button type="button" data-a="copy">Copiar link de esta variante</button><button type="button" data-a="reset">Restablecer</button>';
+    acts.addEventListener('click', e => {
+      const bt = e.target.closest('button'); const a = bt && bt.dataset.a; if (!a) return;
+      if (a === 'reset') { try { sessionStorage.removeItem('dbv'); } catch (x) {} location.href = location.pathname + '?demo=1&reset=1'; return; }
+      const u = new URL(location.href); u.search = ''; u.searchParams.set('demo', '1'); rows.forEach(([k]) => u.searchParams.set(k, root.getAttribute('data-' + k)));
+      (navigator.clipboard ? navigator.clipboard.writeText(u.href) : Promise.reject()).then(() => toast('Link de la variante copiado'), () => toast(u.href));
+    });
+    inner.appendChild(acts);
     $('.demo__btn', box).addEventListener('click', e => { const o = box.classList.toggle('is-open'); e.currentTarget.setAttribute('aria-expanded', o); });
-    body.appendChild(box);
+    body.appendChild(box); sync();
   }
 })();
