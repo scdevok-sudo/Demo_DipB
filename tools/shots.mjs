@@ -28,8 +28,8 @@ for (const k of sel) {
   p.on('requestfailed', r => errs.push('FAIL ' + r.url()));
   for (const n of pages) {
     await p.goto(BASE + n + '.html' + (query ? '?' + query : ''), { waitUntil: 'load' }); await p.waitForTimeout(500);
-    await p.evaluate(async () => { document.querySelectorAll('img[loading=lazy]').forEach(i => { i.loading = 'eager'; }); await Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; setTimeout(r, 4000); }))); for (let y = 0; y < document.body.scrollHeight && y < 12000; y += 500) { scrollTo(0, y); await new Promise(r => setTimeout(r, 60)); } scrollTo(0, 0); });
-    await p.waitForTimeout(700);
+    await p.evaluate(async () => { document.querySelectorAll('img[data-src]').forEach(i => { i.src = i.dataset.src; }); document.querySelectorAll('img[loading=lazy]').forEach(i => { i.loading = 'eager'; }); await Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; setTimeout(r, 4000); }))); for (let y = 0; y < document.body.scrollHeight && y < 12000; y += 500) { scrollTo(0, y); await new Promise(r => setTimeout(r, 140)); } scrollTo(0, 0); });
+    await p.waitForFunction(() => [...document.images].every(i => !i.isConnected || i.naturalWidth > 0), null, { timeout: 15000 }).catch(() => {}); await p.waitForTimeout(1500);
     const ov = await p.evaluate(() => {
       const w = document.documentElement.clientWidth;
       const bad = [...document.querySelectorAll('body *')].filter(e => { const r = e.getBoundingClientRect(); return r.width && r.right > w + 1 && !e.closest('.lcar__track,.nav,.demo,.adr__view') && getComputedStyle(e).position !== 'fixed'; }).slice(0, 3).map(e => e.className || e.tagName);
