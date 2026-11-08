@@ -23,6 +23,10 @@ const OPTIONS = {
   ad: ['on', 'off'], fondos: ['on', 'off'], fotos: ['ejemplo', 'iniciales'], font: ['a', 'b'], hora: ['on', 'off'], diario: ['on', 'off'], credito: ['on', 'off'],
 };
 
+/* CSS: main.css es la fuente; se minifica a main.min.css (menos bytes bloqueando el primer render). No editar el .min a mano. */
+{ const css = rd('assets/css/main.css').replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s+/g, ' ').replace(/\s*([{};,>])\s*/g, '$1').replace(/;}/g, '}').trim();
+  fs.writeFileSync(path.join(R, 'assets/css/main.min.css'), css); console.log('✓ main.min.css', (css.length / 1024).toFixed(1) + ' KB'); }
+
 /* ------------------------------------------------------------ datos */
 const raw = J('data/10_muestra_notas.json');
 const extra = J('data/11_notas_extra.json');
@@ -199,7 +203,9 @@ const head = (title, { extra = '', body = '', desc = 'Maqueta del rediseño de D
 <meta name="description" content="${esc(desc)}">
 <meta name="theme-color" content="#0b2236">
 ${EARLY}
-<link rel="stylesheet" href="assets/css/main.css">${extra}
+<link rel="preload" href="assets/fonts/SourceSerif4-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/Inter-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/main.min.css">${extra}
 </head><body class="${[SHOW_TOP_BANNER && 'show-topbanner', body].filter(Boolean).join(' ')}">
 <a class="skip" href="#main">Saltar al contenido</a>`;
 
