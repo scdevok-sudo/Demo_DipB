@@ -11,14 +11,15 @@ const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').re
 /* ------------------------------------------------------------ switches de construcción (los de diseño se cambian en vivo con ?demo=1 o por URL) */
 const SHOW_TOP_BANNER = false;      // banner superior: APAGADO
 const EDITION_LINE = '';            // "Año XX · Edición Nº": no se inventa; configurable y vacío
+const SHOW_LEGISLATURA_LABEL = false; // false: en las notas de Legislatura no se repite la volanta "Legislatura Bonaerense" (Legislatura es el todo, no un módulo)
 const DEMO_PLACEHOLDERS = true;     // pie de foto / crédito de ejemplo donde el dato no existe
 const SECTION_AD_EVERY = 10;        // mobile, secciones internas: un slot 300x250 cada N notas (0 = apagado)
 const SECTION_TOTAL = 120;          // notas que se pueden "scrollear" en la sección (se reutilizan con ids distintos)
 const SECTION_CHUNK = 10;
 /* Valores por defecto de cada parámetro (se pisan con ?param=valor, que se recuerda en la sesión). Ver README. */
-const DEFAULTS = { super: 'off', tapa: 'izq', legis: 'a', m1: '2x2', m1bajada: 'off', m2: 'alt', ad: 'on', fondos: 'on', fotos: 'ejemplo', font: 'a', hora: 'off', diario: 'on', credito: 'on' };
+const DEFAULTS = { super: 'off', tapa: 'izq', legis: 'a', bajada: 'off', ad: 'on', fondos: 'on', fotos: 'ejemplo', font: 'a', hora: 'off', diario: 'on', credito: 'on' };
 const OPTIONS = {
-  super: ['off', 'foto', 'texto', '2', '3'], tapa: ['izq', 'der'], legis: ['a', 'b'], m1: ['2x2', '4x1'], m1bajada: ['on', 'off'], m2: ['1', '2', 'alt'],
+  super: ['off', 'foto', 'texto', '2', '3'], tapa: ['izq', 'der'], legis: ['a', 'b'], bajada: ['on', 'off'],
   ad: ['on', 'off'], fondos: ['on', 'off'], fotos: ['ejemplo', 'iniciales'], font: ['a', 'b'], hora: ['on', 'off'], diario: ['on', 'off'], credito: ['on', 'off'],
 };
 
@@ -95,7 +96,7 @@ const superNotes = (() => {
 })();
 const flow = pub.filter(n => !used.has(n.id) && hasImg(n));
 const mk = k => take(flow, k, hasImg);
-const m1Notes = mk(4), m2a = mk(8), m2b = mk(8), m3 = mk(6);
+const f1a = mk(4), f1b = mk(4), f2n = mk(8);   // 19 notas en el flujo: 3 (tapa) + 4 + 4 + 8
 const ticker = pub.slice(0, 5);
 const legPool = pub.filter(isLeg);
 // "ver también" de la tapa: notas relacionadas por etiquetas (ya existentes, sin autor)
@@ -158,9 +159,11 @@ const PIE = 'Pie de foto de ejemplo: acá va la descripción de la imagen.';
 const caption = (n, { txt = true } = {}) => `<figcaption class="cap">${txt ? `<span class="cap__txt${DEMO_PLACEHOLDERS ? ' is-ph' : ''}">${PIE}</span> ` : ''}<span class="cap__credit${DEMO_PLACEHOLDERS ? ' is-ph' : ''}">Foto: Archivo</span></figcaption>`;
 const fig = (n, o = {}) => { const t = thumb(n, o); return t ? `<figure class="fig">${t}${o.cap ? caption(n, { txt: o.cap !== 'credit' }) : ''}</figure>` : ''; };
 /* Los 4 tipos de tarjeta: lead (fuerte) · med (foto + título) · sm (miniatura + título) · txt (solo texto). Sin autor. */
+/* volanta: en Legislatura Bonaerense se omite (SHOW_LEGISLATURA_LABEL); en las demás categorías se conserva */
+const kick = n => (isLeg(n) && !SHOW_LEGISLATURA_LABEL) ? '' : `<span class="kicker">${esc(sectionOf(n))}</span>`;
 const card = (n, { t = 'med', dek = false, h = 3, tf = false, cap = false, eager = false, sizes, big = false, cls = '' } = {}) => {
   const title = `<h${h}><a href="${noteHref(n)}">${esc(n.titulo)}</a></h${h}>`;
-  const kicker = `<span class="kicker">${esc(sectionOf(n))}</span>`;
+  const kicker = kick(n);
   const meta = `<div class="meta">${rel(n)}</div>`;
   const dk = dek ? `<p class="dek">${esc(n.extracto)}</p>` : '';
   if (t === 'txt') return `<article class="card card--txt ${cls}">${kicker}${title}${meta}</article>`;
@@ -261,32 +264,39 @@ const superBlock = ({ n, kind }, i) => kind === 'texto'
 const band = (inner, cls = '') => `<section class="band ${cls}"><div class="wrap">${inner}</div></section>`;
 const vermas = hero2 => `<ul class="vermas">${related(hero2, 2).map(r => `<li><a href="${noteHref(r)}">${esc(r.titulo)}</a></li>`).join('')}</ul>`;
 const dl = n => datelineOf(n) ? `<span class="dateline">${esc(datelineOf(n))}</span>` : '';
-const m2Block = (ns, i) => `<section class="band m2band ${i % 2 ? '' : 'band--alt'}" aria-label="Más notas"><div class="wrap"><div class="flow vr cols-3 m2" data-i="${i}">${ns.map((n, k) => card(n, { t: 'med', dek: true, big: true, sizes: k > 5 ? SZ.s6 : SZ.s4, cls: k > 5 ? 'is-wide' : '' })).join('')}</div></div></section>`;
 
+/* ---- Secuencia del home: lista configurable de bloques (mover, sumar o sacar sin reescribir componentes) ----
+   Bloques disponibles: tapa · legis-a · legis-b · f1 · f2 · banner · linea · anunciantes · secciones
+   (cada "f1"/"f2" toma las siguientes notas del flujo, en orden de fecha y sin repetir) */
+const FLOW = ['tapa', 'legis-a', 'f1', 'banner', 'f1', 'legis-b', 'linea', 'f2', 'anunciantes', 'linea', 'secciones'];
+const F1_POOL = [f1a, f1b];
+let f1i = 0;
+const BLOCKS = {
+  tapa: () => band(`<div class="tapa">
+  <article class="card card--lead tapa__lead">
+    ${fig(hero, { sizes: SZ.lead, big: true, eager: true, cap: true, alt: hero.titulo })}
+    <div class="card__txt">${kick(hero)}<h2><a href="${noteHref(hero)}">${esc(hero.titulo)}</a></h2>${dl(hero)}<p class="dek">${esc(hero.extracto)}</p>${vermas(hero)}<div class="meta">${rel(hero)}</div></div>
+  </article>
+  <div class="row vr cols-2 tapa__two">${tapa2.map(n => `<div class="span-6">${card(n, { t: 'med', dek: true, h: 2, big: true, sizes: SZ.s6, cap: true, cls: 'card--tapa2' })}</div>`).join('')}</div>
+</div>`, 'band--tapa'),
+  'legis-a': () => legModule('a'),
+  'legis-b': () => legModule('b'),
+  // Formato 1: 4 notas, 2×2, título arriba de la foto, fondo blanco
+  f1: () => band(`<div class="flow vr cols-2 f1">${(F1_POOL[f1i++] || []).map(n => card(n, { t: 'med', tf: true, dek: true, cap: 'credit', big: true, sizes: SZ.s6 })).join('')}</div>`, 'f1band'),
+  // Formato 2: 8 notas, 2 columnas × 4 filas, foto a la izquierda, fondo suave
+  f2: () => band(`<div class="flow vr cols-2 f2">${f2n.map(n => card(n, { t: 'med', dek: true, big: true, sizes: SZ.s6 })).join('')}</div>`, 'f2band band--alt'),
+  banner: () => band(hBanner(), 'adband'),
+  linea: () => ruleDouble('rule-double--wrap'),
+  anunciantes: () => adZone(),
+  secciones: () => band(`<div class="strip vr cols-4" aria-label="Secciones">${mods.map(([cat, ns]) => `<section class="strip__col" aria-label="${cat}">${secTitle(cat, null)}
+  ${card(ns[0], { t: 'med' })}<div class="list">${ns.slice(1).map(n => card(n, { t: 'txt' })).join('')}</div><a class="strip__more" href="#" data-stub="Sección no incluida en la maqueta.">Ver más de ${cat}</a></section>`).join('')}</div>`, 'stripband'),
+};
 write('index.html', `${head('Diputados Bonaerenses · Maqueta', { extra: `<link rel="preload" as="image" fetchpriority="high" imagesrcset="assets/img/notas/${hero.id}-m.webp ${D(hero, 'm')[0]}w, assets/img/notas/${hero.id}-full.webp ${D(hero, 'full')[0]}w" imagesizes="(min-width:1024px) 700px, 100vw">` })}
 ${header('index.html')}
 <main id="main">
 <h1 class="sr">Diputados Bonaerenses: noticias de la Legislatura Bonaerense</h1>
 ${superNotes.map(superBlock).join('\n')}
-${band(`<div class="tapa">
-  <article class="card card--lead tapa__lead">
-    ${fig(hero, { sizes: SZ.lead, big: true, eager: true, cap: true, alt: hero.titulo })}
-    <div class="card__txt"><span class="kicker">${esc(sectionOf(hero))}</span><h2><a href="${noteHref(hero)}">${esc(hero.titulo)}</a></h2>${dl(hero)}<p class="dek">${esc(hero.extracto)}</p>${vermas(hero)}<div class="meta">${rel(hero)}</div></div>
-  </article>
-  <div class="row vr cols-2 tapa__two">${tapa2.map(n => `<div class="span-6">${card(n, { t: 'med', dek: true, h: 2, big: true, sizes: SZ.s6, cap: true, cls: 'card--tapa2' })}</div>`).join('')}</div>
-</div>`, 'band--tapa')}
-${ruleDouble('rule-double--wrap')}
-${legModule('a')}
-${band(`<div class="flow vr m1">${m1Notes.map(n => card(n, { t: 'med', tf: true, dek: true, cap: 'credit', big: true, sizes: SZ.s6 })).join('')}</div>${hBanner()}`, 'm1band')}
-${ruleDouble('rule-double--wrap')}
-${legModule('b')}
-${m2Block(m2a, 0)}
-${m2Block(m2b, 1)}
-${band(`<div class="flow vr cols-3 m3">${m3.map(n => card(n, { t: 'sm' })).join('')}</div>`, 'm3band band--alt')}
-${adZone()}
-${ruleDouble('rule-double--wrap')}
-${band(`<div class="strip vr cols-4" aria-label="Secciones">${mods.map(([cat, ns]) => `<section class="strip__col" aria-label="${cat}">${secTitle(cat, null)}
-  ${card(ns[0], { t: 'med' })}<div class="list">${ns.slice(1).map((n, i) => card(n, { t: 'txt', cls: i > 1 ? '' : '' })).join('')}</div><a class="strip__more" href="#" data-stub="Sección no incluida en la maqueta.">Ver más de ${cat}</a></section>`).join('')}</div>`, 'stripband')}
+${FLOW.map(k => BLOCKS[k]()).join('\n')}
 </main>
 ${footer()}`);
 

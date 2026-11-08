@@ -1,6 +1,6 @@
 /* Diputados Bonaerenses · Maqueta v2 · diseño "diario" (acuerdo del 4/11)
    Tokens únicos en :root · grilla de 12 columnas con spans permitidos (3·4·6·8·9·12) · 4 tipos de tarjeta · mobile first.
-   Los parámetros de variante viven en <html data-*> (ver README): super, tapa, legis, m1, m1bajada, m2, ad, fondos, fotos, font, hora, diario, credito. */
+   Los parámetros de variante viven en <html data-*> (ver README): super, tapa, legis, bajada, ad, fondos, fotos, font, hora, diario, credito. */
 @font-face{font-family:'Source Serif 4';font-style:normal;font-weight:400 800;font-display:swap;src:url(../fonts/SourceSerif4-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:'Merriweather';font-style:normal;font-weight:400 900;font-display:swap;src:url(../fonts/Merriweather-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:'Inter';font-style:normal;font-weight:400 700;font-display:swap;src:url(../fonts/Inter-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
@@ -220,6 +220,7 @@ html[data-diario="off"] .super--texto{background:#1b1b1b}
 /* ---------- Tapa de 3 notas ---------- */
 .band{padding:var(--s3) 0}
 .band--tapa{padding-top:var(--s3)}
+.adband{padding:0 0 var(--s4)}
 html[data-fondos="on"] .band--alt{background:var(--paper-tint)}
 .tapa{display:grid;gap:var(--s4)}
 .tapa__lead{display:grid;gap:var(--s2)}
@@ -248,62 +249,36 @@ html[data-fondos="on"] .band--alt{background:var(--paper-tint)}
   .card--tapa2 h2{font-size:28px}
 }
 
-/* ---------- Flujo: filas con filetes (línea fina arriba de cada tarjeta, vertical entre columnas) ---------- */
+/* ---------- Flujo de notas: SOLO dos formatos (misma familia: mismos filetes, espaciado, recorte y crédito) ---------- */
 .flow{display:grid;grid-template-columns:minmax(0,1fr);row-gap:0;column-gap:var(--gap)}
 .flow>*{min-width:0;position:relative;padding:var(--s3) 0;border-top:1px solid var(--rule-hair)}
 html[data-diario="off"] .flow>*{border-top-color:transparent}
 .flow>:first-child{border-top:0;padding-top:0}
 @media (min-width:768px){.flow{grid-template-columns:repeat(2,minmax(0,1fr))}.flow>:nth-child(2){border-top:0;padding-top:0}}
-/* tarjeta con título arriba de la foto (módulo 1) */
+/* Formato 1 · "título arriba": 4 notas (2×2), volanta → titular → hora → foto 16:10 → crédito. Sin bajada (?bajada=on la muestra). */
 .card--tf .card__txt{order:0;margin:0 0 12px}
 .card--tf .fig{order:1}
-.card--tf h3{font-size:24px;line-height:1.15}
+.card--tf h3{font-size:22px;line-height:1.2}
 .card--tf .cap{margin-top:5px}
-html[data-m1bajada="off"] .m1 .dek{display:none}
-@media (max-width:767px){.card--tf .fig{order:-1}.card--tf .card__txt{margin:12px 0 0}.m1 .cap{display:none}}
+.card--tf .meta{margin-top:6px}
+html[data-bajada="off"] .f1 .dek{display:none}
+.f1band{padding:var(--s4) 0}
+@media (max-width:767px){.card--tf .fig{order:-1}.card--tf .card__txt{margin:12px 0 0}.f1 .cap{display:none}}
+/* Formato 2 · "horizontal con fondo": 8 notas, 2 columnas × 4 filas; foto 4:3 a la izquierda (~40 %), texto a la derecha. Fondo suave (?fondos) */
+.f2band{padding:var(--s4) 0}
+.f2>*{padding:var(--s3) 0}
+.f2 .card--med{flex-direction:column}
+.f2 .card--med .thumb{aspect-ratio:16/10}
+.f2 .card--med h3{font-size:20px;line-height:1.2}
+.f2 .card--med .dek{font-size:16px;-webkit-line-clamp:2}
 @media (min-width:1024px){
-  html[data-m1="2x2"] .m1>*{grid-column:span 6}
-  html[data-m1="4x1"] .m1>*{grid-column:span 3}
-  html[data-m1="2x2"] .m1{grid-template-columns:repeat(12,minmax(0,1fr))}
-  html[data-m1="4x1"] .m1{grid-template-columns:repeat(12,minmax(0,1fr))}
-  html[data-m1="2x2"] .m1>:nth-child(2n+1)::before{display:none}
-  html[data-m1="2x2"] .m1>:nth-child(2n)::before{display:block}
-  html[data-m1="4x1"] .m1>:nth-child(4n+1)::before{display:none}
-  html[data-m1="4x1"] .m1>:nth-child(n+2)::before{display:block}
-  html[data-m1="2x2"] .m1>:nth-child(2){border-top:0;padding-top:0}
-  html[data-m1="4x1"] .m1>:nth-child(-n+4){border-top:0;padding-top:0}
-  html[data-m1="4x1"] .card--tf h3{font-size:20px}
+  .f2 .card--med{flex-direction:row;gap:var(--s2);align-items:flex-start}
+  .f2 .card--med .fig{flex:0 0 40%}
+  .f2 .card--med .thumb{aspect-ratio:4/3}
+  .f2 .card--med .card__txt{margin-top:0;flex:1;min-width:0}
+  .f2 .card--med .dek{-webkit-line-clamp:3}
 }
-.m1band{padding-bottom:var(--s3)}
-/* módulo 2: bloque de 8. Posibilidad 1 = filas de 2 horizontales · Posibilidad 2 = filas de 3 con foto arriba y bajada de 1 línea */
-@media (min-width:1024px){
-  .m2{grid-template-columns:repeat(12,minmax(0,1fr))}
-  .m2>:nth-child(n){border-top:1px solid var(--rule-hair);padding-top:var(--s3)}
-  :is(html[data-m2="1"] .m2,html[data-m2="alt"] .m2[data-i="0"])>*{grid-column:span 6}
-  :is(html[data-m2="2"] .m2,html[data-m2="alt"] .m2[data-i="1"])>*{grid-column:span 4}
-  :is(html[data-m2="2"] .m2,html[data-m2="alt"] .m2[data-i="1"])>.is-wide{grid-column:span 6}
-  :is(html[data-m2="1"] .m2,html[data-m2="alt"] .m2[data-i="0"])>:nth-child(2n+1)::before{display:none}
-  :is(html[data-m2="1"] .m2,html[data-m2="alt"] .m2[data-i="0"])>:nth-child(2n)::before{display:block}
-  :is(html[data-m2="2"] .m2,html[data-m2="alt"] .m2[data-i="1"])>:nth-child(n+2)::before{display:block}
-  :is(html[data-m2="2"] .m2,html[data-m2="alt"] .m2[data-i="1"])>:nth-child(3n+1)::before{display:none}
-  :is(html[data-m2="2"] .m2,html[data-m2="alt"] .m2[data-i="1"])>:nth-child(8)::before{display:block}
-  /* posibilidad 1: tarjeta horizontal (foto izquierda, texto derecha) */
-  :is(html[data-m2="1"] .m2,html[data-m2="alt"] .m2[data-i="0"]) .card--med{flex-direction:row;gap:var(--s2);align-items:flex-start}
-  :is(html[data-m2="1"] .m2,html[data-m2="alt"] .m2[data-i="0"]) .card--med .fig{flex:0 0 44%}
-  :is(html[data-m2="1"] .m2,html[data-m2="alt"] .m2[data-i="0"]) .card--med .card__txt{margin-top:0;flex:1;min-width:0}
-  :is(html[data-m2="1"] .m2,html[data-m2="alt"] .m2[data-i="0"]) .card--med h3{font-size:21px}
-  :is(html[data-m2="1"] .m2,html[data-m2="alt"] .m2[data-i="0"]) .card--med .dek{-webkit-line-clamp:3;font-size:16px}
-  /* posibilidad 2: bajada de UNA línea */
-  :is(html[data-m2="2"] .m2,html[data-m2="alt"] .m2[data-i="1"]) .card--med .dek{-webkit-line-clamp:1}
-  :is(html[data-m2="2"] .m2,html[data-m2="alt"] .m2[data-i="1"]) .card--med h3{font-size:22px}
-}
-@media (min-width:768px) and (max-width:1023px){.m2>:nth-child(n){border-top:1px solid var(--rule-hair);padding-top:var(--s3)}.m2>.is-wide{grid-column:auto}}
-@media (max-width:767px){.m2 .dek{-webkit-line-clamp:2}}
-/* último bloque: fotos más chicas (tarjeta sm), 3 por fila */
-.m3band .flow{row-gap:0}
-.m3>*{padding:var(--s2) 0}
-@media (min-width:1024px){.m3{grid-template-columns:repeat(12,minmax(0,1fr))}.m3>*{grid-column:span 4}.m3>:nth-child(-n+3){border-top:0}}
-@media (max-width:1023px){.m3>:nth-child(n){border-top:1px solid var(--rule-hair);padding-top:var(--s2)}}
+.f1band+.f1band{padding-top:0}
 
 /* ---------- Franja de secciones (único módulo; 4 columnas span-3, apiladas en mobile, sin desplegables) ---------- */
 .stripband{padding-top:0}
@@ -565,3 +540,6 @@ html[data-diario="off"] .srow:first-child{border-top-color:var(--rule-hair)}
 .demo__acts button{flex:1;min-height:44px;border:1.5px solid var(--ink);background:#fff;font:700 13px var(--font-ui);cursor:pointer}
 
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+
+/* Formato 1: las fotos de una fila quedan alineadas aunque un titular lleve volanta y otro no */
+@media (min-width:768px){.f1>*{display:flex}.f1>*>.card{flex:1;justify-content:flex-end}}
