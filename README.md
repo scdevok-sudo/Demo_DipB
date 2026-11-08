@@ -1,48 +1,65 @@
-# Maqueta · Diputados Bonaerenses (ajustes tras la reunión del 2/11)
+# Maqueta v2 · Diputados Bonaerenses (diseño "diario" acordado el 4/11)
 
-Maqueta estática, mobile first, sin frameworks. No toca el WordPress ni el VPS. Todas las páginas llevan `noindex,nofollow`.
+Maqueta estática, mobile first, sin frameworks. Todas las páginas llevan `noindex,nofollow`. No toca el WordPress.
 
 ## Cómo abrirla
-- Subir la carpeta a Vercel/Netlify (URL privada) o servirla con cualquier servidor estático (`npx http-server .`).
-- Para la reunión: abrir **`/index.html?demo=1`** (activa el panel de decisiones y lo mantiene mientras se navega).
+- Servir la carpeta (`python -m http.server 8765`, `npx http-server .` o Vercel/Netlify con URL privada).
+- Panel de variantes: **`/index.html?demo=1`** (botón flotante "Variantes", tocable en el celular).
 - Regenerar el HTML: `node build.mjs` (lee `data/`).
-- Verificación: `cd tools && node shots.mjs` (capturas Playwright en `capturas/`, con auditoría de overflow horizontal) y `node ../tools/audit-brief.mjs` (cero autor / Opinión / Colegios / Temas / Proyectos / Playfair).
+- Capturas: `cd tools && node shots.mjs index,seccion d1440,m390 "diario=off"` (viewports: `m360 m390 m412 t d1280 d1440`; avisa overflow horizontal y filas de 2 notas en mobile).
 
-## Qué cambió respecto de la primera maqueta
-- **Grilla fija de 4 columnas** (desktop ≥1024), 2 en tablet, 1 en mobile. Todo bloque usa `.col-1 .col-2 .col-3 .col-4`; las filas suman 4.
-- **4 tipos de tarjeta** y nada más: `lead` (fuerte), `med`, `sm` (chica con foto, miniatura 96×96), `txt` (solo texto).
-- **Tipografía serif**: Source Serif 4 (variable `--font-title` en `main.css`; opción B Merriweather con `body[data-font="b"]`). Inter para UI. Playfair eliminada.
-- **Home**: tapa (1 fuerte a 4 columnas + 2) → Legislatura Bonaerense → módulo "Diputados y Senadores" (rodante, pausa al hover, flechas) → más Legislatura → Anunciantes (+ "Lo último de Legislatura") → 4 modulitos (Congreso, Nación, Provincia, Municipios) → footer.
-- **Mobile**: foto de la nota fuerte a sangre (4:5, máx. 62svh) con el título **debajo**; ningún texto sobre foto. Carrusel de legisladores con `scroll-snap`, autoavance y contador; menú a pantalla completa; botón volver arriba (48 px); barra de compartir inferior en la nota (se oculta al bajar); WhatsApp primero.
-- **Nota**: volanta → título → bajada → foto → fecha/compartir → cuerpo. Sin autor, sin "Lo central". Etiquetas al final. "Leé también" automático (últimas 4 de Legislatura, excluye la actual).
-- **Perfil**: sin "Proyectos presentados". Biografía con "Leer más/menos" (`aria-expanded`), notas vinculadas con "Ver más" (de a 4). Un perfil completo de prueba (`legislador.html`) y 23 con la biografía vacía.
-- **Sacado**: Opinión, Colegios Profesionales, Temas frecuentes, autores, franja premium, `publicidad.html` (mapa de slots, desactualizado por las nuevas reglas).
-- **Se agregó el banner COLPSIBA** (tomado del home en vivo) al inventario de Anunciantes.
+## Parámetros de variante (URL o panel; se recuerdan en la sesión; `?reset=1` los borra)
+Ejemplo: `index.html?demo=1&super=3&legis=b&m2=2`. "Copiar link de esta variante" en el panel arma la URL.
+
+| Parámetro | Valores (default **en negrita**) | Qué cambia |
+|---|---|---|
+| `super` | **off** · foto · texto · 2 · 3 | Superdestacada arriba de la tapa: A foto, B solo texto, o apiladas |
+| `tapa` | **izq** · der | Foto de la nota fuerte a izquierda o derecha |
+| `legis` | **a** · b | Módulo Diputados y Senadores tras la tapa (a) o en el medio del flujo (b) |
+| `m1` | **2x2** · 4x1 | Primer módulo |
+| `m1bajada` | on · **off** | Bajada en el primer módulo |
+| `m2` | 1 · 2 · **alt** | Segundo módulo: posibilidad 1, 2 o alternando (hay dos bloques de 8) |
+| `ad` | **on** · off | Banner 1180×90 tras el primer módulo (320×100 en mobile); apagado colapsa |
+| `fondos` | **on** · off | Fondos alternados blanco / `--paper-tint` |
+| `fotos` | **ejemplo** · iniciales | Retratos de fantasía o iniciales |
+| `font` | **a** · b | Source Serif 4 o Merriweather |
+| `hora` | on · **off** | Franja "Última hora" |
+| `diario` | **on** · off | Todos los detalles de diario juntos (doble línea, barra de sección, filetes verticales y finos, fecha de cabecera, letra capital, "ver también", datelines, crédito de foto) |
+| `credito` | **on** · off | Crédito de foto en mayúsculas |
+
+Implementación: un script inline en `<head>` pone los valores en `<html data-*>` antes del primer render (sin parpadeo ni saltos de layout); todo el resto es CSS.
+
+## Estructura del home
+[superdestacada opcional] → tapa de 3 (fuerte con foto 7/12 + texto centrado verticalmente, y 2 debajo) → doble línea → (legisladores A) → módulo 1 (4 notas, título arriba) + banner → doble línea → (legisladores B) → módulo 2 (bloque de 8, ×2) → último bloque de fotos chicas → Anunciantes (4 slots 300×300) → doble línea → franja de secciones (Congreso, Nación, Provincia, Municipios) → footer.
+
+- Grilla de 12 columnas (`.row`, spans `.span-3/4/6/8/9/12`); tablet 2 columnas; mobile 1. Un solo elemento por fila en el celular.
+- 4 tipos de tarjeta: `lead`, `med`, `sm`, `txt` (`card()` en `build.mjs`).
+- Cada nota del home se usa una sola vez (las secciones se reservan primero; el flujo mezcla categorías por fecha). Si el pool se agota, `build.mjs` avisa.
+- En el módulo 2 posibilidad 2 el bloque de 8 queda 3 + 3 + 2; las dos últimas ocupan `span-6` para que la fila sume 12.
+- Mobile: franja de secciones apilada, sin desplegables (1 nota con foto + 2 solo título); legisladores en carrusel con `scroll-snap` y autoavance.
+
+## Secciones internas (`seccion.html`)
+Mini tapa de 1 nota con el formato de la tapa fuerte + flujo vertical (línea arriba, volanta, titular, bajada, hora relativa, foto a la derecha) + columna lateral sticky de 300 px (300×600) en desktop. Scroll infinito con `IntersectionObserver`, esqueleto con altura reservada y botón "Ver más notas" de respaldo; carga de a 10 hasta 120 (las notas se reutilizan con `data-uid` distinto, no hay noticias inventadas). Mobile: slot 300×250 cada `SECTION_AD_EVERY` notas (constante en `build.mjs`, 0 lo apaga).
+
+## Superdestacada y WordPress
+Cada nota admite `super: "foto" | "texto" | null` en el JSON. Si ninguna lo trae, la maqueta usa tres notas sobrantes de demostración. En WordPress: campo "Superdestacada: Foto / Solo texto / No" en la nota; el home consulta las que lo tengan, por fecha, y las apila sobre la tapa. Viabilidad a confirmar por Santi; el componente (`.super--foto`, `.super--texto`) ya está listo.
+
+## Fotos de fantasía
+Retratos de `randomuser.me` descargados en `assets/img/fantasia/01..24.jpg` (128×128, tal como los entrega el servicio; mezcla de hombres y mujeres según el nombre de pila). Cartel "Foto de ejemplo" en módulo, listado y perfil. **Reemplazo por fotos reales:** campo `foto` de cada legislador (`legs` en `build.mjs`; en el sitio real, el campo del registro); si falta o no carga, se ven las iniciales. `?fotos=iniciales` vuelve a las iniciales.
 
 ## Qué es real y qué es muestra
 | Real | Muestra / placeholder |
 |---|---|
-| Notas (titulares, bajadas, fotos, tags, fechas) de `data/10_muestra_notas.json` y `data/11_notas_extra.json` (traídas de la API pública del 2/11, con cuerpo) | **Legisladores**: nombres, bloques, partidos, cámara y fotos (son iniciales: no hay fotos reales a mano) |
-| Cuerpo completo de 44 notas (el de `nota.html` con imágenes internas; los demás solo texto, sin imágenes internas) | **Biografía** del perfil de prueba: texto de ejemplo, marcado |
-| 32 banners reales de Anunciantes, con su destino | Datos de contacto y redes del footer |
-| Menú (7 ítems) | `nota-412621.html` se muestra **sin foto** a propósito (caso de nota sin imagen) |
+| Notas (titulares, bajadas, fotos, tags, fechas) de `data/` | Legisladores (nombres, bloques, partidos) y sus retratos |
+| 44 cuerpos de nota, 32 banners de Anunciantes | Biografía del perfil de prueba; pie de foto y crédito ("Foto: Archivo", marcados `is-ph`) |
+| Menú de 7 ítems | Contacto/redes del footer |
 
-Las notas de la muestra del 23/10 que no tienen cuerpo descargado muestran un aviso al hacer clic.
+Las horas relativas ("Hace 2 horas") se calculan contra `NOW_REF` (2/11/2026 20:00, momento de la muestra de notas), no contra el reloj real. La fecha de la cabecera sí es la del día.
 
-## Switches
-| Qué | Dónde | Por defecto |
-|---|---|---|
-| Banner superior | `SHOW_TOP_BANNER` en `build.mjs` · panel `?demo=1` | **apagado** |
-| Franja "Última hora" (una línea, 5 notas) | `SHOW_LAST_HOUR` · panel | **apagada** |
-| Fuente de titulares A/B | `DEFAULTS.font` · panel (`body[data-font]`) | A: Source Serif 4 |
-| Columna lateral de la nota A/B | `DEFAULTS.aside` · panel (`body[data-aside]`) | A: solo Anunciantes |
-| "Leé también" 2 / 4 columnas | `DEFAULTS.lee` · panel (`body[data-lee]`) | 2 |
-
-La franja horizontal premium se eliminó; el componente opcional es el banner superior (`.topbanner`, 970×90, apagado).
-
-## Pendientes y notas
-- **Logo**: sigue siendo el PNG de 500×68 del sitio actual. Reemplazar `assets/img/logo-dark.png` por el original (SVG o PNG grande) manteniendo el nombre; el CSS ya usa `height:auto` y `object-fit:contain`, no se deforma.
-- Punto focal de la foto en mobile: `FOCAL` en `build.mjs` (`{ id: '50% 20%' }`).
-- Publicidad: zona única "Anunciantes" (1 slot en mobile, 2 en tablet/desktop), nunca entre notas ni en listados. Altura reservada por slot.
-- Rendimiento (Lighthouse mobile, simulado, local): Performance 88–95, Accesibilidad 92–100 (la sección da 92 por el contraste de enlaces dentro de texto; pendiente), CLS ≤ 0.009 en home, sección y perfil; la nota dio CLS 0.001. LCP 2.0–2.4 s. Los resultados varían entre corridas.
-- Hito 2 (WordPress): los perfiles saldrán de la base de legisladores; "Leé también" será una consulta por categoría.
+## Pendientes y decisiones
+- **Referencias**: la carpeta `referencias/` (Word de Juan, capturas) no estaba en el repo; se trabajó desde el texto del brief.
+- **Logo**: sigue el PNG 500×68 (`assets/img/logo-dark.png`, texto blanco para fondo azul). No hay original vectorial a mano: reemplazarlo manteniendo el nombre. El logo ocupa la barra azul de la cabecera.
+- Dateline: LA PLATA (Legislatura) y BUENOS AIRES (Congreso) solo en la tapa fuerte y en la nota interna; en la nota va arriba del cuerpo, como línea propia, para que no choque con la letra capital.
+- `EDITION_LINE` (vacía), `SHOW_TOP_BANNER` (apagado), `DEMO_PLACEHOLDERS`, `SECTION_AD_EVERY`, `SECTION_TOTAL` en `build.mjs`.
+- Sin verificar: Lighthouse (no corrió en este entorno); accesibilidad revisada a mano (`--accent-text`, foco visible, `aria-label`, `prefers-reduced-motion`).
+- Fuera de alcance: Hito 3, carga interna de WordPress, contenidos reales.

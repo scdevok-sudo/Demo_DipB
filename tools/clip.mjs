@@ -1,0 +1,10 @@
+import { chromium } from 'playwright'; import path from 'node:path';
+const [,, url, vw, y, h, out] = process.argv;
+const b = await chromium.launch({ channel: 'chrome' });
+const mobile = +vw < 700;
+const c = await b.newContext({ viewport: { width: +vw, height: 900 }, deviceScaleFactor: 1, isMobile: mobile, hasTouch: mobile });
+const p = await c.newPage(); await p.goto(url, { waitUntil: 'load' });
+await p.evaluate(async () => { document.querySelectorAll('img[loading=lazy]').forEach(i => { i.loading = 'eager'; }); await Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; setTimeout(r, 4000); }))); });
+await p.waitForTimeout(800);
+await p.screenshot({ path: out, fullPage: true, clip: { x: 0, y: +y, width: +vw, height: +h } });
+await b.close();
