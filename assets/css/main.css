@@ -639,3 +639,12 @@ html[data-peso="700"]{--titulo-peso-mobile:700}
 
 /* Desktop: la nota principal de la tapa queda solo con dateline, titular y bajada (SHOW_TAPA_RELACIONADAS = false en build.mjs) */
 @media (min-width:768px){body.no-tapa-rel .vermas{display:none}}
+
+/* ============ Desktop / tablet (>= 768 px): "Ver más de X" como botón, alineado en la base de cada columna ============ */
+@media (min-width:768px){
+  .strip__col{display:flex;flex-direction:column}
+  .strip .list{margin-bottom:var(--s2)}
+  .strip__more{margin-top:auto;justify-content:center;gap:8px;min-height:40px;padding:8px 16px;border:1px solid var(--accent-text);border-radius:4px;font:600 14px var(--font-ui);color:var(--accent-text);text-align:center;transition:background .2s}
+  .strip__more::after{content:"→";font-size:17px;line-height:1}
+  .strip__more:hover,.strip__more:active{background:var(--paper-tint);color:var(--accent-text)}
+}
