@@ -207,6 +207,7 @@ const head = (title, { extra = '', body = '', desc = 'Maqueta del rediseño de D
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
 <meta name="theme-color" content="#0b2236">
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
 ${EARLY}
 <link rel="preload" href="assets/fonts/SourceSerif4-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/Inter-normal.woff2" as="font" type="font/woff2" crossorigin>
