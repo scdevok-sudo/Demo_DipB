@@ -102,7 +102,7 @@ Retratos de `randomuser.me` en `assets/img/fantasia/01..24.jpg`, **128×128 y no
 - **Criterios**: CLS < 0.05 ✔ · Performance ≥ 85 ✔ · Accesibilidad ≥ 90 ✔. **LCP < 2.5 s: no se cumple en Lighthouse** para index (2.6–2.7 s) y seccion (3.0 s), cerca en las demás. El tiempo se va en el render (CSS y fuentes bloqueando, ~0,6 s de retraso con la imagen ya cargada). Pendiente si se quiere bajar: CSS crítico inline y subconjunto de fuentes.
 - Se corrigió el CLS precargando las fuentes (`<link rel=preload>`), y el scroll infinito con esqueleto de bloque. Accesibilidad: quedan avisos de `color-contrast` (secundarios) en index/seccion/legislador y `link-in-text-block` en seccion, sin corregir.
 
-**Medición v2.2 (13/11, `tools/perf.mjs`, 390 px, CPU ×4, red 1,6 Mbps / 150 ms, con scroll hasta el final):** index LCP 2,24 s · CLS 0,0000; seccion LCP 2,16 s · CLS 0,0000. No hizo falta ajustar el esqueleto ni el espacio del zócalo.
+**Medición v2.2 (13/11, `tools/perf.mjs`, 390 px, CPU ×4, red 1,6 Mbps / 150 ms, con scroll hasta el final):** index LCP 2,04 s · CLS 0,0000; seccion LCP 1,86 s · CLS 0,0000; diputados LCP 1,78 s · CLS 0,0000. No hizo falta ajustar el esqueleto ni el espacio del zócalo.
 **404:** era `/favicon.ico` (las páginas no declaraban ícono). Se agregó `assets/img/favicon.svg` y `<link rel="icon">`; `tools/find404.mjs` recorre todas las páginas a 390 y 1280 px y ya no reporta errores.
 
 ## Publicar en una URL privada (todavía no desplegado)
