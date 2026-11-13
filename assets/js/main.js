@@ -30,11 +30,14 @@
   const nav = $('#nav'), burger = $('.burger'), search = $('.search');
   const setNav = open => {
     nav.classList.toggle('is-open', open); burger.setAttribute('aria-expanded', open);
+    $$('.js-dock-menu').forEach(b => b.setAttribute('aria-expanded', open));
     body.style.overflow = open ? 'hidden' : '';
-    if (open) $('.nav ul a', nav)?.focus(); else burger.focus({ preventScroll: true });
+    const back = [burger, ...$$('.js-dock-menu')].find(b => b.offsetParent) || burger;
+    if (open) $('.nav ul a', nav)?.focus(); else back.focus({ preventScroll: true });
   };
   if (nav && burger) {
     burger.addEventListener('click', () => setNav(true));
+    $$('.js-dock-menu').forEach(b => b.addEventListener('click', () => setNav(!nav.classList.contains('is-open'))));
     $('.nav__close', nav)?.addEventListener('click', () => setNav(false));
     addEventListener('keydown', e => { if (e.key === 'Escape') { if (nav.classList.contains('is-open')) setNav(false); search?.classList.remove('is-open'); } });
     matchMedia('(min-width:1024px)').addEventListener('change', e => { if (e.matches) { nav.classList.remove('is-open'); body.style.overflow = ''; } });
