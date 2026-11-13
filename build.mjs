@@ -16,11 +16,13 @@ const DEMO_PLACEHOLDERS = true;     // pie de foto / crédito de ejemplo donde e
 const SECTION_AD_EVERY = 10;        // mobile, secciones internas: un slot 300x250 cada N notas (0 = apagado)
 const SECTION_TOTAL = 120;          // notas que se pueden "scrollear" en la sección (se reutilizan con ids distintos)
 const SECTION_CHUNK = 10;
+const SHOW_FECHA_EN_NOTA = true;    // dentro de la página de la nota se conserva la fecha de publicación (false la saca)
+const HEADER_MENU_MOBILE = false;   // mobile: false = las tres barritas viven solo en el zócalo; true = también arriba a la derecha
 /* Valores por defecto de cada parámetro (se pisan con ?param=valor, que se recuerda en la sesión). Ver README. */
-const DEFAULTS = { super: 'off', tapa: 'izq', legis: 'a', bajada: 'off', ad: 'on', fondos: 'on', fotos: 'ejemplo', font: 'a', hora: 'off', diario: 'on', credito: 'on' };
+const DEFAULTS = { super: 'off', tapa: 'izq', legis: 'a', bajada: 'auto', ad: 'on', fondos: 'on', fotos: 'ejemplo', font: 'a', hora: 'off', diario: 'on', credito: 'on', tiempo: 'off', peso: '600' };
 const OPTIONS = {
-  super: ['off', 'foto', 'texto', '2', '3'], tapa: ['izq', 'der'], legis: ['a', 'b'], bajada: ['on', 'off'],
-  ad: ['on', 'off'], fondos: ['on', 'off'], fotos: ['ejemplo', 'iniciales'], font: ['a', 'b'], hora: ['on', 'off'], diario: ['on', 'off'], credito: ['on', 'off'],
+  super: ['off', 'foto', 'texto', '2', '3'], tapa: ['izq', 'der'], legis: ['a', 'b'], bajada: ['auto', 'on', 'off'],
+  ad: ['on', 'off'], fondos: ['on', 'off'], fotos: ['ejemplo', 'iniciales'], font: ['a', 'b'], hora: ['on', 'off'], diario: ['on', 'off'], credito: ['on', 'off'], tiempo: ['off', 'on'], peso: ['600', '700'],
 };
 
 /* CSS: main.css es la fuente; se minifica a main.min.css (menos bytes bloqueando el primer render). No editar el .min a mano. */
@@ -206,7 +208,7 @@ ${EARLY}
 <link rel="preload" href="assets/fonts/SourceSerif4-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/Inter-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/main.min.css">${extra}
-</head><body class="${[SHOW_TOP_BANNER && 'show-topbanner', body].filter(Boolean).join(' ')}">
+</head><body class="${[SHOW_TOP_BANNER && 'show-topbanner', !HEADER_MENU_MOBILE && 'no-hdr-burger', body].filter(Boolean).join(' ')}">
 <a class="skip" href="#main">Saltar al contenido</a>`;
 
 const header = active => `<header class="hdr">
@@ -279,7 +281,7 @@ const F1_POOL = [f1a, f1b];
 let f1i = 0;
 const BLOCKS = {
   tapa: () => band(`<div class="tapa">
-  <article class="card card--lead tapa__lead">
+  <article class="card card--lead tapa__lead"${kick(hero) ? ' data-k="1"' : ''}>
     ${fig(hero, { sizes: SZ.lead, big: true, eager: true, cap: true, alt: hero.titulo })}
     <div class="card__txt">${kick(hero)}<h2><a href="${noteHref(hero)}">${esc(hero.titulo)}</a></h2>${dl(hero)}<p class="dek">${esc(hero.extracto)}</p>${vermas(hero)}<div class="meta">${rel(hero)}</div></div>
   </article>
@@ -290,12 +292,12 @@ const BLOCKS = {
   // Formato 1: 4 notas, 2×2, título arriba de la foto, fondo blanco
   f1: () => band(`<div class="flow vr cols-2 f1">${(F1_POOL[f1i++] || []).map(n => card(n, { t: 'med', tf: true, dek: true, cap: 'credit', big: true, sizes: SZ.s6 })).join('')}</div>`, 'f1band'),
   // Formato 2: 8 notas, 2 columnas × 4 filas, foto a la izquierda, fondo suave
-  f2: () => band(`<div class="flow vr cols-2 f2">${f2n.map(n => card(n, { t: 'med', dek: true, big: true, sizes: SZ.s6 })).join('')}</div>`, 'f2band band--alt'),
+  f2: () => band(`<div class="flow vr cols-2 f2">${f2n.map(n => card(n, { t: 'med', dek: true, big: true, sizes: SZ.s6, cap: 'credit' })).join('')}</div>`, 'f2band band--alt'),
   banner: () => band(hBanner(), 'adband'),
   linea: () => ruleDouble('rule-double--wrap'),
   anunciantes: () => adZone(),
   secciones: () => band(`<div class="strip vr cols-4" aria-label="Secciones">${mods.map(([cat, ns]) => `<section class="strip__col" aria-label="${cat}">${secTitle(cat, null)}
-  ${card(ns[0], { t: 'med' })}<div class="list">${ns.slice(1).map(n => card(n, { t: 'txt' })).join('')}</div><a class="strip__more" href="#" data-stub="Sección no incluida en la maqueta.">Ver más de ${cat}</a></section>`).join('')}</div>`, 'stripband'),
+  ${card(ns[0], { t: 'med', cap: 'credit' })}<div class="list">${ns.slice(1).map(n => card(n, { t: 'txt' })).join('')}</div><a class="strip__more" href="#" data-stub="Sección no incluida en la maqueta.">Ver más de ${cat}</a></section>`).join('')}</div>`, 'stripband'),
 };
 write('index.html', `${head('Diputados Bonaerenses · Maqueta', { extra: `<link rel="preload" as="image" fetchpriority="high" imagesrcset="assets/img/notas/${hero.id}-m.webp ${D(hero, 'm')[0]}w, assets/img/notas/${hero.id}-full.webp ${D(hero, 'full')[0]}w" imagesizes="(min-width:1024px) 700px, 100vw">` })}
 ${header('index.html')}
@@ -360,7 +362,7 @@ ${header('seccion.html')}
     <p class="art__lead">${esc(n.extracto)}</p>
     ${ruleDouble('art__rule')}
    </header>
-   <div class="art__meta"><time datetime="${n.fecha.replace(' ', 'T')}">${fechaLarga(n)} · ${n.fecha.slice(11, 16)} h</time><span>${mins} min de lectura</span>
+   <div class="art__meta">${SHOW_FECHA_EN_NOTA ? `<time datetime="${n.fecha.replace(' ', 'T')}">${fechaLarga(n)} · ${n.fecha.slice(11, 16)} h</time>` : ''}<span>${mins} min de lectura</span>
     <div class="mini-share"><a class="ibtn-sq ibtn-sq--wa" href="https://wa.me/?text=${shareText(n)}" target="_blank" rel="noopener" aria-label="Compartir por WhatsApp">${I.wa}</a><button class="ibtn-sq js-copy" type="button" data-url="${esc(n.url)}" aria-label="Copiar link">${I.link}</button></div></div>
    ${artFigure(n)}
    ${datelineOf(n) ? `<p class="art__dateline"><span class="dateline">${esc(datelineOf(n))}</span></p>` : ''}
@@ -385,7 +387,7 @@ const secPool = pub.filter(isLeg);
 const secLead = secPool[0];
 const secTotal = catCount('Legislatura Bonaerense');
 /* fila del flujo: línea fina arriba, volanta, titular serif, bajada gris, "Hace X" y foto a la DERECHA */
-const sRow = (n, uid) => `<article class="srow" data-uid="${uid}"><div class="srow__txt"><span class="kicker">${esc(sectionOf(n))}</span><h3><a href="${noteHref(n)}">${esc(n.titulo)}</a></h3><p class="dek">${esc(n.extracto)}</p><div class="meta">${rel(n)}</div></div>${thumb(n, { sizes: '(min-width:768px) 280px, 120px' })}</article>`;
+const sRow = (n, uid) => `<article class="srow" data-uid="${uid}"><div class="srow__txt"><span class="kicker">${esc(sectionOf(n))}</span><h3><a href="${noteHref(n)}">${esc(n.titulo)}</a></h3><p class="dek">${esc(n.extracto)}</p><div class="meta">${rel(n)}</div></div>${thumb(n, { sizes: '(min-width:768px) 280px, 100vw' })}<span class="srow__cred cap__credit${DEMO_PLACEHOLDERS ? ' is-ph' : ''}">Foto: Archivo</span></article>`;
 const secRows = [];
 for (let i = 0; secRows.length < SECTION_TOTAL; i++) { const base = secPool[(i % (secPool.length - 1)) + 1]; secRows.push(sRow(base, i < secPool.length - 1 ? `n${base.id}` : `n${base.id}-r${Math.floor(i / (secPool.length - 1))}`)); }
 const adM = () => `<div class="srow-ad only-m"><span class="adbox__label">Publicidad</span><a class="srow-ad__in" ${adLink(ROT.find(b => !isH(b)))}><img src="${ROT.find(b => !isH(b)).file}" alt="Banner publicitario" width="300" height="250" loading="lazy"></a></div>`;
