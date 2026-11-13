@@ -608,3 +608,25 @@ html[data-peso="700"]{--titulo-peso-mobile:700}
 .legband+.legband{border-top:0;padding-top:0}
 .legband+.legband>.wrap{border-top:1px solid #c5ddf0;padding-top:var(--s4)}
 .legband:has(+.legband){padding-bottom:var(--s3);border-bottom:0}
+
+/* ============ v2.2 · MOBILE: secciones del final, "Ver más", divisores de doble línea, anunciantes finos ============ */
+@media (max-width:767px){
+  .strip{gap:0}
+  .strip .sec-title{font-size:28px;line-height:1.12}
+  .strip__col+.strip__col::before{content:"";display:block;position:static;height:3px;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);border-left:0;margin:var(--s4) 0}
+  html[data-diario="off"] .strip__col+.strip__col::before{display:block!important;height:0;border-bottom:0;border-top-color:var(--rule-hair)}
+  .strip__more{justify-content:center;gap:8px;margin-top:var(--s2);min-height:48px;padding:12px 16px;border:1px solid var(--accent-text);border-radius:4px;font:600 15px var(--font-ui);color:var(--accent-text);text-align:center}
+  .strip__more::after{content:"→";font-size:18px;line-height:1}
+  .strip__more:active{background:var(--paper-tint)}
+  /* anunciantes: sin textos, lo más fino posible */
+  .adz__head,.adbanner__label{display:none}
+  .adz{padding:8px 0 2px;margin-top:var(--s3)}
+  .adz--one{margin-top:var(--s3);padding-top:8px}
+  .adz__slots{gap:0}
+  .adz__dots{min-height:20px;margin-top:0}
+  .adr__dot{width:22px;height:20px}
+  .adr__dot::before{width:6px;height:6px}
+  .adr__dot[aria-current="true"]::before{width:14px}
+  .adbanner{margin-top:0}
+  .adband{padding-bottom:var(--s2)}
+}
