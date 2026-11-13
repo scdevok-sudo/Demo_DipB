@@ -17,6 +17,7 @@ const SECTION_AD_EVERY = 10;        // mobile, secciones internas: un slot 300x2
 const SECTION_TOTAL = 120;          // notas que se pueden "scrollear" en la sección (se reutilizan con ids distintos)
 const SECTION_CHUNK = 10;
 const SHOW_FECHA_EN_NOTA = true;    // dentro de la página de la nota se conserva la fecha de publicación (false la saca)
+const SHOW_TAPA_RELACIONADAS = false; // desktop: false oculta las 2 notas relacionadas (con guión) bajo la bajada de la nota principal; el markup se conserva, true las vuelve a mostrar
 const HEADER_MENU_MOBILE = false;   // mobile: false = las tres barritas viven solo en el zócalo; true = también arriba a la derecha
 /* Valores por defecto de cada parámetro (se pisan con ?param=valor, que se recuerda en la sesión). Ver README. */
 const DEFAULTS = { super: 'off', tapa: 'izq', legis: 'a', bajada: 'auto', ad: 'on', fondos: 'on', fotos: 'ejemplo', font: 'a', hora: 'off', diario: 'on', credito: 'on', tiempo: 'off', peso: '600' };
@@ -212,7 +213,7 @@ ${EARLY}
 <link rel="preload" href="assets/fonts/SourceSerif4-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/Inter-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/main.min.css">${extra}
-</head><body class="${[SHOW_TOP_BANNER && 'show-topbanner', !HEADER_MENU_MOBILE && 'no-hdr-burger', body].filter(Boolean).join(' ')}">
+</head><body class="${[SHOW_TOP_BANNER && 'show-topbanner', !HEADER_MENU_MOBILE && 'no-hdr-burger', !SHOW_TAPA_RELACIONADAS && 'no-tapa-rel', body].filter(Boolean).join(' ')}">
 <a class="skip" href="#main">Saltar al contenido</a>`;
 
 const DOCK = [['menu', 'Menú', null, I.burger], ['leg', 'Legislatura', 'seccion.html', I.leg], ['dip', 'Diputados', 'diputados.html', I.dip], ['sen', 'Senadores', 'senadores.html', I.sen]];

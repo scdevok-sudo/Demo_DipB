@@ -631,3 +631,6 @@ html[data-peso="700"]{--titulo-peso-mobile:700}
   .adbanner{margin-top:0}
   .adband{padding-bottom:var(--s2)}
 }
+
+/* Desktop: la nota principal de la tapa queda solo con dateline, titular y bajada (SHOW_TAPA_RELACIONADAS = false en build.mjs) */
+@media (min-width:768px){body.no-tapa-rel .vermas{display:none}}
