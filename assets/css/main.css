@@ -262,8 +262,9 @@ html[data-diario="off"] .flow>*{border-top-color:transparent}
 .card--tf .cap{margin-top:5px}
 .card--tf .meta{margin-top:6px}
 html[data-bajada="off"] .f1 .dek{display:none}
+@media (min-width:768px){html[data-bajada="auto"] .f1 .dek{display:none}}
 .f1band{padding:var(--s4) 0}
-@media (max-width:767px){.card--tf .fig{order:-1}.card--tf .card__txt{margin:12px 0 0}.f1 .cap{display:none}}
+@media (min-width:768px){.f2 .cap,.strip .cap{display:none}}
 /* Formato 2 · "horizontal con fondo": 8 notas, 2 columnas × 4 filas; foto 4:3 a la izquierda (~40 %), texto a la derecha. Fondo suave (?fondos) */
 .f2band{padding:var(--s4) 0}
 .f2>*{padding:var(--s3) 0}
@@ -544,3 +545,42 @@ html[data-diario="off"] .srow:first-child{border-top-color:var(--rule-hair)}
 
 /* Formato 1: las fotos de una fila quedan alineadas aunque un titular lleve volanta y otro no */
 @media (min-width:768px){.f1>*{display:flex}.f1>*>.card{flex:1;justify-content:flex-end}}
+
+/* ============ v2.2 · hora de las tarjetas (todas las pantallas) ============ */
+html[data-tiempo="off"] .card .meta,html[data-tiempo="off"] .srow .meta{display:none}
+
+/* ============ v2.2 · MOBILE (< 768 px): cintillo, título, bajada, foto, crédito ============ */
+:root{--titulo-peso-mobile:600}
+html[data-peso="700"]{--titulo-peso-mobile:700}
+@media (max-width:767px){
+  /* orden vertical: texto arriba, foto abajo */
+  .card--med .card__txt,.card--lead .card__txt,.card--super .card__txt{order:-1}
+  .card--med .card__txt,.card--tf .card__txt,.card--tapa2 .card__txt{margin:0 0 12px}
+  .card--lead .card__txt{margin:0 0 12px}
+  .card--super .card__txt{margin:0 0 var(--s2)}
+  .srow{grid-template-columns:minmax(0,1fr);gap:0;min-height:430px}
+  .srow .thumb{grid-column:1;grid-row:2;aspect-ratio:16/10;margin-top:12px}
+  .srow__cred{grid-row:3;margin-top:6px;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+  html[data-credito="off"] .srow__cred,html[data-diario="off"] .srow__cred{display:none}
+  .skel--i{aspect-ratio:16/10}
+  /* cintillo: serif, un poco más chico que el título, color de acento */
+  .card--med .kicker,.card--lead .kicker,.card--super .kicker,.srow .kicker,.card--lead .dateline{font:600 20px/1.2 var(--font-title);letter-spacing:0;text-transform:none;color:var(--accent-text);margin:10px 0 6px}
+  .card--lead[data-k] .dateline{display:none}
+  .card--lead .card__txt{display:flex;flex-direction:column}
+  .card--lead .dateline{order:-2}
+  .strip .kicker{display:none}                      /* en la franja de secciones la categoría ya es el título de la columna */
+  /* títulos más livianos (peso: variable --titulo-peso-mobile / ?peso=600|700) */
+  .card--med h2,.card--med h3,.card--tapa2 h2,.card--tf h3,.f2 .card--med h3,.strip .card--med h3,.srow h3,.card--super h2,.super--foto h2{font-size:26px;line-height:1.22;font-weight:var(--titulo-peso-mobile)}
+  .card--lead h2{font-size:30px;line-height:1.2;font-weight:var(--titulo-peso-mobile)}
+  .card--txt h3,.card--sm h3{font-weight:var(--titulo-peso-mobile)}
+  /* bajada entera, sin recorte */
+  .dek{-webkit-line-clamp:unset!important;overflow:visible!important}
+  .tapa .card--lead .dek,.tapa .card--lead .vermas{display:none}  /* nota 1 de la tapa: sin bajada ni relacionadas */
+  html[data-bajada="off"] .f1 .dek{display:none}
+  /* foto a ancho completo 16:10 y crédito debajo */
+  .card--lead .thumb{aspect-ratio:16/10;height:auto}
+  .card--super .thumb,.super--foto .thumb{aspect-ratio:16/10;height:auto}
+  .card--lead .tapa__lead,.tapa__lead{gap:0}
+  .cap__txt{display:none}
+  .cap{margin-top:6px}
+}
