@@ -259,15 +259,17 @@ const footer = () => `${ruleDouble('rule-double--ftr')}<footer class="ftr"><div 
 const write = (f, html) => { fs.writeFileSync(path.join(R, f), html); console.log('✓', f, (html.length / 1024).toFixed(0) + ' KB'); };
 
 /* ================================================================ módulo "Diputados y Senadores" (dos posiciones: a = tras la tapa · b = en el medio del flujo) */
-const legModule = slot => `<section class="legband legband--${slot}" aria-labelledby="t-leg-${slot}"><div class="wrap">
-  <div class="legband__head"><h2 class="sec-title" id="t-leg-${slot}"><span>Diputados y Senadores</span></h2>${tagEj}<a href="legisladores.html">Ver todos</a></div>
-  <div class="lcar" aria-roledescription="carrusel" aria-label="Legisladores">
+const legOne = (slot, cam, titulo, href) => { const L = legs.filter(l => l.cam === cam); return `<section class="legband legband--${slot}" aria-labelledby="t-leg-${slot}-${href}"><div class="wrap">
+  <div class="legband__head"><h2 class="sec-title" id="t-leg-${slot}-${href}"><span>${titulo}</span></h2>${tagEj}<a href="${href}.html">Ver todos</a></div>
+  <div class="lcar" aria-roledescription="carrusel" aria-label="${titulo}">
     <button class="lcar__btn lcar__btn--p" type="button" aria-label="Anteriores">${I.prev}</button>
-    <div class="lcar__track" tabindex="0">${legs.map(l => `<a class="lcar__item" href="${l.file}"><div class="avatar" aria-hidden="true">${avatarIn(l)}</div><b>${l.nombre}</b><small>${l.cam} · ${l.bloque}</small></a>`).join('')}</div>
+    <div class="lcar__track" tabindex="0">${L.map(l => `<a class="lcar__item" href="${l.file}"><div class="avatar" aria-hidden="true">${avatarIn(l)}</div><b>${l.nombre}</b><small>${l.cam} · ${l.bloque}</small></a>`).join('')}</div>
     <button class="lcar__btn lcar__btn--n" type="button" aria-label="Siguientes">${I.next}</button>
     <div class="lcar__count" aria-hidden="true"></div>
   </div>
-</div></section>`;
+</div></section>`; };
+/* dos módulos separados, uno tras otro: Diputados y Senadores (posición según ?legis=a|b) */
+const legModule = slot => legOne(slot, 'Diputados', 'Diputados', 'diputados') + legOne(slot, 'Senado', 'Senadores', 'senadores');
 
 /* ================================================================ superdestacada (recurso a demanda, apilable) */
 const superBlock = ({ n, kind }, i) => kind === 'texto'
