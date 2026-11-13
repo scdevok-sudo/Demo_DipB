@@ -396,7 +396,7 @@ const secPool = pub.filter(isLeg);
 const secLead = secPool[0];
 const secTotal = catCount('Legislatura Bonaerense');
 /* fila del flujo: línea fina arriba, volanta, titular serif, bajada gris, "Hace X" y foto a la DERECHA */
-const sRow = (n, uid) => `<article class="srow" data-uid="${uid}"><div class="srow__txt"><span class="kicker">${esc(sectionOf(n))}</span><h3><a href="${noteHref(n)}">${esc(n.titulo)}</a></h3><p class="dek">${esc(n.extracto)}</p><div class="meta">${rel(n)}</div></div>${thumb(n, { sizes: '(min-width:768px) 280px, 100vw' })}<span class="srow__cred cap__credit${DEMO_PLACEHOLDERS ? ' is-ph' : ''}">Foto: Archivo</span></article>`;
+const sRow = (n, uid) => `<article class="srow" data-uid="${uid}"><div class="srow__txt">${kick(n)}<h3><a href="${noteHref(n)}">${esc(n.titulo)}</a></h3><p class="dek">${esc(n.extracto)}</p><div class="meta">${rel(n)}</div></div>${thumb(n, { sizes: '(min-width:768px) 280px, 100vw' })}<span class="srow__cred cap__credit${DEMO_PLACEHOLDERS ? ' is-ph' : ''}">Foto: Archivo</span></article>`;
 const secRows = [];
 for (let i = 0; secRows.length < SECTION_TOTAL; i++) { const base = secPool[(i % (secPool.length - 1)) + 1]; secRows.push(sRow(base, i < secPool.length - 1 ? `n${base.id}` : `n${base.id}-r${Math.floor(i / (secPool.length - 1))}`)); }
 const adM = () => `<div class="srow-ad only-m"><span class="adbox__label">Publicidad</span><a class="srow-ad__in" ${adLink(ROT.find(b => !isH(b)))}><img src="${ROT.find(b => !isH(b)).file}" alt="Banner publicitario" width="300" height="250" loading="lazy"></a></div>`;
@@ -409,7 +409,7 @@ ${header('seccion.html')}
  <div class="sec-hero"><h1 class="sec-title sec-title--lg"><span>Legislatura Bonaerense</span></h1><p>Sesiones, proyectos y la actividad de ambas cámaras de la Provincia de Buenos Aires. ${fmtN(secTotal)} notas en el archivo.</p></div>
  <article class="card card--lead tapa__lead sec-tapa">
    ${fig(secLead, { sizes: SZ.lead, big: true, eager: true, cap: true, alt: secLead.titulo })}
-   <div class="card__txt"><span class="kicker">${esc(sectionOf(secLead))}</span><h2><a href="${noteHref(secLead)}">${esc(secLead.titulo)}</a></h2>${dl(secLead)}<p class="dek">${esc(secLead.extracto)}</p>${vermas(secLead)}<div class="meta">${rel(secLead)}</div></div>
+   <div class="card__txt">${kick(secLead)}<h2><a href="${noteHref(secLead)}">${esc(secLead.titulo)}</a></h2>${dl(secLead)}<p class="dek">${esc(secLead.extracto)}</p>${vermas(secLead)}<div class="meta">${rel(secLead)}</div></div>
  </article>
  ${ruleDouble('rule-double--wrap')}
  <div class="sec-layout">
