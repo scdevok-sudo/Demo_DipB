@@ -186,6 +186,9 @@ const I = {
   search: '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
   burger: '<svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
   close: '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+  leg: '<svg viewBox="0 0 24 24"><path d="M3 10 12 4l9 6M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"/></svg>',
+  dip: '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.9 3.1-6.5 7-6.5s7 2.6 7 6.5"/></svg>',
+  sen: '<svg viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3"/><path d="M3 19c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5M16 6a3 3 0 0 1 0 5.5M18 14c2 .7 3 2.4 3 5"/></svg>',
   up: '<svg viewBox="0 0 24 24"><path d="m6 14 6-6 6 6"/></svg>',
   prev: '<svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>',
   next: '<svg viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>',
@@ -211,7 +214,9 @@ ${EARLY}
 </head><body class="${[SHOW_TOP_BANNER && 'show-topbanner', !HEADER_MENU_MOBILE && 'no-hdr-burger', body].filter(Boolean).join(' ')}">
 <a class="skip" href="#main">Saltar al contenido</a>`;
 
-const header = active => `<header class="hdr">
+const DOCK = [['menu', 'Menú', null, I.burger], ['leg', 'Legislatura', 'seccion.html', I.leg], ['dip', 'Diputados', 'diputados.html', I.dip], ['sen', 'Senadores', 'senadores.html', I.sen]];
+const dockHtml = act => `<nav class="dock" aria-label="Navegación rápida">${DOCK.map(([k, t, h, ic]) => h ? `<a class="dock__b" href="${h}"${h === act ? ' aria-current="page"' : ''}>${ic}<span>${t}</span></a>` : `<button class="dock__b js-dock-menu" type="button" aria-expanded="false" aria-controls="nav">${ic}<span>${t}</span></button>`).join('')}</nav>`;
+const header = (active, dockActive = active) => `<header class="hdr">
   <div class="topstrip"><div class="wrap topstrip__in">
     <time class="topstrip__date" data-hoy>${hoyStr}</time>${EDITION_LINE ? `<span class="topstrip__ed">${esc(EDITION_LINE)}</span>` : ''}
     <div class="topstrip__links"><button class="topstrip__btn js-search" type="button" aria-expanded="false">${I.search}Buscar</button><a href="legisladores.html">Legisladores</a></div>
@@ -230,7 +235,8 @@ const header = active => `<header class="hdr">
   ${ruleDouble('rule-double--hdr')}
 </header>
 ${topBanner()}
-<div class="lasthour" role="region" aria-label="Última hora"><div class="wrap"><span class="lasthour__tag">Última hora</span><div class="lasthour__list">${ticker.map(n => `<a class="lasthour__item" href="${noteHref(n)}"><time>${n.fecha.slice(11, 16)}</time><span>${esc(n.titulo)}</span></a>`).join('')}</div></div></div>`;
+<div class="lasthour" role="region" aria-label="Última hora"><div class="wrap"><span class="lasthour__tag">Última hora</span><div class="lasthour__list">${ticker.map(n => `<a class="lasthour__item" href="${noteHref(n)}"><time>${n.fecha.slice(11, 16)}</time><span>${esc(n.titulo)}</span></a>`).join('')}</div></div></div>
+${dockHtml(dockActive)}`;
 
 const footer = () => `${ruleDouble('rule-double--ftr')}<footer class="ftr"><div class="wrap">
   <div class="ftr__grid">
@@ -416,23 +422,26 @@ ${header('seccion.html')}
 ${footer()}`);
 
 /* ================================================================ legisladores.html */
-write('legisladores.html', `${head('Diputados Bonaerenses · Legisladores')}
-${header('legisladores.html')}
+const legPage = (file, tit, list, crumb) => write(file, `${head('Diputados Bonaerenses · ' + tit)}
+${header(file === 'legisladores.html' ? file : 'x', file)}
 <main id="main">
 <div class="wrap">
- <p class="crumbs"><a href="index.html">Home</a> › Diputados Bonaerenses</p>
- <div class="sec-hero"><h1 class="sec-title sec-title--lg"><span>Diputados y Senadores</span></h1><p>Perfiles de legisladores de la Provincia de Buenos Aires. ${tagEj}</p></div>
+ <p class="crumbs"><a href="index.html">Home</a> › ${crumb}</p>
+ <div class="sec-hero"><h1 class="sec-title sec-title--lg"><span>${tit}</span></h1><p>Perfiles de legisladores de la Provincia de Buenos Aires. ${tagEj}</p></div>
  <div class="sec" style="margin-top:24px">
   <div class="notice"><b>Dato de muestra.</b> No se recibió el export del CPT <code>funcionario</code>: nombres, bloques y partidos son ficticios y las fotos son retratos de ejemplo (se vuelve a las iniciales con <code>?fotos=iniciales</code>). En el Hito 2 se reemplazan por los registros reales.</div>
   <form class="filters" onsubmit="return false"><label>Bloque<select id="f-bloque"><option value="">Todos</option>${BLOQUES.map(b => `<option>${b}</option>`).join('')}</select></label>
    <label>Partido<select id="f-partido"><option value="">Todos</option>${PARTIDOS.map(b => `<option>${b}</option>`).join('')}</select></label>
    <div style="display:flex;gap:12px;align-items:center"><button class="btn btn--ghost" id="f-reset" type="button">Limpiar</button><span id="f-count" class="meta" role="status"></span></div></form>
-  <div class="legs" id="legs">${legs.map(l => `<a class="leg" href="${l.file}" data-bloque="${l.bloque}" data-partido="${l.partido}"><div class="avatar" aria-hidden="true">${avatarIn(l)}</div><h3>${l.nombre}</h3><small>${l.cam} · ${l.bloque} · ${l.partido}</small></a>`).join('')}</div>
+  <div class="legs" id="legs">${list.map(l => `<a class="leg" href="${l.file}" data-bloque="${l.bloque}" data-partido="${l.partido}"><div class="avatar" aria-hidden="true">${avatarIn(l)}</div><h3>${l.nombre}</h3><small>${l.cam} · ${l.bloque} · ${l.partido}</small></a>`).join('')}</div>
  </div>
  <div class="sec">${adOne()}</div>
 </div>
 </main>
 ${footer()}`);
+legPage('legisladores.html', 'Diputados y Senadores', legs, 'Diputados Bonaerenses');
+legPage('diputados.html', 'Diputados', legs.filter(l => l.cam === 'Diputados'), 'Diputados');
+legPage('senadores.html', 'Senadores', legs.filter(l => l.cam === 'Senado'), 'Senadores');
 
 /* ================================================================ legislador*.html (perfil completo de prueba + 23 sin biografía) */
 const BIO = [
@@ -442,7 +451,7 @@ const BIO = [
 ];
 const linked = legPool.slice(0, 12);
 const perfil = (L, withBio) => `${head(L.nombre + ' · Diputados Bonaerenses')}
-${header('legisladores.html')}
+${header('legisladores.html', L.cam === 'Senado' ? 'senadores.html' : 'diputados.html')}
 <main id="main">
 <div class="wrap">
  <p class="crumbs"><a href="index.html">Home</a> › <a href="legisladores.html">Diputados Bonaerenses</a> › ${L.nombre}</p>

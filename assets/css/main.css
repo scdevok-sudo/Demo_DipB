@@ -584,3 +584,27 @@ html[data-peso="700"]{--titulo-peso-mobile:700}
   .cap__txt{display:none}
   .cap{margin-top:6px}
 }
+
+/* ============ v2.2 · Zócalo fijo de navegación (solo mobile < 768 px): Menú · Legislatura · Diputados · Senadores ============ */
+.dock{display:none}
+@media (max-width:767px){
+  :root{--dock-h:calc(56px + env(safe-area-inset-bottom))}
+  .dock{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;left:0;right:0;bottom:0;z-index:40;height:var(--dock-h);padding-bottom:env(safe-area-inset-bottom);background:#fff;border-top:1px solid var(--rule-hair)}
+  .dock__b{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:44px;border:0;background:none;padding:0;color:var(--ink-2);font:500 11.5px/1 var(--font-ui);cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .dock__b svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+  .dock__b[aria-current="page"],.dock__b[aria-expanded="true"]{color:var(--accent-text);font-weight:700}
+  .dock__b:active{background:var(--paper-tint)}
+  body{padding-bottom:var(--dock-h)}
+  .totop{bottom:calc(var(--dock-h) + 12px)!important}
+  .sharebar{bottom:var(--dock-h);padding-bottom:8px}
+  .has-sharebar{padding-bottom:calc(64px + var(--dock-h))}
+  .has-sharebar .totop{bottom:calc(var(--dock-h) + 76px)!important}
+  .toast{bottom:calc(var(--dock-h) + 16px)}
+  .demo{bottom:calc(var(--dock-h) + 8px)}
+  body.no-hdr-burger .hdr__tools .burger{display:none}
+}
+
+/* ============ v2.2 · Diputados y Senadores: dos módulos seguidos, filete fino entre ambos ============ */
+.legband+.legband{border-top:0;padding-top:0}
+.legband+.legband>.wrap{border-top:1px solid #c5ddf0;padding-top:var(--s4)}
+.legband:has(+.legband){padding-bottom:var(--s3);border-bottom:0}
