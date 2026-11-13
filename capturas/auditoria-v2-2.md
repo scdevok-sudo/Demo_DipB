@@ -38,5 +38,5 @@ Verificaciones transversales: crédito "FOTO: ARCHIVO" en las 23 tarjetas con fo
 
 Nota: estos extractos son texto real del sitio actual (no de fantasía). Al cortar en la última oración completa quedan más cortos que el original.
 
-## Pendiente de decisión
-- Punto 6: banner de Anunciantes a ancho completo con proporción natural (ver arriba).
+## Actualización del punto 6 (13/11)
+Resuelto con la decisión de Santi: slot de alto fijo de 110 px, ancho completo, `object-fit: contain` sobre `--paper-tint`, 8 px de aire y puntos de 6 px, sin textos. El bloque mide 146 px en todos los banners (medido durante la rotación completa) y no se corta ninguno (`anunciantes-110-comparacion-m390.png`). Punto 6: **cumple**.
