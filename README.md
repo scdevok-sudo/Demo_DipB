@@ -1,4 +1,4 @@
-# Maqueta v2.1 · Diputados Bonaerenses (diseño "diario", solo 2 formatos en el flujo)
+# Maqueta v2.2 · Diputados Bonaerenses (diseño "diario", 2 formatos en el flujo, ajustes mobile del 12/11)
 
 Maqueta estática, mobile first, sin frameworks. Todas las páginas llevan `noindex,nofollow`. No toca el WordPress.
 
@@ -14,11 +14,11 @@ Maqueta estática, mobile first, sin frameworks. Todas las páginas llevan `noin
 cabecera (fecha · menú · doble línea)
 [superdestacada opcional]
 TAPA de 3
-[legis=a] Diputados y Senadores
+[legis=a] Diputados + Senadores (dos módulos)
 FORMATO 1 (4 notas)
 banner 1180×90
 FORMATO 1 (4 notas más)
-[legis=b] Diputados y Senadores
+[legis=b] Diputados + Senadores (dos módulos)
 ─── doble línea ───
 FORMATO 2 (8 notas, fondo suave)
 Anunciantes
@@ -48,7 +48,9 @@ Ejemplo: `index.html?demo=1&super=2&legis=b&bajada=on`. "Copiar link de esta var
 | `super` | **off** · foto · texto · 2 · 3 | Superdestacada sobre la tapa: A foto, B solo texto, o apiladas |
 | `tapa` | **izq** · der | Foto de la nota fuerte a izquierda o derecha |
 | `legis` | **a** · b | Diputados y Senadores tras la tapa (a) o tras el segundo Formato 1 (b) |
-| `bajada` | on · **off** | Bajada en el Formato 1 |
+| `bajada` | **auto** · on · off | Bajada del Formato 1. `auto`: en mobile siempre con bajada entera (sin recorte), en desktop sin bajada en F1. La nota 1 de la tapa en mobile nunca lleva bajada |
+| `peso` | **600** · 700 | Peso de los títulos de tarjeta en mobile (variable CSS `--titulo-peso-mobile`) |
+| `tiempo` | **off** · on | Hora relativa ("Hace 2 horas") en las tarjetas. OJO: `hora` sigue siendo la franja "Última hora" (el brief asumía que `hora` era la de las tarjetas, por eso se creó `tiempo`) |
 | `ad` | **on** · off | Banner 1180×90 (320×100 en mobile); apagado colapsa |
 | `fondos` | **on** · off | Fondo suave del Formato 2 |
 | `fotos` | **ejemplo** · iniciales | Retratos de fantasía o iniciales |
@@ -58,6 +60,14 @@ Ejemplo: `index.html?demo=1&super=2&legis=b&bajada=on`. "Copiar link de esta var
 | `credito` | **on** · off | Crédito de foto en mayúsculas |
 
 Los parámetros `m1` y `m2` ya no existen. Un script inline en `<head>` pone los valores en `<html data-*>` antes del primer render.
+
+## v2.2 · Mobile (< 768 px), feedback de Juan 12/11
+- **Tarjetas**: cintillo (volanta o dateline "La Plata", serif 20 px, color de acento) → título (26 px, 30 px la nota 1 de la tapa; peso 600) → bajada entera → foto 16:10 → "FOTO: ARCHIVO". Nota 1 de la tapa sin bajada ni relacionadas. En la franja de secciones se oculta el cintillo (la categoría ya es el título de la columna). Listas de la sección interna con el mismo orden.
+- **Zócalo fijo** (`.dock`): Menú · Legislatura · Diputados · Senadores, 56 px + safe-area, sin ocultarse al scrollear. Menú abre el panel de siempre (queda por encima del zócalo, se cierra con su X). Volver arriba, barra de compartir y panel `?demo=1` quedan encima del zócalo. Nuevas páginas `diputados.html` y `senadores.html` (filtradas por cámara).
+- **Módulos separados** Diputados / Senadores (también en desktop, uno tras otro, contadores propios "1 de 16" / "1 de 8").
+- **Franja final**: títulos a 28 px, "Ver más de X" como botón con flecha, doble línea entre secciones, anunciantes sin título ni rótulo y con 8 px de aire.
+- Constantes en `build.mjs`: `HEADER_MENU_MOBILE` (false: sin las tres barritas arriba en mobile), `SHOW_FECHA_EN_NOTA` (true). La hora de las tarjetas está apagada en todas las pantallas (`tiempo=off`).
+- Capturas en `capturas/`: `index-m390.png`, `zocalo-*`, `modulos-diputados-senadores-m390.png`, `franja-secciones-m390.png`, `anunciantes-m390.png`, `comparacion-peso-600-vs-700-m360.png`, `index-d1280.png`.
 
 ## Secciones internas (`seccion.html`)
 Mini tapa de 1 nota + flujo vertical (línea arriba, volanta, titular, bajada, hora, foto a la derecha) + columna lateral sticky de 300 px en desktop. Scroll infinito con `IntersectionObserver`, esqueleto de un bloque entero (altura reservada) y botón "Ver más notas" de respaldo; carga de a 10 hasta 120 (las notas se reutilizan con `data-uid` distinto). Mobile: slot 300×250 cada `SECTION_AD_EVERY` notas (0 lo apaga). Esta lista es independiente de los dos formatos del home.
