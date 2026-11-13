@@ -66,7 +66,9 @@ Los parámetros `m1` y `m2` ya no existen. Un script inline en `<head>` pone los
 - **Zócalo fijo** (`.dock`): Menú · Legislatura · Diputados · Senadores, 56 px + safe-area, sin ocultarse al scrollear. Menú abre el panel de siempre (queda por encima del zócalo, se cierra con su X). Volver arriba, barra de compartir y panel `?demo=1` quedan encima del zócalo. Nuevas páginas `diputados.html` y `senadores.html` (filtradas por cámara).
 - **Módulos separados** Diputados / Senadores (también en desktop, uno tras otro, contadores propios "1 de 16" / "1 de 8").
 - **Franja final**: títulos a 28 px, "Ver más de X" como botón con flecha, doble línea entre secciones, anunciantes sin título ni rótulo y con 8 px de aire.
-- Constantes en `build.mjs`: `HEADER_MENU_MOBILE` (false: sin las tres barritas arriba en mobile), `SHOW_FECHA_EN_NOTA` (true). La hora de las tarjetas está apagada en todas las pantallas (`tiempo=off`).
+- **Anunciantes mobile**: slot de alto fijo 110 px, ancho completo, `object-fit: contain` sobre `--paper-tint` (el banner del flujo usa el mismo criterio); el bloque mide 146 px durante toda la rotación (sin saltos). Desktop sin cambios.
+- **Tapa desktop**: `SHOW_TAPA_RELACIONADAS = false` oculta las 2 notas relacionadas bajo la bajada de la nota principal (en la tapa y en la mini tapa de la sección); el markup se conserva.
+- Constantes en `build.mjs`: `SHOW_TAPA_RELACIONADAS` (false), `HEADER_MENU_MOBILE` (false: sin las tres barritas arriba en mobile), `SHOW_FECHA_EN_NOTA` (true). La hora de las tarjetas está apagada en todas las pantallas (`tiempo=off`).
 - Capturas en `capturas/`: `index-m390.png`, `zocalo-*`, `modulos-diputados-senadores-m390.png`, `franja-secciones-m390.png`, `anunciantes-m390.png`, `comparacion-peso-600-vs-700-m360.png`, `index-d1280.png`.
 
 ## Secciones internas (`seccion.html`)

@@ -629,6 +629,11 @@ html[data-peso="700"]{--titulo-peso-mobile:700}
   .adr__dot::before{width:6px;height:6px}
   .adr__dot[aria-current="true"]::before{width:14px}
   .adbanner{margin-top:0}
+  /* v2.2.1 · slot de alto fijo (110 px, ancho completo): el banner se ve entero con object-fit:contain, sin saltos de alto al rotar */
+  .adz{padding:8px 0}
+  .adr__view{aspect-ratio:auto;height:110px;max-width:none;background:var(--paper-tint)}
+  .adz__slots{justify-content:stretch;grid-template-columns:minmax(0,1fr)}
+  .adbanner__box{aspect-ratio:auto;height:110px;background:var(--paper-tint)}
   .adband{padding-bottom:var(--s2)}
 }
 
