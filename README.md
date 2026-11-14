@@ -45,6 +45,11 @@ Bloques: `tapa · legis-a · legis-b · f1 · f2 · banner · linea · anunciant
 - **Sección** (categoría) es una etiqueta chica con fondo (`--seccion-bg`, `--seccion-fg`). Parámetro `seccion=foto|abajo` (default `foto`: sobre la foto, esquina inferior izquierda; `abajo`: debajo de la foto, a la derecha). En tarjetas sin foto va debajo del título.
 - `SHOW_LEGISLATURA_LABEL` ahora vale `true` (la etiqueta también aparece en Legislatura Bonaerense). El dateline ("LA PLATA") ya no se muestra.
 
+## v2.3 · Tipografía y tamaños (etapa B)
+- Fuentes variables self-hosted (latin, `font-display: swap`), peso 400 a 900 cada una: Source Serif 4 (51 KB, la actual y la única que se descarga por defecto junto con Inter, 48 KB), Merriweather (98 KB) y Literata (39 KB). Las alternativas solo se descargan si se elige esa fuente.
+- Títulos de tarjeta +2 px (grandes) o +1 px (chicos) en mobile y desktop; peso por defecto 800.
+- Cuerpo de la nota: 20 px en mobile, 21 px en tablet y 22 px en desktop, con `line-height` 1.6 (antes 18 px); bajada 20/23 px.
+
 ## Parámetros de variante (URL o panel; se recuerdan en la sesión; `?reset=1` los borra)
 Ejemplo: `index.html?demo=1&super=2&legis=b&bajada=on`. "Copiar link de esta variante" arma la URL.
 
@@ -54,12 +59,12 @@ Ejemplo: `index.html?demo=1&super=2&legis=b&bajada=on`. "Copiar link de esta var
 | `tapa` | **izq** · der | Foto de la nota fuerte a izquierda o derecha |
 | `legis` | **a** · b | Diputados y Senadores tras la tapa (a) o tras el segundo Formato 1 (b) |
 | `bajada` | **auto** · on · off | Bajada del Formato 1. `auto`: en mobile siempre con bajada entera (sin recorte), en desktop sin bajada en F1. La nota 1 de la tapa en mobile nunca lleva bajada |
-| `peso` | **600** · 700 | Peso de los títulos de tarjeta en mobile (variable CSS `--titulo-peso-mobile`) |
+| `peso` | 700 · **800** · 900 | Peso de los títulos de tarjetas y notas, en todas las pantallas (variable CSS `--titulo-peso`). `600` queda como alias de `700` |
 | `tiempo` | **off** · on | Hora relativa ("Hace 2 horas") en las tarjetas. OJO: `hora` sigue siendo la franja "Última hora" (el brief asumía que `hora` era la de las tarjetas, por eso se creó `tiempo`) |
 | `ad` | **on** · off | Banner 1180×90 (320×100 en mobile); apagado colapsa |
 | `fondos` | **on** · off | Fondo suave del Formato 2 |
 | `fotos` | **ejemplo** · iniciales | Retratos de fantasía o iniciales |
-| `font` | **a** · b | Source Serif 4 o Merriweather |
+| `font` | **actual** · merriweather · literata | Serif de los títulos. `actual` = Source Serif 4 (referencia; es la que ya usaba la maqueta). Alias viejos: `a` → actual, `b` → merriweather. Clarín usa Portada/Portada Text (TypeTogether, comercial): no se pueden usar sin licencia |
 | `hora` | on · **off** | Franja "Última hora" |
 | `diario` | **on** · off | Todos los detalles de diario juntos |
 | `credito` | **on** · off | Crédito de foto en mayúsculas |
