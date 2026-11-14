@@ -139,8 +139,8 @@
     const rows = [
       ['super', 'Superdestacada', [['off', 'Sin ella'], ['foto', 'A · foto'], ['texto', 'B · texto'], ['2', '2'], ['3', '3']]],
       ['seccion', 'Etiqueta de sección', [['foto', 'Sobre la foto'], ['abajo', 'Debajo de la foto']]],
-      ['tapa', 'Foto de la nota fuerte', [['izq', 'Izquierda'], ['der', 'Derecha']]],
-      ['legis', 'Diputados y Senadores', [['a', 'A · tras la tapa'], ['b', 'B · en el medio']]],
+      ['tapa', 'Tapa (desktop)', [['texto-izq', 'Texto a la izquierda'], ['foto-izq', 'Foto a la izquierda']]],
+      ['vermas', 'Ver más de X', [['flecha', 'Texto con flecha'], ['boton', 'Botón con borde']]],
       ['bajada', 'Bajada (mobile siempre con, salvo nota 1)', [['auto', 'Auto'], ['on', 'Con'], ['off', 'Sin']]],
       ['peso', 'Peso de los títulos', [['700', '700'], ['800', '800'], ['900', '900']]],
       ['tiempo', 'Hora en las tarjetas', [['off', 'No'], ['on', 'Sí']]],

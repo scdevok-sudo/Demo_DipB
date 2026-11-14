@@ -20,14 +20,14 @@ const SHOW_FECHA_EN_NOTA = true;    // dentro de la página de la nota se conser
 const SHOW_TAPA_RELACIONADAS = false; // desktop: false oculta las 2 notas relacionadas (con guión) bajo la bajada de la nota principal; el markup se conserva, true las vuelve a mostrar
 const HEADER_MENU_MOBILE = false;   // mobile: false = las tres barritas viven solo en el zócalo; true = también arriba a la derecha
 /* Valores por defecto de cada parámetro (se pisan con ?param=valor, que se recuerda en la sesión). Ver README. */
-const DEFAULTS = { seccion: 'foto', super: 'off', tapa: 'izq', legis: 'a', bajada: 'auto', ad: 'on', fondos: 'on', fotos: 'ejemplo', font: 'actual', hora: 'off', diario: 'on', credito: 'on', tiempo: 'off', peso: '800' };
+const DEFAULTS = { seccion: 'foto', super: 'off', tapa: 'texto-izq', vermas: 'flecha', bajada: 'auto', ad: 'on', fondos: 'on', fotos: 'ejemplo', font: 'actual', hora: 'off', diario: 'on', credito: 'on', tiempo: 'off', peso: '800' };
 const OPTIONS = {
-  seccion: ['foto', 'abajo'], super: ['off', 'foto', 'texto', '2', '3'], tapa: ['izq', 'der'], legis: ['a', 'b'], bajada: ['auto', 'on', 'off'],
+  seccion: ['foto', 'abajo'], super: ['off', 'foto', 'texto', '2', '3'], tapa: ['texto-izq', 'foto-izq'], vermas: ['flecha', 'boton'], bajada: ['auto', 'on', 'off'],
   ad: ['on', 'off'], fondos: ['on', 'off'], fotos: ['ejemplo', 'iniciales'], font: ['actual', 'merriweather', 'literata'], hora: ['on', 'off'], diario: ['on', 'off'], credito: ['on', 'off'], tiempo: ['off', 'on'], peso: ['700', '800', '900'],
 };
 
 /* Alias de valores viejos de parámetros (los links ya compartidos siguen funcionando) */
-const ALIAS = { font: { a: 'actual', b: 'merriweather' }, peso: { 600: '700' } };
+const ALIAS = { font: { a: 'actual', b: 'merriweather' }, peso: { 600: '700' }, tapa: { izq: 'foto-izq', der: 'texto-izq' } };
 
 /* CSS: main.css es la fuente; se minifica a main.min.css (menos bytes bloqueando el primer render). No editar el .min a mano. */
 { const css = rd('assets/css/main.css').replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s+/g, ' ').replace(/\s*([{};,>])\s*/g, '$1').replace(/;}/g, '}').trim();
@@ -96,7 +96,7 @@ const tapa2 = [take(pub.filter(n => n.categorias.includes('Nación')), 1, hasImg
 const tapa = [hero, ...tapa2];
 // franja de secciones (reservada primero para que el flujo se arme con lo que sobra, mayormente Legislatura)
 const SECCIONES = ['Congreso', 'Nación', 'Provincia', 'Municipios'];
-const mods = SECCIONES.map(c => { const p = pub.filter(n => n.categorias.includes(c)); const ph = take(p, 1, hasImg); return [c, [...ph, ...take(p, 3)]]; });
+const mods = SECCIONES.map(c => { const p = pub.filter(n => n.categorias.includes(c)); const ph = take(p, 1, hasImg); return [c, [...ph, ...take(p, 2)]]; });
 // superdestacadas de demostración (recurso a demanda): el campo `super` de la nota manda; si no hay, se usan sobrantes con foto grande
 const superNotes = (() => {
   const marked = pub.filter(n => n.super === 'foto' || n.super === 'texto');
@@ -119,29 +119,34 @@ const BANNER_HORIZ_ID = '410410';
 const uniq = [...new Map(banners.map(b => [b.id, b])).values()];
 const isH = b => b.w / b.h > 3;
 const hB = uniq.find(b => b.id === BANNER_HORIZ_ID);
-const ROT = uniq.filter(b => b.id !== BANNER_HORIZ_ID).sort((a, b) => isH(a) - isH(b));
+const isSq = b => b.w / b.h > .9 && b.w / b.h < 1.12;
+const ROT = uniq.filter(isSq).slice(0, 16);                                   // solo cuadrados (4 slots x 4 banners)
 const SLOTS4 = [0, 1, 2, 3].map(k => ROT.filter((_, i) => i % 4 === k));
+const HROT = uniq.filter(b => isH(b) && b.id !== BANNER_HORIZ_ID);            // horizontales: rotan en una tira fina de 90 px (contain, sin desborde)
 const adLink = b => b.dest ? `href="${esc(b.dest)}" target="_blank" rel="noopener sponsored"` : 'href="#" data-stub="Banner sin destino cargado en el sitio actual."';
 const adSlide = (b, first) => `<a class="adr__slide" ${adLink(b)} aria-label="Publicidad"><img ${first ? `src="${b.file}"` : `data-src="${b.file}"`} alt="Banner publicitario" width="${b.w}" height="${b.h}"></a>`;
 const adSlot = list => `<div class="adr"><div class="adr__view">${list.map(b => adSlide(b, false)).join('')}</div></div>`;
-const adZone = (lists = SLOTS4) => `<section class="adz" data-group="${BANNERS_POR_CICLO}" data-interval="${SEGUNDOS_POR_BANNER * 1000}" aria-label="Anunciantes"><div class="wrap adz__in">
-  <div class="adz__head"><h2 class="sec-title"><span>Anunciantes</span></h2><span class="adz__label">Publicidad</span></div>
+const adZone = (lists = SLOTS4, cls = '') => `<section class="adz ${cls}" data-interval="${SEGUNDOS_POR_BANNER * 1000}" aria-label="Publicidad"><div class="wrap adz__in">
   <div class="adz__slots">${lists.map(adSlot).join('')}</div>
   <div class="adz__dots"></div>
 </div></section>`;
+const adZoneH = () => adZone([HROT], 'adz--h');
 const adOne = () => adZone([ROT]).replace('<section class="adz"', '<section class="adz adz--one"');
 /* Banner horizontal 1180x90 (320x100 en mobile). Interruptor: ?ad=on|off. Si está apagado colapsa (display:none). */
-const hBanner = () => `<div class="adbanner" aria-label="Publicidad"><span class="adbanner__label">Publicidad</span><a class="adbanner__box" ${adLink(hB)}><img src="${hB.file}" alt="Banner publicitario" width="${hB.w}" height="${hB.h}" loading="lazy"></a></div>`;
+const hBanner = () => `<div class="adbanner" aria-label="Publicidad"><a class="adbanner__box" ${adLink(hB)}><img src="${hB.file}" alt="Banner publicitario" width="${hB.w}" height="${hB.h}" loading="lazy"></a></div>`;
 const topBanner = () => SHOW_TOP_BANNER ? `<div class="topbanner" aria-label="Publicidad"><div class="wrap"><a ${adLink(hB)}><img src="${hB.file}" alt="" width="${hB.w}" height="${hB.h}" loading="lazy"></a></div></div>` : '';
 /* slot de sección interna: 300x600 sticky (desktop) / 300x250 cada N notas (mobile) */
 const adBox = cls => `<aside class="adbox ${cls}" aria-label="Publicidad"><span class="adbox__label">Publicidad</span><a class="adbox__in" ${adLink(ROT.find(b => !isH(b)))}><img src="${ROT.find(b => !isH(b)).file}" alt="Banner publicitario" width="300" height="300" loading="lazy"></a></aside>`;
 
 /* ------------------------------------------------------------ legisladores (MUESTRA) */
 const NOMBRES = ['Lucía Ferrer', 'Martín Salgado', 'Valeria Ruiz', 'Gonzalo Páez', 'Camila Orellana', 'Julián Berro', 'Sofía Mansilla', 'Tomás Aguirre', 'Noelia Bravo', 'Ezequiel Lamas', 'Paula Cardozo', 'Facundo Ibarra', 'Marina Quiroga', 'Hernán Dubois', 'Agustina Roldán', 'Matías Sosa', 'Daniela Vega', 'Rodolfo Pineda', 'Carla Escobar', 'Nicolás Barrios', 'Mariana Toledo', 'Sebastián Fuentes', 'Romina Acosta', 'Leandro Cabrera'];
-const BLOQUES = ['Bloque A', 'Bloque B', 'Bloque C', 'Bloque D'], PARTIDOS = ['Partido 1', 'Partido 2', 'Partido 3'];
+const BLOQUES = ['Fuerza Patria', 'La Libertad Avanza', 'UCR', 'PRO', 'Coalición Cívica'];
+const PARTIDOS = ['Partido 1', 'Partido 2', 'Partido 3'];   // provisorio: la etapa D lo quita (las páginas muestran solo bloque)
+const SECCIONES_E = ['Primera', 'Segunda', 'Tercera', 'Cuarta', 'Quinta', 'Sexta', 'Séptima', 'Octava'];
+const CIUDADES = ['La Plata', 'Bahía Blanca', 'Mar del Plata', 'Quilmes', 'Lomas de Zamora', 'San Isidro', 'Tandil', 'Junín', 'Pergamino', 'Olavarría', 'Lanús', 'Morón'];
 const slugify = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ /g, '-');
 // `foto`: ruta del retrato de fantasía (assets/img/fantasia/NN.jpg). En el sitio real viene del registro del legislador; si falta, se ven las iniciales.
-const legs = NOMBRES.map((nombre, i) => ({ nombre, slug: slugify(nombre), bloque: BLOQUES[i % 4], partido: PARTIDOS[(i * 7 + (i >> 2)) % 3], cam: i % 3 === 2 ? 'Senado' : 'Diputados', ini: nombre.split(' ').map(p => p[0]).join(''), foto: `assets/img/fantasia/${String(i + 1).padStart(2, '0')}.jpg`, file: i === 0 ? 'legislador.html' : `legislador-${slugify(nombre)}.html` }));
+const legs = NOMBRES.map((nombre, i) => ({ nombre, slug: slugify(nombre), bloque: BLOQUES[(i + (i >> 2)) % 5], partido: PARTIDOS[(i * 7 + (i >> 2)) % 3], cam: i % 3 === 2 ? 'Senado' : 'Diputados', mandato: i % 3 === 2 ? '2021 a 2025' : '2023 a 2027', seccion_electoral: `${SECCIONES_E[(i * 3 + 1) % 8]} sección electoral`, ciudad: CIUDADES[(i * 5 + 2) % 12], ini: nombre.split(' ').map(p => p[0]).join(''), foto: `assets/img/fantasia/${String(i + 1).padStart(2, '0')}.jpg`, file: i === 0 ? 'legislador.html' : `legislador-${slugify(nombre)}.html` }));
 const avatarIn = l => `<span class="avatar__ini">${l.ini}</span>${l.foto ? `<img class="avatar__img" src="${l.foto}" alt="" width="128" height="128" loading="lazy" decoding="async" onerror="this.remove()">` : ''}`;
 const tagEj = `<span class="tag-ejemplo"><span class="on-ej">Foto de ejemplo</span><span class="on-ini">Datos de muestra</span></span>`;
 
@@ -265,53 +270,51 @@ const footer = () => `${ruleDouble('rule-double--ftr')}<footer class="ftr"><div 
 
 const write = (f, html) => { fs.writeFileSync(path.join(R, f), html); console.log('✓', f, (html.length / 1024).toFixed(0) + ' KB'); };
 
-/* ================================================================ módulo "Diputados y Senadores" (dos posiciones: a = tras la tapa · b = en el medio del flujo) */
-const legOne = (slot, cam, titulo, href) => { const L = legs.filter(l => l.cam === cam); return `<section class="legband legband--${slot}" aria-labelledby="t-leg-${slot}-${href}"><div class="wrap">
-  <div class="legband__head"><h2 class="sec-title" id="t-leg-${slot}-${href}"><span>${titulo}</span></h2>${tagEj}<a href="${href}.html">Ver todos</a></div>
+/* ================================================================ módulos "Diputados" y "Senadores" (dos módulos grises y chicos; cada uno es un bloque del FLOW) */
+const legOne = (cam, titulo, href) => { const L = legs.filter(l => l.cam === cam); return `<section class="legband" aria-labelledby="t-leg-${href}"><div class="wrap">
+  <div class="legband__head"><h2 class="sec-title" id="t-leg-${href}"><span>${titulo}</span></h2>${tagEj}<a href="${href}.html">Ver todos</a></div>
   <div class="lcar" aria-roledescription="carrusel" aria-label="${titulo}">
     <button class="lcar__btn lcar__btn--p" type="button" aria-label="Anteriores">${I.prev}</button>
-    <div class="lcar__track" tabindex="0">${L.map(l => `<a class="lcar__item" href="${l.file}"><div class="avatar" aria-hidden="true">${avatarIn(l)}</div><b>${l.nombre}</b><small>${l.cam} · ${l.bloque}</small></a>`).join('')}</div>
+    <div class="lcar__track" tabindex="0">${L.map(l => `<a class="lcar__item" href="${l.file}"><div class="avatar" aria-hidden="true">${avatarIn(l)}</div><b>${l.nombre}</b><small>${l.bloque}</small></a>`).join('')}</div>
     <button class="lcar__btn lcar__btn--n" type="button" aria-label="Siguientes">${I.next}</button>
     <div class="lcar__count" aria-hidden="true"></div>
   </div>
 </div></section>`; };
-/* dos módulos separados, uno tras otro: Diputados y Senadores (posición según ?legis=a|b) */
-const legModule = slot => legOne(slot, 'Diputados', 'Diputados', 'diputados') + legOne(slot, 'Senado', 'Senadores', 'senadores');
 
 /* ================================================================ superdestacada (recurso a demanda, apilable) */
 const superBlock = ({ n, kind }, i) => kind === 'texto'
   ? `<section class="super super--texto" data-s="${i + 1}" aria-label="Superdestacada"><div class="wrap"><a class="super__in" href="${noteHref(n)}"><span class="super__kicker">${esc(cintillos[n.id] || '')} <i aria-hidden="true">›</i></span><h2>${esc(n.titulo)}</h2>${secTag(n, 'sectag--t')}</a></div></section>`
-  : `<section class="super super--foto" data-s="${i + 1}" aria-label="Superdestacada"><div class="wrap"><article class="card card--super">${fig(n, { sizes: SZ.full, big: true, cap: true, alt: n.titulo })}<div class="card__txt">${kick(n)}<h2><a href="${noteHref(n)}">${esc(n.titulo)}</a></h2><p class="dek">${esc(n.extracto)}</p><div class="meta">${rel(n)}</div></div></article></div></section>`;
+  : `<section class="super super--foto" data-s="${i + 1}" aria-label="Superdestacada"><div class="wrap"><article class="card card--super">${fig(n, { sizes: SZ.full, big: true, alt: n.titulo })}<div class="card__txt">${kick(n)}<h2><a href="${noteHref(n)}">${esc(n.titulo)}</a></h2><p class="dek">${esc(n.extracto)}</p><div class="meta">${rel(n)}</div></div></article></div></section>`;
 
 /* ================================================================ index.html */
 const band = (inner, cls = '') => `<section class="band ${cls}"><div class="wrap">${inner}</div></section>`;
 const vermas = hero2 => `<ul class="vermas">${related(hero2, 2).map(r => `<li><a href="${noteHref(r)}">${esc(r.titulo)}</a></li>`).join('')}</ul>`;
 
 /* ---- Secuencia del home: lista configurable de bloques (mover, sumar o sacar sin reescribir componentes) ----
-   Bloques disponibles: tapa · legis-a · legis-b · f1 · f2 · banner · linea · anunciantes · secciones
+   Bloques disponibles: tapa · legis-diputados · legis-senadores · f1 · f2 · banner · linea · anunciantes · secciones
    (cada "f1"/"f2" toma las siguientes notas del flujo, en orden de fecha y sin repetir) */
-const FLOW = ['tapa', 'legis-a', 'f1', 'banner', 'f1', 'legis-b', 'linea', 'f2', 'anunciantes', 'linea', 'secciones'];
+const FLOW = ['tapa', 'legis-diputados', 'f1', 'banner', 'f1', 'legis-senadores', 'linea', 'f2', 'anunciantes', 'linea', 'secciones'];
 const F1_POOL = [f1a, f1b];
 let f1i = 0;
 const BLOCKS = {
   tapa: () => band(`<div class="tapa">
   <article class="card card--lead tapa__lead">
-    ${fig(hero, { sizes: SZ.lead, big: true, eager: true, cap: true, alt: hero.titulo })}
+    ${fig(hero, { sizes: SZ.lead, big: true, eager: true, alt: hero.titulo })}
     <div class="card__txt">${kick(hero)}<h2><a href="${noteHref(hero)}">${esc(hero.titulo)}</a></h2><p class="dek">${esc(hero.extracto)}</p>${vermas(hero)}<div class="meta">${rel(hero)}</div></div>
   </article>
-  <div class="row vr cols-2 tapa__two">${tapa2.map(n => `<div class="span-6">${card(n, { t: 'med', dek: true, h: 2, big: true, sizes: SZ.s6, cap: true, cls: 'card--tapa2' })}</div>`).join('')}</div>
+  <div class="row vr cols-2 tapa__two">${tapa2.map(n => `<div class="span-6">${card(n, { t: 'med', dek: true, h: 2, big: true, sizes: SZ.s6, cls: 'card--tapa2' })}</div>`).join('')}</div>
 </div>`, 'band--tapa'),
-  'legis-a': () => legModule('a'),
-  'legis-b': () => legModule('b'),
+  'legis-diputados': () => legOne('Diputados', 'Diputados', 'diputados'),
+  'legis-senadores': () => legOne('Senado', 'Senadores', 'senadores'),
   // Formato 1: 4 notas, 2×2, título arriba de la foto, fondo blanco
-  f1: () => band(`<div class="flow vr cols-2 f1">${(F1_POOL[f1i++] || []).map(n => card(n, { t: 'med', tf: true, dek: true, cap: 'credit', big: true, sizes: SZ.s6 })).join('')}</div>`, 'f1band'),
+  f1: () => band(`<div class="flow vr cols-2 f1">${(F1_POOL[f1i++] || []).map(n => card(n, { t: 'med', tf: true, dek: true, big: true, sizes: SZ.s6 })).join('')}</div>`, 'f1band'),
   // Formato 2: 8 notas, 2 columnas × 4 filas, foto a la izquierda, fondo suave
-  f2: () => band(`<div class="flow vr cols-2 f2">${f2n.map(n => card(n, { t: 'med', dek: true, big: true, sizes: SZ.s6, cap: 'credit' })).join('')}</div>`, 'f2band band--alt'),
+  f2: () => band(`<div class="flow vr cols-2 f2">${f2n.map(n => card(n, { t: 'med', dek: true, big: true, sizes: SZ.s6 })).join('')}</div>`, 'f2band band--alt'),
   banner: () => band(hBanner(), 'adband'),
   linea: () => ruleDouble('rule-double--wrap'),
-  anunciantes: () => adZone(),
+  anunciantes: () => adZone() + adZoneH(),
   secciones: () => band(`<div class="strip vr cols-4" aria-label="Secciones">${mods.map(([cat, ns]) => `<section class="strip__col" aria-label="${cat}">${secTitle(cat, null)}
-  ${card(ns[0], { t: 'med', cap: 'credit' })}<div class="list">${ns.slice(1).map(n => card(n, { t: 'txt' })).join('')}</div><a class="strip__more" href="#" data-stub="Sección no incluida en la maqueta.">Ver más de ${cat}</a></section>`).join('')}</div>`, 'stripband'),
+  ${card(ns[0], { t: 'med' })}<div class="list">${ns.slice(1).map(n => card(n, { t: 'txt' })).join('')}</div><a class="strip__more" href="#" data-stub="Sección no incluida en la maqueta.">Ver más de ${cat}</a></section>`).join('')}</div>`, 'stripband'),
 };
 write('index.html', `${head('Diputados Bonaerenses · Maqueta', { extra: `<link rel="preload" as="image" fetchpriority="high" imagesrcset="assets/img/notas/${hero.id}-m.webp ${D(hero, 'm')[0]}w, assets/img/notas/${hero.id}-full.webp ${D(hero, 'full')[0]}w" imagesizes="(min-width:1024px) 700px, 100vw">` })}
 ${header('index.html')}
@@ -400,7 +403,7 @@ const secPool = pub.filter(isLeg);
 const secLead = secPool[0];
 const secTotal = catCount('Legislatura Bonaerense');
 /* fila del flujo: línea fina arriba, volanta, titular serif, bajada gris, "Hace X" y foto a la DERECHA */
-const sRow = (n, uid) => `<article class="srow" data-uid="${uid}"><div class="srow__txt">${kick(n)}<h3><a href="${noteHref(n)}">${esc(n.titulo)}</a></h3>${secTag(n, 'sectag--t')}<p class="dek">${esc(n.extracto)}</p><div class="meta">${rel(n)}</div></div>${thumb(n, { sizes: '(min-width:768px) 280px, 100vw' })}<span class="srow__cred cap__credit${DEMO_PLACEHOLDERS ? ' is-ph' : ''}">Foto: Archivo</span></article>`;
+const sRow = (n, uid) => `<article class="srow" data-uid="${uid}"><div class="srow__txt">${kick(n)}<h3><a href="${noteHref(n)}">${esc(n.titulo)}</a></h3>${secTag(n, 'sectag--t')}<p class="dek">${esc(n.extracto)}</p><div class="meta">${rel(n)}</div></div>${thumb(n, { sizes: '(min-width:768px) 280px, 100vw' })}</article>`;
 const secRows = [];
 for (let i = 0; secRows.length < SECTION_TOTAL; i++) { const base = secPool[(i % (secPool.length - 1)) + 1]; secRows.push(sRow(base, i < secPool.length - 1 ? `n${base.id}` : `n${base.id}-r${Math.floor(i / (secPool.length - 1))}`)); }
 const adM = () => `<div class="srow-ad only-m"><span class="adbox__label">Publicidad</span><a class="srow-ad__in" ${adLink(ROT.find(b => !isH(b)))}><img src="${ROT.find(b => !isH(b)).file}" alt="Banner publicitario" width="300" height="250" loading="lazy"></a></div>`;
@@ -412,7 +415,7 @@ ${header('seccion.html')}
  <p class="crumbs"><a href="index.html">Home</a> › Legislatura Bonaerense</p>
  <div class="sec-hero"><h1 class="sec-title sec-title--lg"><span>Legislatura Bonaerense</span></h1><p>Sesiones, proyectos y la actividad de ambas cámaras de la Provincia de Buenos Aires. ${fmtN(secTotal)} notas en el archivo.</p></div>
  <article class="card card--lead tapa__lead sec-tapa">
-   ${fig(secLead, { sizes: SZ.lead, big: true, eager: true, cap: true, alt: secLead.titulo })}
+   ${fig(secLead, { sizes: SZ.lead, big: true, eager: true, alt: secLead.titulo })}
    <div class="card__txt">${kick(secLead)}<h2><a href="${noteHref(secLead)}">${esc(secLead.titulo)}</a></h2><p class="dek">${esc(secLead.extracto)}</p>${vermas(secLead)}<div class="meta">${rel(secLead)}</div></div>
  </article>
  ${ruleDouble('rule-double--wrap')}

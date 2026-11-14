@@ -51,12 +51,15 @@
       if (dots) {
         const gi = Math.floor(i / g), pos = i % g, size = Math.min(g, n - gi * g);
         dots.innerHTML = '';
+        const ar = (d, t, path) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'adr__arrow'; b.setAttribute('aria-label', t); b.innerHTML = `<svg viewBox="0 0 24 24"><path d="${path}"/></svg>`; b.addEventListener('click', () => { hold = Date.now() + 10000; go(i + d); }); return b; };
+        dots.appendChild(ar(-1, 'Banner anterior', 'm15 5-7 7 7 7'));
         for (let d = 0; d < size; d++) {
           const b = document.createElement('button'); b.type = 'button'; b.className = 'adr__dot';
           b.setAttribute('aria-label', `Banner ${d + 1} de ${size}`); if (d === pos) b.setAttribute('aria-current', 'true');
           b.addEventListener('click', () => { hold = Date.now() + 10000; go(gi * g + d); });
           dots.appendChild(b);
         }
+        dots.appendChild(ar(1, 'Banner siguiente', 'm9 5 7 7-7 7'));
       }
     };
     go(0);

@@ -14,11 +14,11 @@ Maqueta estática, mobile first, sin frameworks. Todas las páginas llevan `noin
 cabecera (fecha · menú · doble línea)
 [superdestacada opcional]
 TAPA de 3
-[legis=a] Diputados + Senadores (dos módulos)
+módulo DIPUTADOS (gris, chico)
 FORMATO 1 (4 notas)
 banner 1180×90
 FORMATO 1 (4 notas más)
-[legis=b] Diputados + Senadores (dos módulos)
+módulo SENADORES (gris, chico)
 ─── doble línea ───
 FORMATO 2 (8 notas, fondo suave)
 Anunciantes
@@ -29,9 +29,9 @@ footer
 19 notas en el flujo (3 + 4 + 4 + 8), cada nota se usa una sola vez. La secuencia es una lista en `build.mjs`:
 
 ```js
-const FLOW = ['tapa','legis-a','f1','banner','f1','legis-b','linea','f2','anunciantes','linea','secciones'];
+const FLOW = ['tapa','legis-diputados','f1','banner','f1','legis-senadores','linea','f2','anunciantes','linea','secciones'];
 ```
-Bloques: `tapa · legis-a · legis-b · f1 · f2 · banner · linea · anunciantes · secciones`. Para mover, sumar o sacar bloques se edita esa lista y se corre `node build.mjs`. Cada `f1` consume las 4 notas siguientes (hay dos juegos cargados: `f1a`, `f1b`); si se suma un tercer `f1` o `f2`, ampliar la cantidad en `mk(...)`.
+Bloques: `tapa · legis-diputados · legis-senadores · f1 · f2 · banner · linea · anunciantes · secciones`. Para mover, sumar o sacar bloques se edita esa lista y se corre `node build.mjs`. Cada `f1` consume las 4 notas siguientes (hay dos juegos cargados: `f1a`, `f1b`); si se suma un tercer `f1` o `f2`, ampliar la cantidad en `mk(...)`.
 
 **Los dos formatos** (más la tapa y la franja de secciones, no hay otros en el flujo):
 - **Formato 1 · título arriba** (`.f1`): 2×2, volanta (si corresponde) → titular serif ~22 px → hora relativa → foto 16:10 → crédito. Sin bajada (`?bajada=on` la muestra). Línea fina arriba de la 2.ª fila y filete vertical entre columnas. Fondo blanco. Las fotos de una fila quedan alineadas aunque un titular tenga volanta y el otro no.
@@ -50,14 +50,21 @@ Bloques: `tapa · legis-a · legis-b · f1 · f2 · banner · linea · anunciant
 - Títulos de tarjeta +2 px (grandes) o +1 px (chicos) en mobile y desktop; peso por defecto 800.
 - Cuerpo de la nota: 20 px en mobile, 21 px en tablet y 22 px en desktop, con `line-height` 1.6 (antes 18 px); bajada 20/23 px.
 
+## v2.3 · Home desktop (etapa C)
+- **Sin pie de foto** en ninguna tarjeta del home ni de los listados (se conserva en la página de la nota). `credito` ahora solo afecta a la nota.
+- **Diputados y Senadores**: dos módulos grises (`--modulo-legisladores-bg`), retratos de 72 px, solo nombre y bloque. Bloques reales de ejemplo (Fuerza Patria, La Libertad Avanza, UCR, PRO, Coalición Cívica). El parámetro `legis` se eliminó: la posición se define en `FLOW`. Cada legislador de muestra tiene `mandato`, `seccion_electoral` y `ciudad` (los usa el perfil, etapa D).
+- **Anunciantes**: sin título ni rótulo "Publicidad", sin fondo, con puntos y flechas chicas. Los 4 slots rotan solo banners cuadrados (16). Los 6 horizontales (excepto el 1180×90 del flujo) rotan en una tira de 90 px con `object-fit: contain` (solo desktop). El banner horizontal del flujo también perdió el rótulo.
+- **Franja final**: una nota menos por columna (1 con foto + 2 de texto). En la franja la etiqueta de sección no se muestra porque cada columna ya se titula con la sección.
+- **Colores**: `--fondo-f2` (gris para el Formato 2), `--modulo-legisladores-bg`, `--cintillo-color`, `--seccion-bg`; todo en el `:root` de `assets/css/main.css`.
+
 ## Parámetros de variante (URL o panel; se recuerdan en la sesión; `?reset=1` los borra)
 Ejemplo: `index.html?demo=1&super=2&legis=b&bajada=on`. "Copiar link de esta variante" arma la URL.
 
 | Parámetro | Valores (default **en negrita**) | Qué cambia |
 |---|---|---|
 | `super` | **off** · foto · texto · 2 · 3 | Superdestacada sobre la tapa: A foto, B solo texto, o apiladas |
-| `tapa` | **izq** · der | Foto de la nota fuerte a izquierda o derecha |
-| `legis` | **a** · b | Diputados y Senadores tras la tapa (a) o tras el segundo Formato 1 (b) |
+| `tapa` | **texto-izq** · foto-izq | Tapa desktop: texto a la izquierda y foto a la derecha (default), o al revés. Alias de links viejos: `izq` → `foto-izq`, `der` → `texto-izq` |
+| `vermas` | **flecha** · boton | "Ver más de X" de la franja final: texto con flecha sin borde (default) o botón con borde |
 | `bajada` | **auto** · on · off | Bajada del Formato 1. `auto`: en mobile siempre con bajada entera (sin recorte), en desktop sin bajada en F1. La nota 1 de la tapa en mobile nunca lleva bajada |
 | `peso` | 700 · **800** · 900 | Peso de los títulos de tarjetas y notas, en todas las pantallas (variable CSS `--titulo-peso`). `600` queda como alias de `700` |
 | `tiempo` | **off** · on | Hora relativa ("Hace 2 horas") en las tarjetas. OJO: `hora` sigue siendo la franja "Última hora" (el brief asumía que `hora` era la de las tarjetas, por eso se creó `tiempo`) |
