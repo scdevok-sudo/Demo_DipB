@@ -40,6 +40,11 @@ Bloques: `tapa · legis-a · legis-b · f1 · f2 · banner · linea · anunciant
 
 **Volanta de Legislatura**: `SHOW_LEGISLATURA_LABEL = false` en `build.mjs` omite el texto "Legislatura Bonaerense" en las notas de esa categoría (tapa, formatos, listas laterales y notas vinculadas); las demás categorías conservan su volanta. Ponerlo en `true` lo revierte. No hay título "Legislatura Bonaerense" encima de ningún bloque; la página de la sección sí lo lleva. El dateline "LA PLATA" se mantiene.
 
+## v2.3 · Cintillo y sección (etapa A)
+- **Cintillo** (texto libre de la redacción, siempre arriba del título) vive en `data/cintillos.json` (id de nota → texto; `tools/gen-cintillos.mjs` lo generó con frases de ejemplo y ahora se edita a mano). Si una nota no tiene cintillo, la tarjeta arranca con el título. En producción es **un campo editable en el editor de notas de WordPress** (requisito del Hito 2). Color: variable `--cintillo-color`.
+- **Sección** (categoría) es una etiqueta chica con fondo (`--seccion-bg`, `--seccion-fg`). Parámetro `seccion=foto|abajo` (default `foto`: sobre la foto, esquina inferior izquierda; `abajo`: debajo de la foto, a la derecha). En tarjetas sin foto va debajo del título.
+- `SHOW_LEGISLATURA_LABEL` ahora vale `true` (la etiqueta también aparece en Legislatura Bonaerense). El dateline ("LA PLATA") ya no se muestra.
+
 ## Parámetros de variante (URL o panel; se recuerdan en la sesión; `?reset=1` los borra)
 Ejemplo: `index.html?demo=1&super=2&legis=b&bajada=on`. "Copiar link de esta variante" arma la URL.
 
