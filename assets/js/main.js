@@ -138,6 +138,7 @@
     const root = document.documentElement;
     const rows = [
       ['super', 'Superdestacada', [['off', 'Sin ella'], ['foto', 'A · foto'], ['texto', 'B · texto'], ['2', '2'], ['3', '3']]],
+      ['seccion', 'Etiqueta de sección', [['foto', 'Sobre la foto'], ['abajo', 'Debajo de la foto']]],
       ['tapa', 'Foto de la nota fuerte', [['izq', 'Izquierda'], ['der', 'Derecha']]],
       ['legis', 'Diputados y Senadores', [['a', 'A · tras la tapa'], ['b', 'B · en el medio']]],
       ['bajada', 'Bajada (mobile siempre con, salvo nota 1)', [['auto', 'Auto'], ['on', 'Con'], ['off', 'Sin']]],

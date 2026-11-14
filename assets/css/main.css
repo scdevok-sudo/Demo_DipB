@@ -18,6 +18,7 @@
   --font-title:"Source Serif 4","Serif Fallback",Georgia,"Times New Roman",serif;
   --font-ui:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --navy:#0b2236;--super-bg:#141414;
+  --cintillo-color:var(--accent-text);--seccion-bg:var(--navy);--seccion-fg:#fff;
   --s1:8px;--s2:16px;--s3:24px;--s4:32px;--s5:48px;--s6:64px;
   --wrap:1240px;--gut:16px;--gap:16px;
   --ease:cubic-bezier(.2,.7,.2,1);
@@ -85,10 +86,6 @@ html[data-diario="off"] .rule-double::after{display:none}
 .sec-title--lg{font-size:34px}
 html[data-diario="off"] .sec-title::after{display:none}
 html[data-diario="off"] .sec-title{border-bottom-color:transparent}
-.dateline{font:700 11.5px/1 var(--font-ui);letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}
-html[data-diario="off"] .dateline{display:none}
-.card--lead .dateline,.art__dateline .dateline{display:block}
-.card--lead .dateline{margin:12px 0 0}
 .vermas{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px}
 .vermas a{display:block;position:relative;padding-left:36px;font:700 16px/1.3 var(--font-title)}
 .vermas a::before{content:"";position:absolute;left:0;top:.62em;width:24px;border-top:2px solid var(--ink)}
@@ -171,7 +168,19 @@ html[data-credito="off"] .cap__credit{display:none}
 html[data-diario="off"] .cap__credit{display:none}
 .card{display:flex;flex-direction:column;min-width:0}
 .card h2 a:hover,.card h3 a:hover,.card h1 a:hover{color:var(--accent-text)}
-.kicker{display:block;font:700 11.5px/1.2 var(--font-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--accent-text);margin:0 0 6px}
+.cintillo{display:block;font:600 16px/1.25 var(--font-title);color:var(--cintillo-color);margin:0 0 6px}
+.card--lead .cintillo,.art__head .cintillo{font-size:19px}
+.card--sm .cintillo,.card--txt .cintillo{font-size:14px;margin-bottom:4px}
+/* etiqueta de sección: chica, con fondo y texto. ?seccion=foto (default, sobre la foto) | abajo (debajo de la foto, a la derecha) */
+.sectag{display:inline-block;font:700 11px/1.25 var(--font-ui);letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;background:var(--seccion-bg);color:var(--seccion-fg);border-radius:2px;max-width:100%;vertical-align:middle}
+.sectag--t{margin-top:8px}
+.art__meta .sectag--t{margin:0;order:-1}
+.fig{display:grid;grid-template-columns:minmax(0,1fr)}
+.fig>.thumb{grid-area:1/1}
+.fig>.sectag{grid-area:1/1;align-self:end;justify-self:start;margin:0 0 8px 8px;z-index:2;pointer-events:none}
+.fig>.cap{grid-row:3}
+html[data-seccion="abajo"] .fig>.sectag{grid-area:2/1;align-self:start;justify-self:end;margin:6px 0 0}
+@media (max-width:767px){.card--lead .fig>.sectag,.super--foto .fig>.sectag{margin-left:calc(8px - var(--gut))}html[data-seccion="abajo"] .card--lead .fig>.sectag{margin:6px 0 0}}
 .meta{font:400 12.5px/1.4 var(--font-ui);color:var(--muted)}
 .dek{margin:8px 0 0;font:400 17px/1.4 var(--font-title);color:var(--ink-2);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .card .meta{margin-top:8px}
@@ -400,9 +409,7 @@ html[data-diario="off"] .art__meta{border-bottom-color:transparent}
 .art__fig--bleed{margin-inline:calc(var(--gut) * -1)}
 .art__fig img{width:100%;height:auto}
 .art__fig .cap{margin:6px var(--gut) 0}
-.art__dateline{margin:var(--s3) 0 10px}
 @media (min-width:1024px){.art__fig--bleed{margin-inline:0}.art__body figure{margin-inline:0}.art__fig .cap,.art__body figcaption{margin-inline:0}}
-.aside .kicker{display:none}
 .art__body{font:400 18px/1.6 var(--font-title);max-width:680px;hyphens:auto;-webkit-hyphens:auto;text-wrap:pretty}
 .art__body p{margin:0 0 1.1em}
 .art__body h2{font-size:26px;margin:1.5em 0 .6em;font-weight:800}
@@ -565,11 +572,8 @@ html[data-peso="700"]{--titulo-peso-mobile:700}
   html[data-credito="off"] .srow__cred,html[data-diario="off"] .srow__cred{display:none}
   .skel--i{aspect-ratio:16/10}
   /* cintillo: serif, un poco más chico que el título, color de acento */
-  .card--med .kicker,.card--lead .kicker,.card--super .kicker,.srow .kicker,.card--lead .dateline{font:600 20px/1.2 var(--font-title);letter-spacing:0;text-transform:none;color:var(--accent-text);margin:10px 0 6px}
-  .card--lead[data-k] .dateline{display:none}
+  .card--med .cintillo,.card--lead .cintillo,.card--super .cintillo,.srow .cintillo,.art__head .cintillo{font-size:20px;margin:10px 0 6px}
   .card--lead .card__txt{display:flex;flex-direction:column}
-  .card--lead .dateline{order:-2}
-  .strip .kicker{display:none}                      /* en la franja de secciones la categoría ya es el título de la columna */
   /* títulos más livianos (peso: variable --titulo-peso-mobile / ?peso=600|700) */
   .card--med h2,.card--med h3,.card--tapa2 h2,.card--tf h3,.f2 .card--med h3,.strip .card--med h3,.srow h3,.card--super h2,.super--foto h2{font-size:26px;line-height:1.22;font-weight:var(--titulo-peso-mobile)}
   .card--lead h2{font-size:30px;line-height:1.2;font-weight:var(--titulo-peso-mobile)}
@@ -637,7 +641,7 @@ html[data-peso="700"]{--titulo-peso-mobile:700}
   .adband{padding-bottom:var(--s2)}
 }
 
-/* Desktop: la nota principal de la tapa queda solo con dateline, titular y bajada (SHOW_TAPA_RELACIONADAS = false en build.mjs) */
+/* Desktop: la nota principal de la tapa queda solo con cintillo, titular y bajada (SHOW_TAPA_RELACIONADAS = false en build.mjs) */
 @media (min-width:768px){body.no-tapa-rel .vermas{display:none}}
 
 /* ============ Desktop / tablet (>= 768 px): "Ver más de X" como botón, alineado en la base de cada columna ============ */

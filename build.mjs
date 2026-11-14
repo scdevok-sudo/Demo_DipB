@@ -11,7 +11,7 @@ const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').re
 /* ------------------------------------------------------------ switches de construcción (los de diseño se cambian en vivo con ?demo=1 o por URL) */
 const SHOW_TOP_BANNER = false;      // banner superior: APAGADO
 const EDITION_LINE = '';            // "Año XX · Edición Nº": no se inventa; configurable y vacío
-const SHOW_LEGISLATURA_LABEL = false; // false: en las notas de Legislatura no se repite la volanta "Legislatura Bonaerense" (Legislatura es el todo, no un módulo)
+const SHOW_LEGISLATURA_LABEL = true;  // v2.3: true = la etiqueta de sección también aparece en las notas de Legislatura Bonaerense (Juan: "en todas, todas, todas"); false la omite
 const DEMO_PLACEHOLDERS = true;     // pie de foto / crédito de ejemplo donde el dato no existe
 const SECTION_AD_EVERY = 10;        // mobile, secciones internas: un slot 300x250 cada N notas (0 = apagado)
 const SECTION_TOTAL = 120;          // notas que se pueden "scrollear" en la sección (se reutilizan con ids distintos)
@@ -20,9 +20,9 @@ const SHOW_FECHA_EN_NOTA = true;    // dentro de la página de la nota se conser
 const SHOW_TAPA_RELACIONADAS = false; // desktop: false oculta las 2 notas relacionadas (con guión) bajo la bajada de la nota principal; el markup se conserva, true las vuelve a mostrar
 const HEADER_MENU_MOBILE = false;   // mobile: false = las tres barritas viven solo en el zócalo; true = también arriba a la derecha
 /* Valores por defecto de cada parámetro (se pisan con ?param=valor, que se recuerda en la sesión). Ver README. */
-const DEFAULTS = { super: 'off', tapa: 'izq', legis: 'a', bajada: 'auto', ad: 'on', fondos: 'on', fotos: 'ejemplo', font: 'a', hora: 'off', diario: 'on', credito: 'on', tiempo: 'off', peso: '600' };
+const DEFAULTS = { seccion: 'foto', super: 'off', tapa: 'izq', legis: 'a', bajada: 'auto', ad: 'on', fondos: 'on', fotos: 'ejemplo', font: 'a', hora: 'off', diario: 'on', credito: 'on', tiempo: 'off', peso: '600' };
 const OPTIONS = {
-  super: ['off', 'foto', 'texto', '2', '3'], tapa: ['izq', 'der'], legis: ['a', 'b'], bajada: ['auto', 'on', 'off'],
+  seccion: ['foto', 'abajo'], super: ['off', 'foto', 'texto', '2', '3'], tapa: ['izq', 'der'], legis: ['a', 'b'], bajada: ['auto', 'on', 'off'],
   ad: ['on', 'off'], fondos: ['on', 'off'], fotos: ['ejemplo', 'iniciales'], font: ['a', 'b'], hora: ['on', 'off'], diario: ['on', 'off'], credito: ['on', 'off'], tiempo: ['off', 'on'], peso: ['600', '700'],
 };
 
@@ -36,6 +36,7 @@ const extra = J('data/11_notas_extra.json');
 const banners = J('data/banners.json');
 const cuerpo = J('data/nota-412179-cuerpo.json');
 const dims = J('data/dims.json');
+const cintillos = J('data/cintillos.json');   // id → cintillo (texto libre). En producción: campo editable en el editor de notas de WordPress
 const cats = rd('data/02_categorias.csv').trim().split('\n').slice(1).map(l => { const m = l.match(/^(\d+),"?([^",]+)"?,([^,]+),(\d+),(\d+)$/); return { name: m[2], slug: m[3], count: +m[5] }; });
 const catCount = n => (cats.find(c => c.name.toLowerCase() === n.toLowerCase()) || {}).count;
 const fmtN = n => n.toLocaleString('es-AR');
@@ -70,7 +71,6 @@ const fechaLarga = n => `${+n.fecha.slice(8, 10)} de ${MESL[+n.fecha.slice(5, 7)
 const hoyStr = (() => { const d = new Date(); return `${DIAS[d.getDay()]} ${d.getDate()} de ${MESL[d.getMonth()]} de ${d.getFullYear()}`.replace(/^./, c => c.toUpperCase()); })();
 const sectionOf = n => n.categorias.find(c => !/Destacada|Cables|Elecciones|Sin categor|Soy tu/.test(c)) || n.categorias[0];
 const isLeg = n => n.categorias.includes('Legislatura Bonaerense');
-const datelineOf = n => n.dateline || (isLeg(n) ? 'La Plata' : n.categorias.includes('Congreso') ? 'Buenos Aires' : '');
 
 /* ------------------------------------------------------------ páginas de nota */
 const hasPage = n => n.id === NOTA_ID || !!n._html;
@@ -164,19 +164,21 @@ const thumb = (n, { sizes = SZ.s4, big = false, eager = false, cls = '', alt = '
 const PIE = 'Pie de foto de ejemplo: acá va la descripción de la imagen.';
 /* Pie de foto: descripción en sans gris + crédito en mayúsculas (el crédito se apaga con ?credito=off). Nunca el autor de la nota. */
 const caption = (n, { txt = true } = {}) => `<figcaption class="cap">${txt ? `<span class="cap__txt${DEMO_PLACEHOLDERS ? ' is-ph' : ''}">${PIE}</span> ` : ''}<span class="cap__credit${DEMO_PLACEHOLDERS ? ' is-ph' : ''}">Foto: Archivo</span></figcaption>`;
-const fig = (n, o = {}) => { const t = thumb(n, o); return t ? `<figure class="fig">${t}${o.cap ? caption(n, { txt: o.cap !== 'credit' }) : ''}</figure>` : ''; };
+const fig = (n, o = {}) => { const t = thumb(n, o); return t ? `<figure class="fig">${t}${o.noTag ? '' : secTag(n)}${o.cap ? caption(n, { txt: o.cap !== 'credit' }) : ''}</figure>` : ''; };
 /* Los 4 tipos de tarjeta: lead (fuerte) · med (foto + título) · sm (miniatura + título) · txt (solo texto). Sin autor. */
 /* volanta: en Legislatura Bonaerense se omite (SHOW_LEGISLATURA_LABEL); en las demás categorías se conserva */
-const kick = n => (isLeg(n) && !SHOW_LEGISLATURA_LABEL) ? '' : `<span class="kicker">${esc(sectionOf(n))}</span>`;
+const kick = n => cintillos[n.id] ? `<span class="cintillo">${esc(cintillos[n.id])}</span>` : '';   // cintillo: texto libre de la redacción, SIEMPRE arriba del título; sin cintillo no deja hueco
+/* etiqueta de sección (chica, con fondo): sobre la foto o debajo (?seccion=foto|abajo); en tarjetas sin foto va debajo del título */
+const secTag = (n, cls = '') => (isLeg(n) && !SHOW_LEGISLATURA_LABEL) ? '' : `<span class="sectag ${cls}">${esc(sectionOf(n))}</span>`;
 const card = (n, { t = 'med', dek = false, h = 3, tf = false, cap = false, eager = false, sizes, big = false, cls = '' } = {}) => {
   const title = `<h${h}><a href="${noteHref(n)}">${esc(n.titulo)}</a></h${h}>`;
-  const kicker = kick(n);
+  const kicker = kick(n), below = secTag(n, 'sectag--t');
   const meta = `<div class="meta">${rel(n)}</div>`;
   const dk = dek ? `<p class="dek">${esc(n.extracto)}</p>` : '';
-  if (t === 'txt') return `<article class="card card--txt ${cls}">${kicker}${title}${meta}</article>`;
-  if (t === 'sm') return `<article class="card card--sm ${cls}"><div class="card__txt">${kicker}${title}${meta}</div>${thumb(n, { sizes: SZ.sm })}</article>`;
+  if (t === 'txt') return `<article class="card card--txt ${cls}">${kicker}${title}${below}${meta}</article>`;
+  if (t === 'sm') return `<article class="card card--sm ${cls}"><div class="card__txt">${kicker}${title}${below}${meta}</div>${thumb(n, { sizes: SZ.sm })}</article>`;
   const f = fig(n, { sizes, big, eager, cap, alt: eager ? n.titulo : '' });
-  const txt = `<div class="card__txt">${kicker}${title}${dk}${meta}</div>`;
+  const txt = `<div class="card__txt">${kicker}${title}${f ? '' : below}${dk}${meta}</div>`;
   return `<article class="card card--${t}${tf ? ' card--tf' : ''} ${cls}">${tf ? txt + f : f + txt}</article>`;
 };
 const secTitle = (label, href, id) => `<div class="sec-head"><h2 class="sec-title"${id ? ` id="${id}"` : ''}><span>${label}</span></h2>${href ? `<a href="${href}">Ver más</a>` : ''}</div>`;
@@ -275,13 +277,12 @@ const legModule = slot => legOne(slot, 'Diputados', 'Diputados', 'diputados') + 
 
 /* ================================================================ superdestacada (recurso a demanda, apilable) */
 const superBlock = ({ n, kind }, i) => kind === 'texto'
-  ? `<section class="super super--texto" data-s="${i + 1}" aria-label="Superdestacada"><div class="wrap"><a class="super__in" href="${noteHref(n)}"><span class="super__kicker">${esc(sectionOf(n))} <i aria-hidden="true">›</i></span><h2>${esc(n.titulo)}</h2></a></div></section>`
-  : `<section class="super super--foto" data-s="${i + 1}" aria-label="Superdestacada"><div class="wrap"><article class="card card--super">${fig(n, { sizes: SZ.full, big: true, cap: true, alt: n.titulo })}<div class="card__txt"><span class="kicker">${esc(sectionOf(n))}</span><h2><a href="${noteHref(n)}">${esc(n.titulo)}</a></h2><p class="dek">${esc(n.extracto)}</p><div class="meta">${rel(n)}</div></div></article></div></section>`;
+  ? `<section class="super super--texto" data-s="${i + 1}" aria-label="Superdestacada"><div class="wrap"><a class="super__in" href="${noteHref(n)}"><span class="super__kicker">${esc(cintillos[n.id] || '')} <i aria-hidden="true">›</i></span><h2>${esc(n.titulo)}</h2>${secTag(n, 'sectag--t')}</a></div></section>`
+  : `<section class="super super--foto" data-s="${i + 1}" aria-label="Superdestacada"><div class="wrap"><article class="card card--super">${fig(n, { sizes: SZ.full, big: true, cap: true, alt: n.titulo })}<div class="card__txt">${kick(n)}<h2><a href="${noteHref(n)}">${esc(n.titulo)}</a></h2><p class="dek">${esc(n.extracto)}</p><div class="meta">${rel(n)}</div></div></article></div></section>`;
 
 /* ================================================================ index.html */
 const band = (inner, cls = '') => `<section class="band ${cls}"><div class="wrap">${inner}</div></section>`;
 const vermas = hero2 => `<ul class="vermas">${related(hero2, 2).map(r => `<li><a href="${noteHref(r)}">${esc(r.titulo)}</a></li>`).join('')}</ul>`;
-const dl = n => datelineOf(n) ? `<span class="dateline">${esc(datelineOf(n))}</span>` : '';
 
 /* ---- Secuencia del home: lista configurable de bloques (mover, sumar o sacar sin reescribir componentes) ----
    Bloques disponibles: tapa · legis-a · legis-b · f1 · f2 · banner · linea · anunciantes · secciones
@@ -291,9 +292,9 @@ const F1_POOL = [f1a, f1b];
 let f1i = 0;
 const BLOCKS = {
   tapa: () => band(`<div class="tapa">
-  <article class="card card--lead tapa__lead"${kick(hero) ? ' data-k="1"' : ''}>
+  <article class="card card--lead tapa__lead">
     ${fig(hero, { sizes: SZ.lead, big: true, eager: true, cap: true, alt: hero.titulo })}
-    <div class="card__txt">${kick(hero)}<h2><a href="${noteHref(hero)}">${esc(hero.titulo)}</a></h2>${dl(hero)}<p class="dek">${esc(hero.extracto)}</p>${vermas(hero)}<div class="meta">${rel(hero)}</div></div>
+    <div class="card__txt">${kick(hero)}<h2><a href="${noteHref(hero)}">${esc(hero.titulo)}</a></h2><p class="dek">${esc(hero.extracto)}</p>${vermas(hero)}<div class="meta">${rel(hero)}</div></div>
   </article>
   <div class="row vr cols-2 tapa__two">${tapa2.map(n => `<div class="span-6">${card(n, { t: 'med', dek: true, h: 2, big: true, sizes: SZ.s6, cap: true, cls: 'card--tapa2' })}</div>`).join('')}</div>
 </div>`, 'band--tapa'),
@@ -368,14 +369,13 @@ ${header('seccion.html')}
  <p class="crumbs"><a href="index.html">Home</a> › <a href="seccion.html">Legislatura Bonaerense</a></p>
  <div class="row art-row">
   <article class="span-9 art">
-   <header class="art__head"><a class="kicker" href="seccion.html">${esc(sectionOf(n))}</a><h1>${esc(n.titulo)}</h1>
+   <header class="art__head">${kick(n)}<h1>${esc(n.titulo)}</h1>
     <p class="art__lead">${esc(n.extracto)}</p>
     ${ruleDouble('art__rule')}
    </header>
-   <div class="art__meta">${SHOW_FECHA_EN_NOTA ? `<time datetime="${n.fecha.replace(' ', 'T')}">${fechaLarga(n)} · ${n.fecha.slice(11, 16)} h</time>` : ''}<span>${mins} min de lectura</span>
+   <div class="art__meta">${SHOW_FECHA_EN_NOTA ? `<time datetime="${n.fecha.replace(' ', 'T')}">${fechaLarga(n)} · ${n.fecha.slice(11, 16)} h</time>` : ''}${secTag(n, 'sectag--t')}<span>${mins} min de lectura</span>
     <div class="mini-share"><a class="ibtn-sq ibtn-sq--wa" href="https://wa.me/?text=${shareText(n)}" target="_blank" rel="noopener" aria-label="Compartir por WhatsApp">${I.wa}</a><button class="ibtn-sq js-copy" type="button" data-url="${esc(n.url)}" aria-label="Copiar link">${I.link}</button></div></div>
    ${artFigure(n)}
-   ${datelineOf(n) ? `<p class="art__dateline"><span class="dateline">${esc(datelineOf(n))}</span></p>` : ''}
    <div class="art__body">${bodyOf(n)}</div>
    ${shareBtns(n)}
    <div class="art__tags"><h2>Etiquetas</h2><div class="chips">${n.tags.filter(t => !/Colegios|Opini/i.test(t)).map(t => `<a class="chip" href="#" data-stub="Cada etiqueta lleva a su archivo en el sitio actual.">${esc(t)}</a>`).join('')}</div></div>
@@ -397,7 +397,7 @@ const secPool = pub.filter(isLeg);
 const secLead = secPool[0];
 const secTotal = catCount('Legislatura Bonaerense');
 /* fila del flujo: línea fina arriba, volanta, titular serif, bajada gris, "Hace X" y foto a la DERECHA */
-const sRow = (n, uid) => `<article class="srow" data-uid="${uid}"><div class="srow__txt">${kick(n)}<h3><a href="${noteHref(n)}">${esc(n.titulo)}</a></h3><p class="dek">${esc(n.extracto)}</p><div class="meta">${rel(n)}</div></div>${thumb(n, { sizes: '(min-width:768px) 280px, 100vw' })}<span class="srow__cred cap__credit${DEMO_PLACEHOLDERS ? ' is-ph' : ''}">Foto: Archivo</span></article>`;
+const sRow = (n, uid) => `<article class="srow" data-uid="${uid}"><div class="srow__txt">${kick(n)}<h3><a href="${noteHref(n)}">${esc(n.titulo)}</a></h3>${secTag(n, 'sectag--t')}<p class="dek">${esc(n.extracto)}</p><div class="meta">${rel(n)}</div></div>${thumb(n, { sizes: '(min-width:768px) 280px, 100vw' })}<span class="srow__cred cap__credit${DEMO_PLACEHOLDERS ? ' is-ph' : ''}">Foto: Archivo</span></article>`;
 const secRows = [];
 for (let i = 0; secRows.length < SECTION_TOTAL; i++) { const base = secPool[(i % (secPool.length - 1)) + 1]; secRows.push(sRow(base, i < secPool.length - 1 ? `n${base.id}` : `n${base.id}-r${Math.floor(i / (secPool.length - 1))}`)); }
 const adM = () => `<div class="srow-ad only-m"><span class="adbox__label">Publicidad</span><a class="srow-ad__in" ${adLink(ROT.find(b => !isH(b)))}><img src="${ROT.find(b => !isH(b)).file}" alt="Banner publicitario" width="300" height="250" loading="lazy"></a></div>`;
@@ -410,7 +410,7 @@ ${header('seccion.html')}
  <div class="sec-hero"><h1 class="sec-title sec-title--lg"><span>Legislatura Bonaerense</span></h1><p>Sesiones, proyectos y la actividad de ambas cámaras de la Provincia de Buenos Aires. ${fmtN(secTotal)} notas en el archivo.</p></div>
  <article class="card card--lead tapa__lead sec-tapa">
    ${fig(secLead, { sizes: SZ.lead, big: true, eager: true, cap: true, alt: secLead.titulo })}
-   <div class="card__txt">${kick(secLead)}<h2><a href="${noteHref(secLead)}">${esc(secLead.titulo)}</a></h2>${dl(secLead)}<p class="dek">${esc(secLead.extracto)}</p>${vermas(secLead)}<div class="meta">${rel(secLead)}</div></div>
+   <div class="card__txt">${kick(secLead)}<h2><a href="${noteHref(secLead)}">${esc(secLead.titulo)}</a></h2><p class="dek">${esc(secLead.extracto)}</p>${vermas(secLead)}<div class="meta">${rel(secLead)}</div></div>
  </article>
  ${ruleDouble('rule-double--wrap')}
  <div class="sec-layout">
