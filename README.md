@@ -171,6 +171,20 @@ Un commit por punto, sin push. Auditoría en `capturas/auditoria-v2-3.md` (secci
 5. **Mobile:** toda la publicidad del home (rodante 300×300 y banner horizontal) va al final, después de la franja de secciones (`FLOW_MOBILE`). Medidas, rodado y swipe sin cambios; sin títulos ni rótulos. Los slots de 300×250 que se intercalan en `seccion.html` (`SECTION_AD_EVERY`) no se tocaron.
 6. **Bonus Leé también (nota):** columna lateral de 348 px (antes ~270), foto de 72 px y etiqueta de sección en una línea (9,5 px); los títulos pasan de 6 a 8 líneas a 3 o 4.
 
+### Medición de CLS y LCP después de v2.3.1
+Con `tools/perf.mjs` (Playwright con Chromium, servidor local en `:8765`): viewport mobile de 390×844 con factor 2, CPU 4× más lenta y red emulada de 1,6 Mbps con 150 ms de latencia (CDP); `PerformanceObserver` registra `largest-contentful-paint` y `layout-shift` (sin los que siguen a una interacción) y espera 3 s tras `load`. Es una medición de laboratorio en una red lenta emulada, no Lighthouse ni datos de usuarios reales: sirve para comparar entre versiones.
+
+| Página | LCP | CLS |
+|---|---|---|
+| index | 2,27 s en la tanda completa; 2,39 · 2,24 · 2,08 s en tres corridas sueltas | 0,0000 |
+| seccion | 1,78 s | 0,0000 |
+| nota-413361 | 2,08 s | 0,0000 |
+| diputados | 1,90 s | 0,0000 |
+| senadores | 1,89 s | 0,0000 |
+| legislador | 1,83 s | 0,0002 |
+
+CLS queda por debajo de 0,1 en todas las páginas, y el LCP del index entre 2,08 y 2,39 s, en el rango de antes (2,05 a 2,48 s). La variación entre corridas es de unos 0,3 s.
+
 ## Pendientes
 - **Logo**: se reemplazó por `logo-big.png` del sitio actual (781×100, blanco sobre transparente, ~2.6× a 300 px). Sigue sin ser vectorial: si Santi consigue el SVG, reemplazar `assets/img/logo-dark.png` (o ajustar `LOGO` en `build.mjs`).
 - `referencias/` (Word de Juan y capturas) no está en el repo; se trabajó desde los briefs.
