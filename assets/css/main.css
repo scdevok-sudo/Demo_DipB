@@ -463,7 +463,8 @@ html[data-diario="on"] .art__body>p:first-of-type::first-letter{float:left;font:
 }
 .lee .row{margin-top:var(--s2)}
 .ad-end{margin-top:var(--s5)}
-@media (min-width:1024px){.ad-end{display:none}}
+/* v2.3.3: el bloque del final siempre se ve; en desktop solo el horizontal (el de cuadrados es el lateral) */
+@media (min-width:1024px){.ad-end .adz--sq{display:none}}
 
 /* ============ Sección interna: mini tapa + flujo vertical infinito + columna lateral ============ */
 .sec-hero{padding:var(--s3) 0 var(--s2)}
@@ -808,3 +809,16 @@ html[data-peso="900"]{--titulo-peso:900}
 .adz--side .adr__slide img{object-fit:contain}
 .adz--side .adz__dots{min-height:28px;margin-top:2px}
 @media (min-width:1024px){.aside .adz--side,.prof-side .adz--side{margin-top:0}}
+
+/* ============ v2.3.3 · puntos 2 y 3: rodante horizontal al final de las páginas interiores; en mobile, cuadrados 300x300 y luego el horizontal ============ */
+.ad-end .wrap{padding:0;max-width:none;margin:0}
+.ad-end .adz--end{margin-top:var(--s4);padding:0}
+.ad-end .adz--sq{margin-top:0}
+@media (max-width:767px){
+  .ad-end{margin-top:var(--s4)}
+  .ad-end .adz--sq{padding:8px 0}
+  .ad-end .adz.adz--end{display:block;margin-top:var(--s2);padding:0}
+  .ad-end .adz--end .adz__slots{grid-template-columns:minmax(0,1fr);justify-content:stretch}
+  .ad-end .adz--end .adr__view{width:100%;max-width:none;aspect-ratio:auto;height:64px;background:none}
+}
+@media (min-width:768px){.ad-end .adz--h .adr__view{max-width:none}}

@@ -131,7 +131,7 @@ const adZone = (lists = SLOTS4, cls = '') => `<section class="adz ${cls}" data-i
   <div class="adz__slots">${lists.map(adSlot).join('')}</div>
   <div class="adz__dots"></div>
 </div></section>`;
-const adZoneH = () => adZone([HROT], 'adz--h');
+const adZoneH = (cls = '') => adZone([HROT], ('adz--h ' + cls).trim());
 const adOne = () => adZone([ROT], 'adz--one');   // un solo slot rodante (antes el replace no matcheaba y salían 4 slots de 43 px)
 /* Banner horizontal 1180x90 (320x100 en mobile). Interruptor: ?ad=on|off. Si está apagado colapsa (display:none). */
 const hBanner = () => `<div class="adbanner" aria-label="Publicidad"><a class="adbanner__box" ${adLink(hB)}><img src="${hB.file}" alt="Banner publicitario" width="${hB.w}" height="${hB.h}" loading="lazy"></a></div>`;
@@ -139,6 +139,10 @@ const topBanner = () => SHOW_TOP_BANNER ? `<div class="topbanner" aria-label="Pu
 /* slot de sección interna: 300x600 sticky (desktop) / 300x250 cada N notas (mobile) */
 /* publicidad lateral (nota, perfil, secciones y listados, solo desktop): rodante de banners cuadrados (los mismos del rodante de cuadrados del home), 300x250 máx., sticky, con puntos y flechas chicas, sin rótulos, object-fit: contain, pasa solo cada ~5 s y a mano */
 const adSide = () => adZone([ROT], 'adz--one adz--side');
+/* final de página (nota, perfil, sección y listados): abajo de todo el contenido y antes del pie, sin rótulos.
+   Desktop: solo el rodante horizontal (los 7 banners) a todo el ancho del contenido.
+   Mobile y tablet (< 1024 px, donde no hay lateral): primero el rodante de cuadrados 300x300 y debajo el horizontal. */
+const adEnd = () => `<div class="ad-end">${adZone([ROT], 'adz--one adz--sq')}${adZoneH('adz--end')}</div>`;
 
 /* ------------------------------------------------------------ legisladores (MUESTRA) */
 const NOMBRES = ['Lucía Ferrer', 'Martín Salgado', 'Valeria Ruiz', 'Gonzalo Páez', 'Camila Orellana', 'Julián Berro', 'Sofía Mansilla', 'Tomás Aguirre', 'Noelia Bravo', 'Ezequiel Lamas', 'Paula Cardozo', 'Facundo Ibarra', 'Marina Quiroga', 'Hernán Dubois', 'Agustina Roldán', 'Matías Sosa', 'Daniela Vega', 'Rodolfo Pineda', 'Carla Escobar', 'Nicolás Barrios', 'Mariana Toledo', 'Sebastián Fuentes', 'Romina Acosta', 'Leandro Cabrera'];
@@ -409,7 +413,7 @@ ${header('seccion.html')}
   ${asideBlock(n)}
  </div>
  ${leeTambien(n)}
- <div class="ad-end">${adOne()}</div>
+ ${adEnd()}
 </div>
 </main>
 <div class="sharebar" role="group" aria-label="Compartir"><a class="btn btn--wa" href="https://wa.me/?text=${shareText(n)}" target="_blank" rel="noopener">${I.wa}WhatsApp</a><button class="btn btn--ghost js-copy" type="button" data-url="${esc(n.url)}">${I.link}Copiar link</button></div>
@@ -447,6 +451,7 @@ ${header('seccion.html')}
   </div>
   <aside class="sec-side" aria-label="Publicidad">${adSide()}</aside>
  </div>
+ ${adEnd()}
 </div>
 </main>
 ${footer()}`);
@@ -468,6 +473,7 @@ ${header(file)}
   <p class="legs__empty" id="legs-empty" hidden>No hay legisladores que coincidan con la búsqueda.</p>
  </div>
  <aside class="sec-side" aria-label="Publicidad">${adSide()}</aside></div>
+ ${adEnd()}
 </div>
 </main>
 ${footer()}`); };
@@ -502,6 +508,7 @@ ${header(L.cam === 'Senado' ? 'senadores.html' : 'diputados.html')}
  </section>
  </div>
  <aside class="prof-side" aria-label="Publicidad">${adSide()}</aside></div>
+ ${adEnd()}
 </div>
 </main>
 ${footer()}`;
