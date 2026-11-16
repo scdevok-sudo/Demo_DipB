@@ -1,0 +1,278 @@
+{
+ "home": {
+  "cards": 31,
+  "conCintillo": 31,
+  "conSec": 31,
+  "figcaption": 0,
+  "meta": 0,
+  "anunciantes": false,
+  "publicidad": true,
+  "leg": [
+   {
+    "h": 213,
+    "bg": "rgb(238, 238, 238)",
+    "img": 72,
+    "title": "Diputados",
+    "small": [
+     "Fuerza Patria",
+     "La Libertad Avanza",
+     "PRO"
+    ],
+    "palabrasViejas": false
+   },
+   {
+    "h": 213,
+    "bg": "rgb(238, 238, 238)",
+    "img": 72,
+    "title": "Senadores",
+    "small": [
+     "UCR",
+     "La Libertad Avanza",
+     "Fuerza Patria"
+    ],
+    "palabrasViejas": false
+   }
+  ],
+  "kids": [
+   "sr",
+   "super",
+   "super",
+   "super",
+   "band",
+   "legband:Diputados",
+   "band",
+   "band",
+   "band",
+   "legband:Senadores",
+   "rule-double",
+   "band",
+   "adz",
+   "adz",
+   "rule-double",
+   "band"
+  ],
+  "strips": [
+   {
+    "notas": 3,
+    "border": "0px",
+    "after": "\"→\"",
+    "text": "Ver más de Congreso"
+   },
+   {
+    "notas": 3,
+    "border": "0px",
+    "after": "\"→\"",
+    "text": "Ver más de Nación"
+   },
+   {
+    "notas": 3,
+    "border": "0px",
+    "after": "\"→\"",
+    "text": "Ver más de Provincia"
+   },
+   {
+    "notas": 3,
+    "border": "0px",
+    "after": "\"→\"",
+    "text": "Ver más de Municipios"
+   }
+  ],
+  "tapaTxtIzq": true,
+  "f2bg": "rgb(242, 242, 242)"
+ },
+ "hbanners": {
+  "slot": "1180x90",
+  "res": [
+   {
+    "nat": "970x90",
+    "box": "1180x90",
+    "fits": true,
+    "fit": "contain"
+   },
+   {
+    "nat": "580x90",
+    "box": "1180x90",
+    "fits": true,
+    "fit": "contain"
+   },
+   {
+    "nat": "1180x90",
+    "box": "1180x90",
+    "fits": true,
+    "fit": "contain"
+   },
+   {
+    "nat": "970x90",
+    "box": "1180x90",
+    "fits": true,
+    "fit": "contain"
+   },
+   {
+    "nat": "1180x90",
+    "box": "1180x90",
+    "fits": true,
+    "fit": "contain"
+   },
+   {
+    "nat": "1180x90",
+    "box": "1180x90",
+    "fits": true,
+    "fit": "contain"
+   }
+  ]
+ },
+ "tipo": {
+  "peso": "800",
+  "lead": "46px",
+  "card": "24px",
+  "cintillo": "16px 600 rgb(22, 115, 173)",
+  "cintilloVar": "#1673ad"
+ },
+ "fonts": {
+  "actual": "\"Source Serif 4\" 800",
+  "merriweather": "Merriweather 800",
+  "literata": "Literata 800"
+ },
+ "vermasBoton": "1px",
+ "seccionAbajo": {
+  "debajoDeLaFoto": true,
+  "aLaDerecha": true
+ },
+ "tapaFotoIzq": true,
+ "listado": {
+  "tabs": [
+   "Diputados*→diputados.html",
+   "Senadores→senadores.html"
+  ],
+  "tarjetas": 16,
+  "hijos": [
+   "DIV+H3+SMALL"
+  ],
+  "buscador": true,
+  "bloque": true,
+  "partido": false,
+  "carrusel": false,
+  "busquedaSofia": "1 resultado",
+  "bloqueUCR": "4 resultados"
+ },
+ "senadores": {
+  "tabs": [
+   "Diputados",
+   "Senadores*"
+  ],
+  "n": 8
+ },
+ "perfil": {
+  "facts": [
+   "BloqueFuerza Patria",
+   "Mandato2023 a 2027",
+   "Sección electoralSegunda",
+   "CiudadMar del Plata"
+  ],
+  "bio": true,
+  "leerMas": true,
+  "compartir": true,
+  "copiar": true,
+  "adLateral": "sticky",
+  "adW": 300,
+  "adImg": 268
+ },
+ "perfilSinBio": {
+  "bioVacia": false,
+  "seccionBio": false
+ },
+ "nota": {
+  "cintilloArriba": true,
+  "bajada": true,
+  "fecha": "23 de octubre de 2026",
+  "tieneHora": false,
+  "metaDebajoFoto": true,
+  "seccion": true,
+  "pie": true,
+  "laPlata": false,
+  "redes": [
+   "WhatsApp",
+   "Facebook",
+   "X",
+   "Instagram",
+   "Telegram",
+   "Copiar link"
+  ],
+  "coloresCompartir": [
+   "rgb(243, 243, 243)|rgb(68, 68, 68)"
+  ],
+  "aside": {
+   "position": "sticky",
+   "lee": true,
+   "ad": true,
+   "adW": 213
+  },
+  "titulosCompletos": "true (4)",
+  "bannerAbajoDesktop": "none",
+  "bodyPx": "22px",
+  "lh": "35.2px",
+  "h1Peso": "800",
+  "stickyTopTrasScroll": 120
+ },
+ "mobile": {
+  "360": {
+   "sx": false,
+   "dekVisibles": 0,
+   "f2Foto": "96x72",
+   "f2FotoADerecha": true,
+   "banner": "300x300",
+   "lineasFlow": "true,true,true",
+   "legConsecutivos": true,
+   "anunciantesTexto": false,
+   "zocalo": 4
+  },
+  "390": {
+   "sx": false,
+   "dekVisibles": 0,
+   "f2Foto": "96x72",
+   "f2FotoADerecha": true,
+   "banner": "300x300",
+   "lineasFlow": "true,true,true",
+   "legConsecutivos": true,
+   "anunciantesTexto": false,
+   "zocalo": 4
+  },
+  "412": {
+   "sx": false,
+   "dekVisibles": 0,
+   "f2Foto": "96x72",
+   "f2FotoADerecha": true,
+   "banner": "300x300",
+   "lineasFlow": "true,true,true",
+   "legConsecutivos": true,
+   "anunciantesTexto": false,
+   "zocalo": 4
+  }
+ },
+ "notaM": {
+  "sx": false,
+  "bajada": "block",
+  "bodyPx": "20px"
+ },
+ "seccionM": {
+  "dek": 0,
+  "sx": false
+ },
+ "panel": [
+  "super",
+  "seccion",
+  "tapa2",
+  "tapa",
+  "vermas",
+  "bajada",
+  "peso",
+  "tiempo",
+  "ad",
+  "fondos",
+  "fotos",
+  "font",
+  "hora",
+  "diario",
+  "credito"
+ ]
+}

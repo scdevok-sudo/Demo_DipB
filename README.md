@@ -79,6 +79,7 @@ Ejemplo: `index.html?demo=1&super=2&bajada=on`. "Copiar link de esta variante" a
 | Parámetro | Valores (default **en negrita**) | Qué cambia |
 |---|---|---|
 | `super` | **off** · foto · texto · 2 · 3 | Superdestacada sobre la tapa: A foto, B solo texto, o apiladas |
+| `seccion` | **foto** · abajo | Etiqueta de sección: sobre la foto (esquina inferior izquierda, default) o debajo de la foto, a la derecha. En tarjetas sin foto va debajo del título |
 | `tapa` | **texto-izq** · foto-izq | Tapa desktop: texto a la izquierda y foto a la derecha (default), o al revés. Alias de links viejos: `izq` → `foto-izq`, `der` → `texto-izq` |
 | `vermas` | **flecha** · boton | "Ver más de X" de la franja final: texto con flecha sin borde (default) o botón con borde |
 | `bajada` | **auto** · on · off | Bajada de las tarjetas. En mobile `auto` y `off` no la muestran; `on` la muestra. En desktop, `auto` la oculta en el Formato 1 (la tapa y el Formato 2 la mantienen) |
@@ -137,6 +138,8 @@ Retratos de `randomuser.me` en `assets/img/fantasia/01..24.jpg`, **128×128 y no
 - **Playwright + PerformanceObserver** (`tools/perf.mjs`; 390 px, CPU ×4, red 1.6 Mbps / 150 ms, con scroll hasta el final): CLS 0.000 en las 5 páginas; LCP 1.5–2.5 s.
 - **Criterios**: CLS < 0.05 ✔ · Performance ≥ 85 ✔ · Accesibilidad ≥ 90 ✔. **LCP < 2.5 s: no se cumple en Lighthouse** para index (2.6–2.7 s) y seccion (3.0 s), cerca en las demás. El tiempo se va en el render (CSS y fuentes bloqueando, ~0,6 s de retraso con la imagen ya cargada). Pendiente si se quiere bajar: CSS crítico inline y subconjunto de fuentes.
 - Se corrigió el CLS precargando las fuentes (`<link rel=preload>`), y el scroll infinito con esqueleto de bloque. Accesibilidad: quedan avisos de `color-contrast` (secundarios) en index/seccion/legislador y `link-in-text-block` en seccion, sin corregir.
+
+**Medición v2.3 (16/11, `tools/perf.mjs`, mismo método):** index LCP 2,05 a 2,41 s · CLS 0; seccion 1,64 s; nota 1,98 s; diputados 1,96 s; senadores 1,96 s; legislador 1,71 s; todos con CLS 0,0000. Fuentes por defecto: Source Serif 4 (49,7 KB) + Inter (47,1 KB); alternativas Merriweather (95,3 KB) y Literata (38,1 KB). CSS minificado 46,1 KB (9,8 KB gzip). Detalle y auditoría punto por punto en `capturas/auditoria-v2-3.md` (`tools/audit-v23.mjs`).
 
 **Medición v2.2 (13/11, `tools/perf.mjs`, 390 px, CPU ×4, red 1,6 Mbps / 150 ms, con scroll hasta el final):** index LCP 2,04 s · CLS 0,0000; seccion LCP 1,86 s · CLS 0,0000; diputados LCP 1,78 s · CLS 0,0000. No hizo falta ajustar el esqueleto ni el espacio del zócalo.
 **404:** era `/favicon.ico` (las páginas no declaraban ícono). Se agregó `assets/img/favicon.svg` y `<link rel="icon">`; `tools/find404.mjs` recorre todas las páginas a 390 y 1280 px y ya no reporta errores.
