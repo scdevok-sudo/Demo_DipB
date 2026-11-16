@@ -137,9 +137,8 @@ const adOne = () => adZone([ROT], 'adz--one');   // un solo slot rodante (antes 
 const hBanner = () => `<div class="adbanner" aria-label="Publicidad"><a class="adbanner__box" ${adLink(hB)}><img src="${hB.file}" alt="Banner publicitario" width="${hB.w}" height="${hB.h}" loading="lazy"></a></div>`;
 const topBanner = () => SHOW_TOP_BANNER ? `<div class="topbanner" aria-label="Publicidad"><div class="wrap"><a ${adLink(hB)}><img src="${hB.file}" alt="" width="${hB.w}" height="${hB.h}" loading="lazy"></a></div></div>` : '';
 /* slot de sección interna: 300x600 sticky (desktop) / 300x250 cada N notas (mobile) */
-/* publicidad lateral (nota, perfil y secciones): UN solo banner, 300x250 como máximo, fijo (sticky), sin placeholder ni rótulo; el logo se contiene entero (object-fit: contain) */
-const SIDE_AD = ROT.find(b => !isH(b));
-const adSide = () => `<aside class="adbox adbox--side" aria-label="Publicidad"><a class="adbox__in" ${adLink(SIDE_AD)}><img src="${SIDE_AD.file}" alt="Banner publicitario" width="${SIDE_AD.w}" height="${SIDE_AD.h}" loading="lazy"></a></aside>`;
+/* publicidad lateral (nota, perfil, secciones y listados, solo desktop): rodante de banners cuadrados (los mismos del rodante de cuadrados del home), 300x250 máx., sticky, con puntos y flechas chicas, sin rótulos, object-fit: contain, pasa solo cada ~5 s y a mano */
+const adSide = () => adZone([ROT], 'adz--one adz--side');
 
 /* ------------------------------------------------------------ legisladores (MUESTRA) */
 const NOMBRES = ['Lucía Ferrer', 'Martín Salgado', 'Valeria Ruiz', 'Gonzalo Páez', 'Camila Orellana', 'Julián Berro', 'Sofía Mansilla', 'Tomás Aguirre', 'Noelia Bravo', 'Ezequiel Lamas', 'Paula Cardozo', 'Facundo Ibarra', 'Marina Quiroga', 'Hernán Dubois', 'Agustina Roldán', 'Matías Sosa', 'Daniela Vega', 'Rodolfo Pineda', 'Carla Escobar', 'Nicolás Barrios', 'Mariana Toledo', 'Sebastián Fuentes', 'Romina Acosta', 'Leandro Cabrera'];
@@ -461,13 +460,14 @@ ${header(file)}
  <p class="crumbs"><a href="index.html">Home</a> › ${tit}</p>
  ${legTabs(cam)}
  <div class="sec-hero"><h1 class="sec-title sec-title--lg"><span>${tit}</span></h1>${tagEj}</div>
- <div class="sec" style="margin-top:16px">
+ <div class="sec-layout" style="margin-top:16px"><div class="sec-main">
   <form class="filters" role="search" onsubmit="return false"><label>Buscar por nombre<input id="f-nombre" type="search" placeholder="Nombre o apellido" autocomplete="off"></label>
    <label>Bloque<select id="f-bloque"><option value="">Todos</option>${BLOQUES.map(b => `<option>${b}</option>`).join('')}</select></label>
    <div class="filters__end"><button class="btn btn--ghost" id="f-reset" type="button">Limpiar</button><span id="f-count" class="meta" role="status" aria-live="polite"></span></div></form>
   <div class="legs" id="legs">${list.map(l => `<a class="leg" href="${l.file}" data-bloque="${l.bloque}" data-nombre="${slugify(l.nombre).replace(/-/g, ' ')}"><div class="avatar" aria-hidden="true">${avatarIn(l)}</div><h3>${l.nombre}</h3><small>${l.bloque}</small></a>`).join('')}</div>
   <p class="legs__empty" id="legs-empty" hidden>No hay legisladores que coincidan con la búsqueda.</p>
  </div>
+ <aside class="sec-side" aria-label="Publicidad">${adSide()}</aside></div>
 </div>
 </main>
 ${footer()}`); };

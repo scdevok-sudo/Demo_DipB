@@ -123,7 +123,7 @@
         let n = 0; const frag = document.createDocumentFragment();
         while (pending.length && n < chunk) { const el = pending.shift(); frag.appendChild(el); if (!el.classList.contains('srow-ad')) n++; }
         while (pending[0] && pending[0].classList.contains('srow-ad')) frag.appendChild(pending.shift());
-        s1.replaceWith(frag); busy = false;
+        s1.replaceWith(frag); busy = false; if (window.initAdz) window.initAdz(sflow);
         if (!pending.length) { more.hidden = true; io.disconnect(); } else if (more.getBoundingClientRect().top < innerHeight + 600) load();
       }, reduce ? 0 : 450);
     };

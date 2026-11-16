@@ -37,7 +37,8 @@
   });
 
   /* ---- Anunciantes: los slots de la zona rotan juntos (cada ~5 s), un solo juego de puntos, pausa al tocar/hover ---- */
-  $$('.adz').forEach(z => {
+  const initAdz = (root = document) => $$('.adz', root).forEach(z => {
+    if (z.dataset.init) return; z.dataset.init = '1';
     const slots = $$('.adr', z).map(r => ({ r, slides: $$('.adr__slide', r) }));
     const n = Math.max(...slots.map(s => s.slides.length)), g = +z.dataset.group || n;
     const ms = +z.dataset.interval || 5000, dots = $('.adz__dots', z);
@@ -73,4 +74,6 @@
     z.addEventListener('touchend', e => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null; if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) { hold = Date.now() + 12000; go(i + (dx < 0 ? 1 : -1)); } }, { passive: true });
     ['pointerdown', 'mouseenter', 'focusin'].forEach(ev => z.addEventListener(ev, pause, { passive: true }));
   });
+  initAdz();
+  window.initAdz = initAdz;   /* main.js la llama con los rodantes que entran después (scroll infinito de la sección) */
 })();
