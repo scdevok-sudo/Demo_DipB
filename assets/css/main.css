@@ -662,3 +662,42 @@ html[data-peso="900"]{--titulo-peso:900}
 /* ============ v2.3 · peso de los títulos en todas las pantallas (?peso=700|800|900, default 800) ============ */
 .card h1,.card h2,.card h3,.srow h3,.art__head h1,.super--foto h2,.super--texto h2{font-weight:var(--titulo-peso)}
 .strip .sectag{display:none}   /* la columna ya se titula con la sección */
+
+/* ============ v2.3 etapa D: páginas de legisladores y de la nota ============ */
+/* pestañas Diputados | Senadores */
+.tabs{display:flex;gap:0;margin:var(--s2) 0 0;border-bottom:1px solid var(--rule-hair)}
+.tabs a{flex:1;max-width:220px;text-align:center;padding:12px 16px;font:700 15px var(--font-ui);letter-spacing:.02em;color:var(--ink-2);border-bottom:3px solid transparent;margin-bottom:-1px}
+.tabs a:hover{color:var(--ink)}
+.tabs a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--ink)}
+/* buscador + filtro por bloque */
+.filters input[type=search]{min-height:44px;border:1px solid var(--rule-hair);border-radius:4px;padding:0 10px;font:16px var(--font-ui);background:#fff;width:100%}
+.filters__end{display:flex;gap:12px;align-items:center}
+@media (min-width:600px){.filters{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) auto}}
+.legs__empty{margin:var(--s4) 0;color:var(--muted);font:400 16px var(--font-ui);text-align:center}
+.leg small{font-size:14px}
+/* perfil: columna lateral con publicidad chica y fija */
+.prof-layout{display:grid;grid-template-columns:minmax(0,1fr)}
+.prof-side{margin-top:var(--s4)}
+.prof-side .adz{margin-top:0}
+@media (min-width:1024px){
+  .prof-layout{grid-template-columns:minmax(0,1fr) 300px;column-gap:var(--s5);align-items:start}
+  .prof-side{margin-top:calc(var(--s2) + 22px);position:sticky;top:120px}
+}
+/* nota: fecha y sección debajo de la foto */
+.art__fig+.art__meta{margin-top:12px}
+/* compartir en gris neutro, sin colores de marca */
+.btn--wa,.ibtn-sq--wa{background:#fff;color:var(--ink);border:1.5px solid var(--ink)}
+.btn--wa:hover,.ibtn-sq--wa:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.ibtn-sq--wa{border-color:var(--rule-hair)}
+.share{display:block;max-width:none;margin:var(--s4) 0 var(--s3);padding:var(--s2) 0;border-top:1px solid var(--rule-hair);border-bottom:1px solid var(--rule-hair)}
+.share__lbl{display:block;font:700 12px var(--font-ui);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.share__list{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.share__b{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:1px solid var(--rule-hair);background:#f3f3f3;color:var(--ink-2);font:600 14px var(--font-ui);cursor:pointer}
+.share__b:hover{background:var(--ink);border-color:var(--ink);color:#fff}
+.share__b svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+@media (max-width:480px){.share__list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.share__b{justify-content:center}}
+/* "Leé también" lateral: título completo, sin cortes */
+.aside .card--sm h3{display:block;-webkit-line-clamp:unset;overflow:visible;font-size:17px}
+.aside .card--sm .cintillo{font-size:13px}
+/* publicidad en columna lateral (nota y perfil): el slot ocupa el ancho de la columna (antes se achicaba a ~40 px) */
+@media (min-width:1024px){.aside .adz--one .adz__slots,.prof-side .adz--one .adz__slots{grid-template-columns:minmax(0,1fr)}}

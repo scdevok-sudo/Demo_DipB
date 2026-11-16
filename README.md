@@ -52,13 +52,21 @@ Bloques: `tapa · legis-diputados · legis-senadores · f1 · f2 · banner · li
 
 ## v2.3 · Home desktop (etapa C)
 - **Sin pie de foto** en ninguna tarjeta del home ni de los listados (se conserva en la página de la nota). `credito` ahora solo afecta a la nota.
-- **Diputados y Senadores**: dos módulos grises (`--modulo-legisladores-bg`), retratos de 72 px, solo nombre y bloque. Bloques reales de ejemplo (Fuerza Patria, La Libertad Avanza, UCR, PRO, Coalición Cívica). El parámetro `legis` se eliminó: la posición se define en `FLOW`. Cada legislador de muestra tiene `mandato`, `seccion_electoral` y `ciudad` (los usa el perfil, etapa D).
+- **Diputados y Senadores**: dos módulos grises (`--modulo-legisladores-bg`), retratos de 72 px, solo nombre y bloque. Bloques reales de ejemplo (Fuerza Patria, La Libertad Avanza, UCR, PRO, Coalición Cívica). El parámetro `legis` fue removido: la posición de los módulos Diputados y Senadores la define únicamente `FLOW` (en mobile se resolverá con un orden propio, etapa E, sin tocar el de desktop). Cada legislador de muestra tiene `mandato`, `seccion_electoral` y `ciudad` (los usa el perfil, etapa D).
 - **Anunciantes**: sin título ni rótulo "Publicidad", sin fondo, con puntos y flechas chicas. Los 4 slots rotan solo banners cuadrados (16). Los 6 horizontales (excepto el 1180×90 del flujo) rotan en una tira de 90 px con `object-fit: contain` (solo desktop). El banner horizontal del flujo también perdió el rótulo.
 - **Franja final**: una nota menos por columna (1 con foto + 2 de texto). En la franja la etiqueta de sección no se muestra porque cada columna ya se titula con la sección.
 - **Colores**: `--fondo-f2` (gris para el Formato 2), `--modulo-legisladores-bg`, `--cintillo-color`, `--seccion-bg`; todo en el `:root` de `assets/css/main.css`.
 
+## v2.3 · Legisladores y nota (etapa D)
+- **Dos páginas**, `diputados.html` y `senadores.html` (se eliminó `legisladores.html`; todos los enlaces "Legisladores" del menú y del pie ahora son "Diputados" y "Senadores"). Pestañas cruzadas arriba, buscador por nombre (sin acentos ni mayúsculas), filtro por bloque y contador. Sin filtro por partido, distrito ni sección. Las tarjetas muestran solo foto, nombre y bloque. No había carrusel mezclado dentro de estas páginas; el módulo rodante de anunciantes del final se sacó.
+- **Perfil**: cabecera con bloque, mandato, sección electoral y ciudad (se quitó "Cámara" y "Partido"; `PARTIDOS` ya no existe). Sin bloque de biografía vacío cuando el legislador no tiene biografía. Publicidad en columna lateral chica y fija (desktop); en mobile queda al final.
+- **Campos a cargar por legislador** (planilla de Google Sheets del Hito 2): `nombre`, `camara`, `bloque`, `mandato` (ej. "2023 a 2027"), `seccion_electoral` (ej. "Octava"), `ciudad`, `foto`, `biografia` (opcional). Salen de las páginas oficiales de la Cámara y del Senado.
+- **Nota**: la fecha (solo día, sin hora) y la sección van debajo de la foto; el pie de foto y la bajada se conservan. Botones de compartir en gris neutro: WhatsApp, Facebook, X, Instagram, Telegram y copiar link (Instagram no tiene enlace de compartir web, avisa con un toast). "Leé también" lateral muestra el título completo.
+- **Corrección**: `adOne()` no aplicaba la clase `adz--one` y el slot lateral salía en 4 columnas de ~40 px; ahora ocupa el ancho de la columna.
+- Elementos de la nota que podrían sobrar: `capturas/nota-elementos-dudosos.md` (esperan confirmación, no se borró nada).
+
 ## Parámetros de variante (URL o panel; se recuerdan en la sesión; `?reset=1` los borra)
-Ejemplo: `index.html?demo=1&super=2&legis=b&bajada=on`. "Copiar link de esta variante" arma la URL.
+Ejemplo: `index.html?demo=1&super=2&bajada=on`. "Copiar link de esta variante" arma la URL.
 
 | Parámetro | Valores (default **en negrita**) | Qué cambia |
 |---|---|---|
