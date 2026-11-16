@@ -123,7 +123,7 @@ const hB = uniq.find(b => b.id === BANNER_HORIZ_ID);
 const isSq = b => b.w / b.h > .9 && b.w / b.h < 1.12;
 const ROT = uniq.filter(isSq).slice(0, 16);                                   // solo cuadrados (4 slots x 4 banners)
 const SLOTS4 = [0, 1, 2, 3].map(k => ROT.filter((_, i) => i % 4 === k));
-const HROT = uniq.filter(b => isH(b) && b.id !== BANNER_HORIZ_ID);            // horizontales: rotan en una tira fina de 90 px (contain, sin desborde)
+const HROT = [hB, ...uniq.filter(b => isH(b) && b.id !== BANNER_HORIZ_ID)];   // UN solo rodante horizontal (desktop): el de Banco Provincia es la 1.ª slide; tira de 90 px, contain, sin desborde
 const adLink = b => b.dest ? `href="${esc(b.dest)}" target="_blank" rel="noopener sponsored"` : 'href="#" data-stub="Banner sin destino cargado en el sitio actual."';
 const adSlide = (b, first) => `<a class="adr__slide" ${adLink(b)} aria-label="Publicidad"><img ${first ? `src="${b.file}"` : `data-src="${b.file}"`} alt="Banner publicitario" width="${b.w}" height="${b.h}"></a>`;
 const adSlot = list => `<div class="adr"><div class="adr__view">${list.map(b => adSlide(b, false)).join('')}</div></div>`;
@@ -298,7 +298,7 @@ const vermas = hero2 => `<ul class="vermas">${related(hero2, 2).map(r => `<li><a
    Bloques disponibles: tapa · legis-diputados · legis-senadores · f1 · f2 · banner · linea · anunciantes · secciones
    (cada "f1"/"f2" toma las siguientes notas del flujo, en orden de fecha y sin repetir) */
 /* 'textos' (ritmo=c) y 'trio' (ritmo=b) están siempre en el HTML pero ocultos: con ritmo=actual no se ve ningún cambio. El 2.º 'f1' se oculta con ritmo=b (lo reemplaza 'trio'). */
-const FLOW = ['tapa', 'legis-diputados', 'f1', 'textos', 'banner', 'f1', 'trio', 'legis-senadores', 'linea', 'f2', 'anunciantes', 'linea', 'secciones'];
+const FLOW = ['tapa', 'legis-diputados', 'f1', 'textos', 'f1', 'trio', 'legis-senadores', 'linea', 'f2', 'anunciantes', 'linea', 'secciones', 'banner'];   // 'banner' (horizontal suelto) solo se ve en mobile; en desktop está oculto porque ya es una slide del rodante horizontal de 'anunciantes'
 /* Orden propio para mobile (< 768 px): los dos módulos de legisladores van consecutivos. El FLOW de desktop no se toca: cada bloque lleva su posición mobile en --o y el CSS lo reordena solo en pantallas chicas. */
 const FLOW_MOBILE = ['tapa', 'legis-diputados', 'legis-senadores', 'f1', 'textos', 'banner', 'f1', 'trio', 'linea', 'f2', 'anunciantes', 'linea', 'secciones'];
 const mobilePos = (() => { const seen = {}; return FLOW.map(k => { const nth = seen[k] = (seen[k] ?? -1) + 1; let c = -1; return FLOW_MOBILE.findIndex(m => m === k && ++c === nth) + 1; }); })();
