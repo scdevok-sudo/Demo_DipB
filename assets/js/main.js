@@ -150,6 +150,7 @@
       ['fondos', 'Fondos alternados', [['on', 'Sí'], ['off', 'No']]],
       ['fotos', 'Fotos de legisladores', [['ejemplo', 'Ejemplo'], ['iniciales', 'Iniciales']]],
       ['font', 'Tipografía de títulos', [['actual', 'Actual (Source Serif 4)'], ['merriweather', 'Merriweather'], ['literata', 'Literata']]],
+      ['ritmo', 'Ritmo del home (desktop)', [['actual', 'Actual'], ['b', 'B · una grande y dos chicas'], ['c', 'C · bloque de solo texto']]],
       ['hora', '"Última hora"', [['off', 'No'], ['on', 'Sí']]],
       ['diario', 'Detalles de diario', [['on', 'Con'], ['off', 'Sin']]],
       ['credito', 'Crédito de foto', [['on', 'Sí'], ['off', 'No']]],
