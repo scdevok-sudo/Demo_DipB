@@ -300,7 +300,7 @@ const vermas = hero2 => `<ul class="vermas">${related(hero2, 2).map(r => `<li><a
 /* 'textos' (ritmo=c) y 'trio' (ritmo=b) están siempre en el HTML pero ocultos: con ritmo=actual no se ve ningún cambio. El 2.º 'f1' se oculta con ritmo=b (lo reemplaza 'trio'). */
 const FLOW = ['tapa', 'legis-diputados', 'f1', 'textos', 'f1', 'trio', 'legis-senadores', 'linea', 'f2', 'anunciantes', 'linea', 'secciones', 'banner'];   // 'banner' (horizontal suelto) solo se ve en mobile; en desktop está oculto porque ya es una slide del rodante horizontal de 'anunciantes'
 /* Orden propio para mobile (< 768 px): los dos módulos de legisladores van consecutivos. El FLOW de desktop no se toca: cada bloque lleva su posición mobile en --o y el CSS lo reordena solo en pantallas chicas. */
-const FLOW_MOBILE = ['tapa', 'legis-diputados', 'legis-senadores', 'f1', 'textos', 'banner', 'f1', 'trio', 'linea', 'f2', 'anunciantes', 'linea', 'secciones'];
+const FLOW_MOBILE = ['tapa', 'legis-diputados', 'legis-senadores', 'f1', 'textos', 'f1', 'trio', 'linea', 'f2', 'linea', 'secciones', 'anunciantes', 'banner'];   // toda la publicidad al final, después de la franja de secciones
 const mobilePos = (() => { const seen = {}; return FLOW.map(k => { const nth = seen[k] = (seen[k] ?? -1) + 1; let c = -1; return FLOW_MOBILE.findIndex(m => m === k && ++c === nth) + 1; }); })();
 const F1_POOL = [f1a, f1b];
 let f1i = 0;
