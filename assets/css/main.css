@@ -769,3 +769,21 @@ html[data-peso="900"]{--titulo-peso:900}
 
 /* ============ v2.3.1 · punto 1: un solo rodante horizontal en desktop (el banner suelto del flujo es una slide más del rodante) ============ */
 @media (min-width:768px){.adband{display:none}}
+
+/* ============ v2.3.1 · punto 2: publicidad lateral = un solo banner de 300x250 máx., sticky, sin placeholder; bonus: "Leé también" más legible ============ */
+.adbox--side{width:100%;max-width:300px;margin:0}
+.adbox--side .adbox__in{aspect-ratio:300/250;background:none}
+.adbox--side img{object-fit:contain;object-position:center top}
+.prof-side{max-width:300px}
+@media (min-width:1024px){
+  .art-row{grid-template-columns:minmax(0,1fr) 348px;column-gap:var(--s5)}
+  .art-row>.art{grid-column:1}.art-row>.aside{grid-column:2}
+  .aside{padding-left:var(--gap)}
+  .aside__sticky{gap:var(--s3)}
+  .aside .card--sm{grid-template-columns:minmax(0,1fr) 72px;gap:10px}
+  .aside .card--sm h3{font-size:16.5px;line-height:1.2}
+  .aside .card--sm .cintillo{font-size:12.5px;margin-bottom:3px}
+  .aside .sectag{font-size:9.5px;letter-spacing:.04em;padding:2px 6px;white-space:nowrap}
+}
+/* si la columna (Leé también + banner) no entra en la altura de la ventana, solo el banner queda fijo y Leé también corre con la nota */
+@media (min-width:1024px) and (max-height:960px){.aside__sticky{display:contents}.aside .adbox{position:sticky;top:120px;margin-top:var(--s3)}}

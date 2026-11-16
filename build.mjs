@@ -137,7 +137,9 @@ const adOne = () => adZone([ROT], 'adz--one');   // un solo slot rodante (antes 
 const hBanner = () => `<div class="adbanner" aria-label="Publicidad"><a class="adbanner__box" ${adLink(hB)}><img src="${hB.file}" alt="Banner publicitario" width="${hB.w}" height="${hB.h}" loading="lazy"></a></div>`;
 const topBanner = () => SHOW_TOP_BANNER ? `<div class="topbanner" aria-label="Publicidad"><div class="wrap"><a ${adLink(hB)}><img src="${hB.file}" alt="" width="${hB.w}" height="${hB.h}" loading="lazy"></a></div></div>` : '';
 /* slot de sección interna: 300x600 sticky (desktop) / 300x250 cada N notas (mobile) */
-const adBox = cls => `<aside class="adbox ${cls}" aria-label="Publicidad"><span class="adbox__label">Publicidad</span><a class="adbox__in" ${adLink(ROT.find(b => !isH(b)))}><img src="${ROT.find(b => !isH(b)).file}" alt="Banner publicitario" width="300" height="300" loading="lazy"></a></aside>`;
+/* publicidad lateral (nota, perfil y secciones): UN solo banner, 300x250 como máximo, fijo (sticky), sin placeholder ni rótulo; el logo se contiene entero (object-fit: contain) */
+const SIDE_AD = ROT.find(b => !isH(b));
+const adSide = () => `<aside class="adbox adbox--side" aria-label="Publicidad"><a class="adbox__in" ${adLink(SIDE_AD)}><img src="${SIDE_AD.file}" alt="Banner publicitario" width="${SIDE_AD.w}" height="${SIDE_AD.h}" loading="lazy"></a></aside>`;
 
 /* ------------------------------------------------------------ legisladores (MUESTRA) */
 const NOMBRES = ['Lucía Ferrer', 'Martín Salgado', 'Valeria Ruiz', 'Gonzalo Páez', 'Camila Orellana', 'Julián Berro', 'Sofía Mansilla', 'Tomás Aguirre', 'Noelia Bravo', 'Ezequiel Lamas', 'Paula Cardozo', 'Facundo Ibarra', 'Marina Quiroga', 'Hernán Dubois', 'Agustina Roldán', 'Matías Sosa', 'Daniela Vega', 'Rodolfo Pineda', 'Carla Escobar', 'Nicolás Barrios', 'Mariana Toledo', 'Sebastián Fuentes', 'Romina Acosta', 'Leandro Cabrera'];
@@ -379,7 +381,7 @@ const leeTambien = n => {
 };
 const asideBlock = n => `<aside class="aside span-3" aria-label="Columna lateral"><div class="aside__sticky">
   <section aria-labelledby="t-lee-a">${secTitle('Leé también', 'seccion.html', 't-lee-a')}<div class="list">${legPool.filter(x => x.id !== n.id).slice(0, 4).map(x => card(x, { t: 'sm' })).join('')}</div></section>
-  ${adOne()}
+  ${adSide()}
 </div></aside>`;
 
 const notaPage = n => {
@@ -441,7 +443,7 @@ ${header('seccion.html')}
    <div class="sec-more" id="sec-more" data-chunk="${SECTION_CHUNK}"><button class="btn btn--ghost js-infinite" type="button">Ver más notas</button></div>
    <template id="sec-tpl">${withAds(secRows.slice(SECTION_CHUNK), SECTION_CHUNK)}</template>
   </div>
-  <aside class="sec-side" aria-label="Publicidad">${adBox('adbox--tall')}</aside>
+  <aside class="sec-side" aria-label="Publicidad">${adSide()}</aside>
  </div>
 </div>
 </main>
@@ -496,7 +498,7 @@ ${header(L.cam === 'Senado' ? 'senadores.html' : 'diputados.html')}
   <div class="morebar"><button class="btn btn--ghost js-more" type="button" data-target="#nv-grid" data-step="4">Ver más</button></div>
  </section>
  </div>
- <aside class="prof-side" aria-label="Publicidad">${adOne()}</aside></div>
+ <aside class="prof-side" aria-label="Publicidad">${adSide()}</aside></div>
 </div>
 </main>
 ${footer()}`;
