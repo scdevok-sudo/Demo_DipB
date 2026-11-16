@@ -235,7 +235,7 @@ const dockHtml = act => `<nav class="dock" aria-label="Navegación rápida">${DO
 const header = (active, dockActive = active) => `<header class="hdr">
   <div class="topstrip"><div class="wrap topstrip__in">
     <time class="topstrip__date" data-hoy>${hoyStr}</time>${EDITION_LINE ? `<span class="topstrip__ed">${esc(EDITION_LINE)}</span>` : ''}
-    <div class="topstrip__links"><button class="topstrip__btn js-search" type="button" aria-expanded="false">${I.search}Buscar</button><a href="diputados.html">Diputados</a><a href="senadores.html">Senadores</a></div>
+    <div class="topstrip__links"><button class="topstrip__btn js-search" type="button" aria-expanded="false">${I.search}Buscar</button></div>
   </div></div>
   <div class="hdr__main"><div class="wrap hdr__top">
     <a class="hdr__logo" href="index.html" aria-label="Diputados Bonaerenses, inicio">${LOGO}</a>
