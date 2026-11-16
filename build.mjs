@@ -317,7 +317,10 @@ const BLOCKS = {
   'legis-diputados': () => legOne('Diputados', 'Diputados', 'diputados'),
   'legis-senadores': () => legOne('Senado', 'Senadores', 'senadores'),
   // Formato 1: 4 notas, 2×2, título arriba de la foto, fondo blanco
-  f1: () => { const k = f1i++; return band(`<div class="flow vr cols-2 f1">${(F1_POOL[k] || []).map(n => card(n, { t: 'med', tf: true, dek: true, big: true, sizes: SZ.s6 })).join('')}</div>`, 'f1band' + (k === 1 ? ' rv-a2' : '')); },
+  f1: () => { const k = f1i++; const cs = (F1_POOL[k] || []).map(n => card(n, { t: 'med', tf: true, dek: true, big: true, sizes: SZ.s6 }));
+    /* v2.3.2: en el 1.º Formato 1 el rodante horizontal va entre la fila de arriba (2 notas) y la de abajo (2 notas); solo desktop */
+    const body = k === 0 ? [...cs.slice(0, 2), `<div class="f1__ad">${adZoneH()}</div>`, ...cs.slice(2)] : cs;
+    return band(`<div class="flow vr cols-2 f1${k === 0 ? ' f1--ad' : ''}">${body.join('')}</div>`, 'f1band' + (k === 1 ? ' rv-a2' : '')); },
   // ritmo=b: una nota grande y dos chicas con foto al costado (reemplaza al 2.º Formato 1; usa 3 de sus 4 notas)
   trio: () => { const [g, c1, c2] = F1_POOL[1]; return band(`<div class="trio"><div class="trio__main">${card(g, { t: 'med', h: 2, big: true, sizes: SZ.s6 })}</div><div class="trio__side">${card(c1, { t: 'sm' })}${card(c2, { t: 'sm' })}</div></div>`, 'rv rv-b'); },
   // ritmo=c: bloque de solo texto entre dos bloques con foto, para cortar la grilla
@@ -326,7 +329,7 @@ const BLOCKS = {
   f2: () => band(`<div class="flow vr cols-2 f2">${f2n.map(n => card(n, { t: 'med', dek: true, big: true, sizes: SZ.s6 })).join('')}</div>`, 'f2band band--alt'),
   banner: () => band(hBanner(), 'adband'),
   linea: () => ruleDouble('rule-double--wrap'),
-  anunciantes: () => adZone() + adZoneH(),
+  anunciantes: () => adZone(),   // el rodante horizontal ya no va acá: está dentro del 1.º Formato 1 (v2.3.2)
   secciones: () => band(`<div class="strip vr cols-4" aria-label="Secciones">${mods.map(([cat, ns]) => `<section class="strip__col" aria-label="${cat}">${secTitle(cat, null)}
   ${card(ns[0], { t: 'med' })}<div class="list">${ns.slice(1).map(n => card(n, { t: 'txt' })).join('')}</div><a class="strip__more" href="#" data-stub="Sección no incluida en la maqueta.">Ver más de ${cat}</a></section>`).join('')}</div>`, 'stripband'),
 };

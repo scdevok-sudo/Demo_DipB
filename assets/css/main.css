@@ -787,3 +787,16 @@ html[data-peso="900"]{--titulo-peso:900}
 }
 /* si la columna (Leé también + banner) no entra en la altura de la ventana, solo el banner queda fijo y Leé también corre con la nota */
 @media (min-width:1024px) and (max-height:960px){.aside__sticky{display:contents}.aside .adbox{position:sticky;top:120px;margin-top:var(--s3)}}
+
+/* ============ v2.3.2 · rodante horizontal entre las dos filas del 1.º Formato 1 (desktop) ============ */
+.f1__ad{display:none}
+@media (min-width:768px){
+  .f1.f1--ad>.f1__ad{display:block;grid-column:1/-1;padding:var(--s3) 0;border-top:1px solid var(--rule-hair);justify-self:stretch}
+  .f1.f1--ad>.f1__ad::before{display:none!important}
+  .f1.f1--ad>:nth-child(4)::before{display:none!important}
+  .f1.f1--ad>:nth-child(5)::before{display:block!important}
+  .f1__ad .adz{margin:0;padding:0}
+  .f1__ad .wrap{padding:0;max-width:none;margin:0}
+  .f1__ad .adz__dots{min-height:28px;margin-top:0}
+  .f1__ad .adr__view{max-width:none}
+}
