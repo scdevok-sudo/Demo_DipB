@@ -53,7 +53,7 @@ Bloques: `tapa · legis-diputados · legis-senadores · f1 · f2 · banner · li
 ## v2.3 · Home desktop (etapa C)
 - **Sin pie de foto** en ninguna tarjeta del home ni de los listados (se conserva en la página de la nota). `credito` ahora solo afecta a la nota.
 - **Diputados y Senadores**: dos módulos grises (`--modulo-legisladores-bg`), retratos de 72 px, solo nombre y bloque. Bloques reales de ejemplo (Fuerza Patria, La Libertad Avanza, UCR, PRO, Coalición Cívica). El parámetro `legis` fue removido: la posición de los módulos Diputados y Senadores la define únicamente `FLOW` (en mobile se resolverá con un orden propio, etapa E, sin tocar el de desktop). Cada legislador de muestra tiene `mandato`, `seccion_electoral` y `ciudad` (los usa el perfil, etapa D).
-- **Anunciantes**: sin título ni rótulo "Publicidad", sin fondo, con puntos y flechas chicas. Los 4 slots rotan solo banners cuadrados (16). Los horizontales rotan en **un único rodante** de 90 px con `object-fit: contain` (solo desktop), con flechas y puntos: son 7 slides y la primera es el banner 1180×90 de Banco Provincia, que antes estaba suelto entre los Formato 1 (v2.3.1).
+- **Anunciantes**: sin título ni rótulo "Publicidad", sin fondo, con puntos y flechas chicas. Los 4 slots rotan solo banners cuadrados (16). Los horizontales rotan en **un único rodante** de 90 px con `object-fit: contain` (solo desktop), con flechas y puntos: son 7 slides y la primera es el banner 1180×90 de Banco Provincia, que antes estaba suelto entre los Formato 1. Desde v2.3.2 ese rodante va dentro del 1.º Formato 1, entre sus dos filas.
 - **Franja final**: una nota menos por columna (1 con foto + 2 de texto). En la franja la etiqueta de sección no se muestra porque cada columna ya se titula con la sección.
 - **Colores**: `--fondo-f2` (gris para el Formato 2), `--modulo-legisladores-bg`, `--cintillo-color`, `--seccion-bg`; todo en el `:root` de `assets/css/main.css`.
 
@@ -116,7 +116,7 @@ Los parámetros `m1` y `m2` ya no existen. Un script inline en `<head>` pone los
 - Capturas en `capturas/`: `index-m390.png`, `zocalo-*`, `modulos-diputados-senadores-m390.png`, `franja-secciones-m390.png`, `anunciantes-m390.png`, `comparacion-peso-600-vs-700-m360.png`, `index-d1280.png`.
 
 ## Secciones internas (`seccion.html`)
-Mini tapa de 1 nota + flujo vertical (línea arriba, volanta, titular, bajada, hora, foto a la derecha) + columna lateral sticky de 300 px en desktop. Scroll infinito con `IntersectionObserver`, esqueleto de un bloque entero (altura reservada) y botón "Ver más notas" de respaldo; carga de a 10 hasta 120 (las notas se reutilizan con `data-uid` distinto). Mobile: slot 300×250 cada `SECTION_AD_EVERY` notas (0 lo apaga). Esta lista es independiente de los dos formatos del home.
+Mini tapa de 1 nota + flujo vertical (línea arriba, volanta, titular, bajada, hora, foto a la derecha) + columna lateral sticky de 300 px en desktop (rodante de cuadrados desde v2.3.3). Scroll infinito con `IntersectionObserver`, esqueleto de un bloque entero (altura reservada) y botón "Ver más notas" de respaldo; carga de a 10 hasta 120 (las notas se reutilizan con `data-uid` distinto). Mobile: slot 300×250 cada `SECTION_AD_EVERY` notas (0 lo apaga). Esta lista es independiente de los dos formatos del home.
 
 ## Superdestacada y WordPress
 Cada nota admite `super: "foto" | "texto" | null` en el JSON; si ninguna lo trae, la maqueta usa tres notas sobrantes de demostración. En WordPress: campo "Superdestacada: Foto / Solo texto / No" en la nota (viabilidad a confirmar por Santi). Componentes: `.super--foto`, `.super--texto`.
@@ -165,25 +165,41 @@ Archivos listos: `robots.txt` (`Disallow: /`), `_headers` y `netlify.toml` (Netl
 ## v2.3.1 · cambios posteriores a la aprobación de G y F
 Un commit por punto, sin push. Auditoría en `capturas/auditoria-v2-3.md` (sección v2.3.1) y `tools/audit-v231.mjs`.
 1. **Un solo rodante horizontal en desktop.** `HROT` ahora incluye el banner de Banco Provincia (`BANNER_HORIZ_ID`) como primera slide: 7 slides, flechas y puntos en un único módulo. Se sacó el banner suelto del flujo de desktop (el bloque `banner` quedó al final de `FLOW` y se oculta ≥ 768 px). El rodante de cuadrados es otro módulo y no cambió.
-2. **Publicidad lateral** (nota, perfil y `seccion.html`): un solo banner (`adSide()`), 300×250 como máximo, `position: sticky`, sin placeholder beige ni rótulo y con `object-fit: contain`, así que el logo no se corta ni domina la columna. En la nota, si Leé también + banner no entran en la altura de la ventana (≤ 960 px), solo el banner queda fijo y Leé también corre con la nota. En mobile el banner del perfil queda al final y la nota usa el rodante 300×300 de `ad-end`.
+2. **Publicidad lateral** (nota, perfil y `seccion.html`; reemplazada en v2.3.3 por un rodante, ver abajo): un solo banner (`adSide()`), 300×250 como máximo, `position: sticky`, sin placeholder beige ni rótulo y con `object-fit: contain`, así que el logo no se corta ni domina la columna. En la nota, si Leé también + banner no entran en la altura de la ventana (≤ 960 px), solo el banner queda fijo y Leé también corre con la nota. En mobile el banner del perfil queda al final y la nota usa el rodante 300×300 de `ad-end`.
 3. **Pie de foto:** sin cambios (se mantiene en la nota y no aparece en el home).
 4. **Barra superior:** solo fecha y Buscar; Diputados y Senadores quedan en el menú principal.
 5. **Mobile:** toda la publicidad del home (rodante 300×300 y banner horizontal) va al final, después de la franja de secciones (`FLOW_MOBILE`). Medidas, rodado y swipe sin cambios; sin títulos ni rótulos. Los slots de 300×250 que se intercalan en `seccion.html` (`SECTION_AD_EVERY`) no se tocaron.
 6. **Bonus Leé también (nota):** columna lateral de 348 px (antes ~270), foto de 72 px y etiqueta de sección en una línea (9,5 px); los títulos pasan de 6 a 8 líneas a 3 o 4.
 
-### Medición de CLS y LCP después de v2.3.1
+## v2.3.2 · rodante horizontal dentro del 1.º Formato 1 (home, desktop)
+- El rodante horizontal (los 7 banners, con Banco Provincia) está **entre la fila de arriba y la de abajo del primer Formato 1** (el que sigue al módulo de Diputados): ocupa el ancho de la grilla, mide 90 px más sus flechas y puntos, sin rótulos. Se hace dentro de `BLOCKS.f1` (primera instancia) como un hijo más de la grilla, `grid-column: 1 / -1`.
+- Se sacó de su lugar anterior (justo después del rodante de cuadrados, en `anunciantes`), así que no queda duplicado. El resto de `FLOW` no cambia.
+- Espaciado: un filete arriba y otro abajo, con 24 px de aire de cada lado y sin hueco doble entre las filas. Mobile no cambia (el rodante es solo desktop; la publicidad sigue al final, después de la franja de secciones).
+- `ritmo=b` y `ritmo=c` verificados: el rodante vive en el 1.º Formato 1, que ninguna variante toca; en `c` el bloque de solo texto sigue entre los dos Formato 1.
+- Capturas del home completo a 1280 px: `capturas/i-home-completo-d1280.png` (más `i-home-ritmo-b-d1280.png`, `i-home-ritmo-c-d1280.png` y el detalle `i-f1-con-rodante-d1280.png`).
+
+## v2.3.3 · publicidad de las páginas interiores (nota, perfil, seccion, diputados y senadores)
+1. **Lateral (desktop)**: ahora es un **rodante de banners cuadrados** (los 16 del rodante de cuadrados del home), 300×250 como máximo, `sticky`, con puntos y flechas chicas, sin rótulos, `object-fit: contain`, que rota cada ~5 s y se pasa a mano (`adSide()` = `adZone([ROT], 'adz--one adz--side')`). El logo del Colegio de Psicólogos es solo una de las slides. Se agregó la columna lateral a `diputados.html` y `senadores.html` (grilla de 4 columnas con lateral de 300 px).
+2. **Rectangular al final**: el rodante horizontal de los 7 banners va debajo de todo el contenido (después de "Leé también", el listado o el perfil) y antes del pie, a todo el ancho del contenido, delgado (90 px) y sin rótulos (`adEnd()`).
+3. **Mobile y tablet (< 1024 px, sin lateral)**: al final de la página, primero el rodante de cuadrados 300×300 y debajo el horizontal (64 px de alto en mobile). Sin títulos ni rótulos y sin scroll horizontal.
+4. **`seccion.html` mobile**: los slots cada 10 notas (`SECTION_AD_EVERY`) son el rodante de cuadrados 300×300 (mismo componente que el del final, no un banner suelto), también los que entran por scroll infinito: `carousel.js` expone `window.initAdz` y `main.js` lo llama con cada bloque nuevo. Los rectangulares quedan solo al final.
+5. Quedan afuera el home y los banners de "Anunciantes" del home.
+- Capturas a 1280 y 390 px: `capturas/j-{nota,seccion,perfil,diputados}-{d1280,m390}.png`.
+- Un detalle: cada rodante es una instancia propia y todas arrancan en la primera slide, así que los slots de una misma página muestran el mismo banner al mismo tiempo hasta que rotan.
+
+### Medición de CLS y LCP después de v2.3.3
 Con `tools/perf.mjs` (Playwright con Chromium, servidor local en `:8765`): viewport mobile de 390×844 con factor 2, CPU 4× más lenta y red emulada de 1,6 Mbps con 150 ms de latencia (CDP); `PerformanceObserver` registra `largest-contentful-paint` y `layout-shift` (sin los que siguen a una interacción) y espera 3 s tras `load`. Es una medición de laboratorio en una red lenta emulada, no Lighthouse ni datos de usuarios reales: sirve para comparar entre versiones.
 
 | Página | LCP | CLS |
 |---|---|---|
-| index | 2,27 s en la tanda completa; 2,39 · 2,24 · 2,08 s en tres corridas sueltas | 0,0000 |
-| seccion | 1,78 s | 0,0000 |
-| nota-413361 | 2,08 s | 0,0000 |
-| diputados | 1,90 s | 0,0000 |
-| senadores | 1,89 s | 0,0000 |
-| legislador | 1,83 s | 0,0002 |
+| index | 2,01 s en la tanda completa; 2,02 y 1,99 s en dos corridas sueltas | 0,0000 |
+| seccion | 1,84 s | 0,0000 |
+| nota-413361 | 1,87 s | 0,0000 |
+| diputados | 1,72 s | 0,0000 |
+| senadores | 1,88 s | 0,0000 |
+| legislador | 1,48 s | 0,0000 |
 
-CLS queda por debajo de 0,1 en todas las páginas, y el LCP del index entre 2,08 y 2,39 s, en el rango de antes (2,05 a 2,48 s). La variación entre corridas es de unos 0,3 s.
+CLS queda por debajo de 0,1 en todas las páginas y el LCP del index (alrededor de 2 s) está en el rango anterior o algo por debajo (la medición de v2.3.1 daba 2,08 a 2,39 s); la variación entre corridas y sesiones es de unos 0,3 s, así que no hay una mejora real que atribuir a estos cambios.
 
 ## Pendientes
 - **Logo**: se reemplazó por `logo-big.png` del sitio actual (781×100, blanco sobre transparente, ~2.6× a 300 px). Sigue sin ser vectorial: si Santi consigue el SVG, reemplazar `assets/img/logo-dark.png` (o ajustar `LOGO` en `build.mjs`).
