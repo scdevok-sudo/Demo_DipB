@@ -1,0 +1,213 @@
+{
+ "p1": {
+  "bannerSueltoVisible": 0,
+  "rodantesHorizontales": 1,
+  "slides": [
+   "410410.gif",
+   "266148.gif",
+   "55192.webp",
+   "393450.gif",
+   "260405.webp",
+   "404361.gif",
+   "402121.gif"
+  ],
+  "primeraSlide": "410410.gif",
+  "flechas": 2,
+  "puntos": 7,
+  "rodanteCuadrados": 1,
+  "bloques": [
+   "sr",
+   "band.band--tapa",
+   "legband",
+   "band.f1band",
+   "band.f1band",
+   "legband",
+   "rule-double.rule-double--wrap",
+   "band.f2band",
+   "adz.",
+   "adz.adz--h",
+   "rule-double.rule-double--wrap",
+   "band.stripband"
+  ],
+  "topstrip": "Lunes 16 de noviembre de 2026 Buscar",
+  "avanza": "0 → 1"
+ },
+ "p2": {
+  "nota-413361.html@900": {
+   "bloquesDePublicidadVisibles": 1,
+   "w": 300,
+   "h": 250,
+   "position": "sticky",
+   "objectFit": "contain",
+   "fondo": "rgba(0, 0, 0, 0)",
+   "imgCargada": true,
+   "topTrasScroll": 120,
+   "figcaptionEnNota": 1
+  },
+  "nota-413361.html@1080": {
+   "bloquesDePublicidadVisibles": 1,
+   "w": 300,
+   "h": 250,
+   "position": "static",
+   "objectFit": "contain",
+   "fondo": "rgba(0, 0, 0, 0)",
+   "imgCargada": true,
+   "topTrasScroll": 759,
+   "figcaptionEnNota": 1
+  },
+  "seccion.html@900": {
+   "bloquesDePublicidadVisibles": 1,
+   "w": 300,
+   "h": 250,
+   "position": "sticky",
+   "objectFit": "contain",
+   "fondo": "rgba(0, 0, 0, 0)",
+   "imgCargada": true,
+   "topTrasScroll": 120,
+   "figcaptionEnNota": 0
+  },
+  "seccion.html@1080": {
+   "bloquesDePublicidadVisibles": 1,
+   "w": 300,
+   "h": 250,
+   "position": "sticky",
+   "objectFit": "contain",
+   "fondo": "rgba(0, 0, 0, 0)",
+   "imgCargada": true,
+   "topTrasScroll": 120,
+   "figcaptionEnNota": 0
+  },
+  "legislador-agustina-roldan.html@900": {
+   "bloquesDePublicidadVisibles": 1,
+   "w": 300,
+   "h": 250,
+   "position": "static",
+   "objectFit": "contain",
+   "fondo": "rgba(0, 0, 0, 0)",
+   "imgCargada": true,
+   "topTrasScroll": 105,
+   "figcaptionEnNota": 0
+  },
+  "legislador-agustina-roldan.html@1080": {
+   "bloquesDePublicidadVisibles": 1,
+   "w": 300,
+   "h": 250,
+   "position": "static",
+   "objectFit": "contain",
+   "fondo": "rgba(0, 0, 0, 0)",
+   "imgCargada": true,
+   "topTrasScroll": 120,
+   "figcaptionEnNota": 0
+  }
+ },
+ "bonus": {
+  "anchoColumna": 348,
+  "lineasEtiqueta": [
+   1,
+   1,
+   1,
+   1
+  ],
+  "lineasTitulos": [
+   4,
+   3,
+   3,
+   4
+  ],
+  "titulosCompletos": true,
+  "anchoNota": 812
+ },
+ "homeFigcaption": 0,
+ "p4": {
+  "index.html": {
+   "barra": "Lunes 16 de noviembre de 2026 Buscar",
+   "enlacesDiputadosSenadoresEnBarra": [],
+   "menuPrincipal": [
+    "DIPUTADOS",
+    "SENADORES"
+   ]
+  },
+  "seccion.html": {
+   "barra": "Lunes 16 de noviembre de 2026 Buscar",
+   "enlacesDiputadosSenadoresEnBarra": [],
+   "menuPrincipal": [
+    "DIPUTADOS",
+    "SENADORES"
+   ]
+  },
+  "nota-413361.html": {
+   "barra": "Lunes 16 de noviembre de 2026 Buscar",
+   "enlacesDiputadosSenadoresEnBarra": [],
+   "menuPrincipal": [
+    "DIPUTADOS",
+    "SENADORES"
+   ]
+  },
+  "diputados.html": {
+   "barra": "Lunes 16 de noviembre de 2026 Buscar",
+   "enlacesDiputadosSenadoresEnBarra": [],
+   "menuPrincipal": [
+    "DIPUTADOS",
+    "SENADORES"
+   ]
+  },
+  "legislador.html": {
+   "barra": "Lunes 16 de noviembre de 2026 Buscar",
+   "enlacesDiputadosSenadoresEnBarra": [],
+   "menuPrincipal": [
+    "DIPUTADOS",
+    "SENADORES"
+   ]
+  }
+ },
+ "p5": {
+  "360": {
+   "ultimosBloques": [
+    "band.f2band@5866",
+    "rule-double.rule-double--wrap@7525",
+    "band.stripband@7560",
+    "adz.@10977",
+    "band.adband@11325"
+   ],
+   "publicidadDespuesDeSecciones": true,
+   "cuadrado": "300x300",
+   "cantidadSlotsCuadrados": 1,
+   "textosEnPublicidad": 0,
+   "adHorizontalVisible": 0,
+   "bannerHorizontal": 1,
+   "scrollHorizontal": false
+  },
+  "390": {
+   "ultimosBloques": [
+    "band.f2band@5886",
+    "rule-double.rule-double--wrap@7449",
+    "band.stripband@7484",
+    "adz.@10907",
+    "band.adband@11255"
+   ],
+   "publicidadDespuesDeSecciones": true,
+   "cuadrado": "300x300",
+   "cantidadSlotsCuadrados": 1,
+   "textosEnPublicidad": 0,
+   "adHorizontalVisible": 0,
+   "bannerHorizontal": 1,
+   "scrollHorizontal": false
+  },
+  "412": {
+   "ultimosBloques": [
+    "band.f2band@6003",
+    "rule-double.rule-double--wrap@7494",
+    "band.stripband@7529",
+    "adz.@10982",
+    "band.adband@11330"
+   ],
+   "publicidadDespuesDeSecciones": true,
+   "cuadrado": "300x300",
+   "cantidadSlotsCuadrados": 1,
+   "textosEnPublicidad": 0,
+   "adHorizontalVisible": 0,
+   "bannerHorizontal": 1,
+   "scrollHorizontal": false
+  }
+ }
+}

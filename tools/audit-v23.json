@@ -44,13 +44,13 @@
    "band",
    "band",
    "band",
-   "band",
    "legband:Senadores",
    "rule-double",
    "band",
    "adz",
    "adz",
    "rule-double",
+   "band",
    "band"
   ],
   "strips": [
@@ -85,6 +85,12 @@
  "hbanners": {
   "slot": "1180x90",
   "res": [
+   {
+    "nat": "1180x90",
+    "box": "1180x90",
+    "fits": true,
+    "fit": "contain"
+   },
    {
     "nat": "970x90",
     "box": "1180x90",
@@ -177,7 +183,7 @@
   "copiar": true,
   "adLateral": "sticky",
   "adW": 300,
-  "adImg": 268
+  "adImg": 300
  },
  "perfilSinBio": {
   "bioVacia": false,
@@ -207,7 +213,9 @@
    "position": "sticky",
    "lee": true,
    "ad": true,
-   "adW": 213
+   "adW": 300,
+   "adH": 250,
+   "adPos": "sticky"
   },
   "titulosCompletos": "true (4)",
   "bannerAbajoDesktop": "none",

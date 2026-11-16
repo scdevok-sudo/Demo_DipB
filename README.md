@@ -29,9 +29,9 @@ footer
 19 notas en el flujo (3 + 4 + 4 + 8), cada nota se usa una sola vez. La secuencia es una lista en `build.mjs`:
 
 ```js
-const FLOW = ['tapa','legis-diputados','f1','textos','banner','f1','trio','legis-senadores','linea','f2','anunciantes','linea','secciones'];
+const FLOW = ['tapa','legis-diputados','f1','textos','f1','trio','legis-senadores','linea','f2','anunciantes','linea','secciones','banner'];
 ```
-Bloques: `tapa · legis-diputados · legis-senadores · f1 · f2 · banner · linea · anunciantes · secciones`, más `textos` y `trio`, que solo se ven con `?ritmo=c` y `?ritmo=b` (con `ritmo=actual` quedan ocultos y el home es idéntico al anterior). `FLOW_MOBILE` define el orden propio de mobile (ver etapa E). Para mover, sumar o sacar bloques se edita esa lista y se corre `node build.mjs`. Cada `f1` consume las 4 notas siguientes (hay dos juegos cargados: `f1a`, `f1b`); si se suma un tercer `f1` o `f2`, ampliar la cantidad en `mk(...)`.
+Bloques: `tapa · legis-diputados · legis-senadores · f1 · f2 · banner · linea · anunciantes · secciones`, más `textos` y `trio`, que solo se ven con `?ritmo=c` y `?ritmo=b` (con `ritmo=actual` quedan ocultos y el home es idéntico al anterior). `banner` (el horizontal suelto) está oculto en desktop, donde es una slide más del rodante horizontal de `anunciantes`, y solo se ve en mobile. `FLOW_MOBILE` define el orden propio de mobile (ver etapa E y v2.3.1). Para mover, sumar o sacar bloques se edita esa lista y se corre `node build.mjs`. Cada `f1` consume las 4 notas siguientes (hay dos juegos cargados: `f1a`, `f1b`); si se suma un tercer `f1` o `f2`, ampliar la cantidad en `mk(...)`.
 
 **Los dos formatos** (más la tapa y la franja de secciones, no hay otros en el flujo):
 - **Formato 1 · título arriba** (`.f1`): 2×2, volanta (si corresponde) → titular serif ~22 px → hora relativa → foto 16:10 → crédito. Sin bajada (`?bajada=on` la muestra). Línea fina arriba de la 2.ª fila y filete vertical entre columnas. Fondo blanco. Las fotos de una fila quedan alineadas aunque un titular tenga volanta y el otro no.
@@ -53,13 +53,13 @@ Bloques: `tapa · legis-diputados · legis-senadores · f1 · f2 · banner · li
 ## v2.3 · Home desktop (etapa C)
 - **Sin pie de foto** en ninguna tarjeta del home ni de los listados (se conserva en la página de la nota). `credito` ahora solo afecta a la nota.
 - **Diputados y Senadores**: dos módulos grises (`--modulo-legisladores-bg`), retratos de 72 px, solo nombre y bloque. Bloques reales de ejemplo (Fuerza Patria, La Libertad Avanza, UCR, PRO, Coalición Cívica). El parámetro `legis` fue removido: la posición de los módulos Diputados y Senadores la define únicamente `FLOW` (en mobile se resolverá con un orden propio, etapa E, sin tocar el de desktop). Cada legislador de muestra tiene `mandato`, `seccion_electoral` y `ciudad` (los usa el perfil, etapa D).
-- **Anunciantes**: sin título ni rótulo "Publicidad", sin fondo, con puntos y flechas chicas. Los 4 slots rotan solo banners cuadrados (16). Los 6 horizontales (excepto el 1180×90 del flujo) rotan en una tira de 90 px con `object-fit: contain` (solo desktop). El banner horizontal del flujo también perdió el rótulo.
+- **Anunciantes**: sin título ni rótulo "Publicidad", sin fondo, con puntos y flechas chicas. Los 4 slots rotan solo banners cuadrados (16). Los horizontales rotan en **un único rodante** de 90 px con `object-fit: contain` (solo desktop), con flechas y puntos: son 7 slides y la primera es el banner 1180×90 de Banco Provincia, que antes estaba suelto entre los Formato 1 (v2.3.1).
 - **Franja final**: una nota menos por columna (1 con foto + 2 de texto). En la franja la etiqueta de sección no se muestra porque cada columna ya se titula con la sección.
 - **Colores**: `--fondo-f2` (gris para el Formato 2), `--modulo-legisladores-bg`, `--cintillo-color`, `--seccion-bg`; todo en el `:root` de `assets/css/main.css`.
 
 ## v2.3 · Legisladores y nota (etapa D)
 - **Dos páginas**, `diputados.html` y `senadores.html` (se eliminó `legisladores.html`; todos los enlaces "Legisladores" del menú y del pie ahora son "Diputados" y "Senadores"). Pestañas cruzadas arriba, buscador por nombre (sin acentos ni mayúsculas), filtro por bloque y contador. Sin filtro por partido, distrito ni sección. Las tarjetas muestran solo foto, nombre y bloque. No había carrusel mezclado dentro de estas páginas; el módulo rodante de anunciantes del final se sacó.
-- **Perfil**: cabecera con bloque, mandato, sección electoral y ciudad (se quitó "Cámara" y "Partido"; `PARTIDOS` ya no existe). Sin bloque de biografía vacío cuando el legislador no tiene biografía. Publicidad en columna lateral chica y fija (desktop); en mobile queda al final.
+- **Perfil**: cabecera con bloque, mandato, sección electoral y ciudad (se quitó "Cámara" y "Partido"; `PARTIDOS` ya no existe). Sin bloque de biografía vacío cuando el legislador no tiene biografía. Publicidad lateral: un solo banner de 300×250 como máximo, fijo (v2.3.1); en mobile queda al final.
 - **Campos a cargar por legislador** (planilla de Google Sheets del Hito 2): `nombre`, `camara`, `bloque`, `mandato` (ej. "2023 a 2027"), `seccion_electoral` (ej. "Octava"), `ciudad`, `foto`, `biografia` (opcional). Salen de las páginas oficiales de la Cámara y del Senado.
 - **Nota**: la fecha (solo día, sin hora) y la sección van debajo de la foto; el pie de foto y la bajada se conservan. Botones de compartir en gris neutro: WhatsApp, Facebook, X, Instagram, Telegram y copiar link (Instagram no tiene enlace de compartir web, avisa con un toast). "Leé también" lateral muestra el título completo.
 - **Corrección**: `adOne()` no aplicaba la clase `adz--one` y el slot lateral salía en 4 columnas de ~40 px; ahora ocupa el ancho de la columna.
@@ -76,7 +76,7 @@ Bloques: `tapa · legis-diputados · legis-senadores · f1 · f2 · banner · li
 ## v2.3 · Ritmo del home de escritorio (etapa F, exploración opcional)
 Parámetro `ritmo=actual|b|c` (default `actual`: sin ningún cambio; verificado con el mismo alto de página y la misma cantidad de bloques que antes en 1280, 1440 y 390 px). Solo afecta a desktop (≥ 768 px); en mobile las tres opciones se ven igual.
 - **`b`**: el 2.º Formato 1 (4 notas iguales) se reemplaza por **una nota grande y dos chicas con foto al costado** (2/3 y 1/3 del ancho, la columna de las chicas separada por un filete). Usa 3 de las 4 notas de ese bloque, así que no suma notas nuevas.
-- **`c`**: se suma un **bloque de solo texto** (cintillo, título y etiqueta de sección, sin foto; 3 columnas × 2 filas, entre dos filetes) justo después del 1.º Formato 1 y antes del banner horizontal. Usa 6 notas más del flujo, sin repetir.
+- **`c`**: se suma un **bloque de solo texto** (cintillo, título y etiqueta de sección, sin foto; 3 columnas × 2 filas, entre dos filetes) entre los dos Formato 1 (v2.3.1: ya no hay banner suelto en medio). Usa 6 notas más del flujo, sin repetir.
 - Los dos formatos nuevos usan la misma familia tipográfica, filetes y espaciado que el resto. No se sumó la variante de columna angosta "Lo último".
 - Los bloques ocultos están siempre en el HTML (la variante se elige en el navegador, como los demás parámetros); sus fotos son `loading=lazy` y no se descargan mientras están ocultos.
 - Capturas a 1280 px: `capturas/f-ritmo-actual-d1280.png`, `f-ritmo-b-d1280.png` y `f-ritmo-c-d1280.png`.
@@ -95,7 +95,7 @@ Ejemplo: `index.html?demo=1&super=2&bajada=on`. "Copiar link de esta variante" a
 | `tapa2` | **normal** · chica | Mobile: las notas 2 y 3 de la tapa como tarjetas normales o compactas con foto al costado |
 | `peso` | 700 · **800** · 900 | Peso de los títulos de tarjetas y notas, en todas las pantallas (variable CSS `--titulo-peso`). `600` queda como alias de `700` |
 | `tiempo` | **off** · on | Hora relativa ("Hace 2 horas") en las tarjetas. OJO: `hora` sigue siendo la franja "Última hora" (el brief asumía que `hora` era la de las tarjetas, por eso se creó `tiempo`) |
-| `ad` | **on** · off | Banner 1180×90 (320×100 en mobile); apagado colapsa |
+| `ad` | **on** · off | Banner horizontal suelto del flujo, solo mobile (320×100); apagado colapsa. En desktop el horizontal es una slide del rodante |
 | `fondos` | **on** · off | Fondo suave del Formato 2 |
 | `fotos` | **ejemplo** · iniciales | Retratos de fantasía o iniciales |
 | `font` | **actual** · merriweather · literata | Serif de los títulos. `actual` = Source Serif 4 (referencia; es la que ya usaba la maqueta). Alias viejos: `a` → actual, `b` → merriweather. Clarín usa Portada/Portada Text (TypeTogether, comercial): no se pueden usar sin licencia |
@@ -161,6 +161,15 @@ Archivos listos: `robots.txt` (`Disallow: /`), `_headers` y `netlify.toml` (Netl
 2. **Netlify**: arrastrar la carpeta en app.netlify.com/drop, o `netlify deploy --prod --dir .`. Desde el panel, poner protección con contraseña o dominio con nombre no adivinable.
 3. **Vercel**: `vercel --prod` en la carpeta (`.vercelignore` deja afuera `tools`, `data`, `capturas` y `build.mjs`). Activar "Vercel Authentication" para que sea privada de verdad.
 4. No enlazar la URL desde ningún sitio público. Probar `curl -I <url>` y verificar el `X-Robots-Tag`.
+
+## v2.3.1 · cambios posteriores a la aprobación de G y F
+Un commit por punto, sin push. Auditoría en `capturas/auditoria-v2-3.md` (sección v2.3.1) y `tools/audit-v231.mjs`.
+1. **Un solo rodante horizontal en desktop.** `HROT` ahora incluye el banner de Banco Provincia (`BANNER_HORIZ_ID`) como primera slide: 7 slides, flechas y puntos en un único módulo. Se sacó el banner suelto del flujo de desktop (el bloque `banner` quedó al final de `FLOW` y se oculta ≥ 768 px). El rodante de cuadrados es otro módulo y no cambió.
+2. **Publicidad lateral** (nota, perfil y `seccion.html`): un solo banner (`adSide()`), 300×250 como máximo, `position: sticky`, sin placeholder beige ni rótulo y con `object-fit: contain`, así que el logo no se corta ni domina la columna. En la nota, si Leé también + banner no entran en la altura de la ventana (≤ 960 px), solo el banner queda fijo y Leé también corre con la nota. En mobile el banner del perfil queda al final y la nota usa el rodante 300×300 de `ad-end`.
+3. **Pie de foto:** sin cambios (se mantiene en la nota y no aparece en el home).
+4. **Barra superior:** solo fecha y Buscar; Diputados y Senadores quedan en el menú principal.
+5. **Mobile:** toda la publicidad del home (rodante 300×300 y banner horizontal) va al final, después de la franja de secciones (`FLOW_MOBILE`). Medidas, rodado y swipe sin cambios; sin títulos ni rótulos. Los slots de 300×250 que se intercalan en `seccion.html` (`SECTION_AD_EVERY`) no se tocaron.
+6. **Bonus Leé también (nota):** columna lateral de 348 px (antes ~270), foto de 72 px y etiqueta de sección en una línea (9,5 px); los títulos pasan de 6 a 8 líneas a 3 o 4.
 
 ## Pendientes
 - **Logo**: se reemplazó por `logo-big.png` del sitio actual (781×100, blanco sobre transparente, ~2.6× a 300 px). Sigue sin ser vectorial: si Santi consigue el SVG, reemplazar `assets/img/logo-dark.png` (o ajustar `LOGO` en `build.mjs`).
