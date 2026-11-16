@@ -140,9 +140,10 @@
     const rows = [
       ['super', 'Superdestacada', [['off', 'Sin ella'], ['foto', 'A · foto'], ['texto', 'B · texto'], ['2', '2'], ['3', '3']]],
       ['seccion', 'Etiqueta de sección', [['foto', 'Sobre la foto'], ['abajo', 'Debajo de la foto']]],
+      ['tapa2', 'Tapa mobile: notas 2 y 3', [['normal', 'Normales'], ['chica', 'Chicas con foto al costado']]],
       ['tapa', 'Tapa (desktop)', [['texto-izq', 'Texto a la izquierda'], ['foto-izq', 'Foto a la izquierda']]],
       ['vermas', 'Ver más de X', [['flecha', 'Texto con flecha'], ['boton', 'Botón con borde']]],
-      ['bajada', 'Bajada (mobile siempre con, salvo nota 1)', [['auto', 'Auto'], ['on', 'Con'], ['off', 'Sin']]],
+      ['bajada', 'Bajada (mobile: sin por defecto)', [['auto', 'Auto'], ['on', 'Con'], ['off', 'Sin']]],
       ['peso', 'Peso de los títulos', [['700', '700'], ['800', '800'], ['900', '900']]],
       ['tiempo', 'Hora en las tarjetas', [['off', 'No'], ['on', 'Sí']]],
       ['ad', 'Banner 1180×90', [['on', 'Sí'], ['off', 'No']]],

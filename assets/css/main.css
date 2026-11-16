@@ -575,7 +575,7 @@ html[data-peso="900"]{--titulo-peso:900}
   .card--med .card__txt,.card--tf .card__txt,.card--tapa2 .card__txt{margin:0 0 12px}
   .card--lead .card__txt{margin:0 0 12px}
   .card--super .card__txt{margin:0 0 var(--s2)}
-  .srow{grid-template-columns:minmax(0,1fr);gap:0;min-height:430px}
+  .srow{grid-template-columns:minmax(0,1fr);gap:0;min-height:490px}
   .srow .thumb{grid-column:1;grid-row:2;aspect-ratio:16/10;margin-top:12px}
   .srow .dek{display:block;font-size:16px;color:var(--ink-2)}
   .srow__cred{grid-row:3;margin-top:6px;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
@@ -585,9 +585,9 @@ html[data-peso="900"]{--titulo-peso:900}
   .card--med .cintillo,.card--lead .cintillo,.card--super .cintillo,.srow .cintillo,.art__head .cintillo{font-size:20px;margin:10px 0 6px}
   .card--lead .card__txt{display:flex;flex-direction:column}
   /* títulos con presencia (peso: variable --titulo-peso / ?peso=700|800|900) */
-  .card--med h2,.card--med h3,.card--tapa2 h2,.card--tf h3,.f2 .card--med h3,.strip .card--med h3,.srow h3,.card--super h2,.super--foto h2{font-size:28px;line-height:1.22;font-weight:var(--titulo-peso-mobile)}
-  .card--lead h2{font-size:32px;line-height:1.2;font-weight:var(--titulo-peso-mobile)}
-  .card--txt h3,.card--sm h3{font-weight:var(--titulo-peso-mobile)}
+  .card--med h2,.card--med h3,.card--tapa2 h2,.card--tf h3,.f2 .card--med h3,.strip .card--med h3,.srow h3,.card--super h2,.super--foto h2{font-size:28px;line-height:1.22;font-weight:var(--titulo-peso)}
+  .card--lead h2{font-size:32px;line-height:1.2;font-weight:var(--titulo-peso)}
+  .card--txt h3,.card--sm h3{font-weight:var(--titulo-peso)}
   /* bajada entera, sin recorte */
   .dek{-webkit-line-clamp:unset!important;overflow:visible!important}
   .tapa .card--lead .dek,.tapa .card--lead .vermas{display:none}  /* nota 1 de la tapa: sin bajada ni relacionadas */
@@ -701,3 +701,48 @@ html[data-peso="900"]{--titulo-peso:900}
 .aside .card--sm .cintillo{font-size:13px}
 /* publicidad en columna lateral (nota y perfil): el slot ocupa el ancho de la columna (antes se achicaba a ~40 px) */
 @media (min-width:1024px){.aside .adz--one .adz__slots,.prof-side .adz--one .adz__slots{grid-template-columns:minmax(0,1fr)}}
+
+/* ============ v2.3 etapa E · MOBILE (< 768 px) ============ */
+:root{--filete-suave:#e2e2e2}
+.sectag--cmp{display:none}
+@media (max-width:767px){
+  /* orden propio de los bloques del home (FLOW_MOBILE en build.mjs): Diputados y Senadores consecutivos */
+  main.home{display:flex;flex-direction:column}
+  main.home>*{order:var(--o,0)}
+  main.home>.sr{order:-1}
+
+  /* sin bajadas en las tarjetas (la nota sí la conserva); ?bajada=on las vuelve a mostrar para comparar */
+  html:not([data-bajada="on"]) .dek{display:none!important}
+
+  /* líneas finas entre tarjetas (1px, gris claro) */
+  .flow>*{border-top:1px solid var(--filete-suave)}
+  .flow>:first-child{border-top:0}
+  html[data-diario="off"] .flow>*{border-top-color:var(--filete-suave)}
+  .tapa__lead{padding-bottom:var(--s2);border-bottom:1px solid var(--filete-suave);margin-bottom:var(--s2)}
+  .tapa__two{gap:0}
+  .tapa__two>*+*{border-top:1px solid var(--filete-suave);margin-top:var(--s2);padding-top:var(--s2)}
+  .strip .list{border-top:1px solid var(--filete-suave);margin-top:var(--s2)}
+  .strip .list>*+*{border-top:1px solid var(--filete-suave);margin-top:var(--s1);padding-top:var(--s1)}
+  .srow,html[data-diario="off"] .srow{border-top:1px solid var(--filete-suave)}
+  .srow:first-child{border-top:2px solid var(--ink)}
+  .srow-ad{border-top:1px solid var(--filete-suave)}
+
+  /* Formato 2 (y tapa2=chica): tarjeta compacta, texto a la izquierda y foto chica (96×72) a la derecha */
+  .f2 .card--med,html[data-tapa2="chica"] .card--tapa2{display:grid;grid-template-columns:minmax(0,1fr) 96px;column-gap:12px;align-items:start}
+  .f2 .card--med .fig,html[data-tapa2="chica"] .card--tapa2 .fig{grid-column:2;grid-row:1;width:96px}
+  .f2 .card--med .card__txt,html[data-tapa2="chica"] .card--tapa2 .card__txt{grid-column:1;grid-row:1;order:0;margin:0}
+  .f2 .card--med .thumb,html[data-tapa2="chica"] .card--tapa2 .thumb{aspect-ratio:4/3;width:96px}
+  .f2 .card--med .fig>.sectag,html[data-tapa2="chica"] .card--tapa2 .fig>.sectag{display:none}
+  .f2 .sectag--cmp,html[data-tapa2="chica"] .card--tapa2 .sectag--cmp{display:inline-block;margin-top:8px}
+  .f2 .card--med .cintillo,html[data-tapa2="chica"] .card--tapa2 .cintillo{font-size:15px;margin:0 0 4px}
+  .f2 .card--med h3,html[data-tapa2="chica"] .card--tapa2 h2{font-size:20px;line-height:1.2}
+  .f2 .card--med .meta,html[data-tapa2="chica"] .card--tapa2 .meta{display:none}
+  .f2.flow>*{padding:var(--s2) 0}
+  .f2.flow>:first-child{padding-top:0}
+
+  /* banners: slot de 300×300 reales, centrado, uno por vez y rodante; sin textos y con 8 px de aire */
+  .adz,.adz--one{padding:8px 0;margin-top:0}
+  .adz__slots{justify-content:center;grid-template-columns:min(300px,100%)}
+  .adr__view{aspect-ratio:1/1;height:auto;width:300px;max-width:100%;background:var(--paper-tint)}
+  .srow-ad__in{aspect-ratio:1/1}
+}

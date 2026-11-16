@@ -20,10 +20,10 @@ const SHOW_FECHA_EN_NOTA = true;    // dentro de la página de la nota se conser
 const SHOW_TAPA_RELACIONADAS = false; // desktop: false oculta las 2 notas relacionadas (con guión) bajo la bajada de la nota principal; el markup se conserva, true las vuelve a mostrar
 const HEADER_MENU_MOBILE = false;   // mobile: false = las tres barritas viven solo en el zócalo; true = también arriba a la derecha
 /* Valores por defecto de cada parámetro (se pisan con ?param=valor, que se recuerda en la sesión). Ver README. */
-const DEFAULTS = { seccion: 'foto', super: 'off', tapa: 'texto-izq', vermas: 'flecha', bajada: 'auto', ad: 'on', fondos: 'on', fotos: 'ejemplo', font: 'actual', hora: 'off', diario: 'on', credito: 'on', tiempo: 'off', peso: '800' };
+const DEFAULTS = { seccion: 'foto', super: 'off', tapa: 'texto-izq', vermas: 'flecha', bajada: 'auto', ad: 'on', fondos: 'on', fotos: 'ejemplo', font: 'actual', hora: 'off', diario: 'on', credito: 'on', tiempo: 'off', peso: '800', tapa2: 'normal' };
 const OPTIONS = {
   seccion: ['foto', 'abajo'], super: ['off', 'foto', 'texto', '2', '3'], tapa: ['texto-izq', 'foto-izq'], vermas: ['flecha', 'boton'], bajada: ['auto', 'on', 'off'],
-  ad: ['on', 'off'], fondos: ['on', 'off'], fotos: ['ejemplo', 'iniciales'], font: ['actual', 'merriweather', 'literata'], hora: ['on', 'off'], diario: ['on', 'off'], credito: ['on', 'off'], tiempo: ['off', 'on'], peso: ['700', '800', '900'],
+  ad: ['on', 'off'], fondos: ['on', 'off'], fotos: ['ejemplo', 'iniciales'], font: ['actual', 'merriweather', 'literata'], hora: ['on', 'off'], diario: ['on', 'off'], credito: ['on', 'off'], tiempo: ['off', 'on'], peso: ['700', '800', '900'], tapa2: ['normal', 'chica'],
 };
 
 /* Alias de valores viejos de parámetros (los links ya compartidos siguen funcionando) */
@@ -185,7 +185,7 @@ const card = (n, { t = 'med', dek = false, h = 3, tf = false, cap = false, eager
   if (t === 'txt') return `<article class="card card--txt ${cls}">${kicker}${title}${below}${meta}</article>`;
   if (t === 'sm') return `<article class="card card--sm ${cls}"><div class="card__txt">${kicker}${title}${below}${meta}</div>${thumb(n, { sizes: SZ.sm })}</article>`;
   const f = fig(n, { sizes, big, eager, cap, alt: eager ? n.titulo : '' });
-  const txt = `<div class="card__txt">${kicker}${title}${f ? '' : below}${dk}${meta}</div>`;
+  const txt = `<div class="card__txt">${kicker}${title}${f ? secTag(n, 'sectag--t sectag--cmp') : below}${dk}${meta}</div>`;
   return `<article class="card card--${t}${tf ? ' card--tf' : ''} ${cls}">${tf ? txt + f : f + txt}</article>`;
 };
 const secTitle = (label, href, id) => `<div class="sec-head"><h2 class="sec-title"${id ? ` id="${id}"` : ''}><span>${label}</span></h2>${href ? `<a href="${href}">Ver más</a>` : ''}</div>`;
@@ -297,6 +297,9 @@ const vermas = hero2 => `<ul class="vermas">${related(hero2, 2).map(r => `<li><a
    Bloques disponibles: tapa · legis-diputados · legis-senadores · f1 · f2 · banner · linea · anunciantes · secciones
    (cada "f1"/"f2" toma las siguientes notas del flujo, en orden de fecha y sin repetir) */
 const FLOW = ['tapa', 'legis-diputados', 'f1', 'banner', 'f1', 'legis-senadores', 'linea', 'f2', 'anunciantes', 'linea', 'secciones'];
+/* Orden propio para mobile (< 768 px): los dos módulos de legisladores van consecutivos. El FLOW de desktop no se toca: cada bloque lleva su posición mobile en --o y el CSS lo reordena solo en pantallas chicas. */
+const FLOW_MOBILE = ['tapa', 'legis-diputados', 'legis-senadores', 'f1', 'banner', 'f1', 'linea', 'f2', 'anunciantes', 'linea', 'secciones'];
+const mobilePos = (() => { const seen = {}; return FLOW.map(k => { const nth = seen[k] = (seen[k] ?? -1) + 1; let c = -1; return FLOW_MOBILE.findIndex(m => m === k && ++c === nth) + 1; }); })();
 const F1_POOL = [f1a, f1b];
 let f1i = 0;
 const BLOCKS = {
@@ -321,10 +324,10 @@ const BLOCKS = {
 };
 write('index.html', `${head('Diputados Bonaerenses · Maqueta', { extra: `<link rel="preload" as="image" fetchpriority="high" imagesrcset="assets/img/notas/${hero.id}-m.webp ${D(hero, 'm')[0]}w, assets/img/notas/${hero.id}-full.webp ${D(hero, 'full')[0]}w" imagesizes="(min-width:1024px) 700px, 100vw">` })}
 ${header('index.html')}
-<main id="main">
+<main id="main" class="home">
 <h1 class="sr">Diputados Bonaerenses: noticias de la Legislatura Bonaerense</h1>
 ${superNotes.map(superBlock).join('\n')}
-${FLOW.map(k => BLOCKS[k]()).join('\n')}
+${FLOW.map((k, i) => BLOCKS[k]().replace(/^<(\w+)/, `<$1 style="--o:${mobilePos[i]}"`)).join('\n')}
 </main>
 ${footer()}`);
 
@@ -413,7 +416,7 @@ const secTotal = catCount('Legislatura Bonaerense');
 const sRow = (n, uid) => `<article class="srow" data-uid="${uid}"><div class="srow__txt">${kick(n)}<h3><a href="${noteHref(n)}">${esc(n.titulo)}</a></h3>${secTag(n, 'sectag--t')}<p class="dek">${esc(n.extracto)}</p><div class="meta">${rel(n)}</div></div>${thumb(n, { sizes: '(min-width:768px) 280px, 100vw' })}</article>`;
 const secRows = [];
 for (let i = 0; secRows.length < SECTION_TOTAL; i++) { const base = secPool[(i % (secPool.length - 1)) + 1]; secRows.push(sRow(base, i < secPool.length - 1 ? `n${base.id}` : `n${base.id}-r${Math.floor(i / (secPool.length - 1))}`)); }
-const adM = () => `<div class="srow-ad only-m"><span class="adbox__label">Publicidad</span><a class="srow-ad__in" ${adLink(ROT.find(b => !isH(b)))}><img src="${ROT.find(b => !isH(b)).file}" alt="Banner publicitario" width="300" height="250" loading="lazy"></a></div>`;
+const adM = () => `<div class="srow-ad only-m"><a class="srow-ad__in" ${adLink(ROT.find(b => !isH(b)))}><img src="${ROT.find(b => !isH(b)).file}" alt="Banner publicitario" width="300" height="300" loading="lazy"></a></div>`;
 const withAds = (rows, startIdx) => rows.map((r, i) => r + (SECTION_AD_EVERY && (startIdx + i + 1) % SECTION_AD_EVERY === 0 ? adM() : '')).join('');
 write('seccion.html', `${head('Legislatura Bonaerense · Diputados Bonaerenses', { extra: `<link rel="preload" as="image" fetchpriority="high" imagesrcset="assets/img/notas/${secLead.id}-m.webp ${D(secLead, 'm')[0]}w${D(secLead, 'full') ? `, assets/img/notas/${secLead.id}-full.webp ${D(secLead, 'full')[0]}w` : ''}" imagesizes="(min-width:1024px) 700px, 100vw">` })}
 ${header('seccion.html')}
