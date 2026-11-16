@@ -657,7 +657,6 @@ html[data-peso="900"]{--titulo-peso:900}
   html[data-vermas="boton"] .strip__more{justify-content:center;gap:8px;min-height:40px;padding:8px 16px;border:1px solid var(--accent-text);border-radius:4px;font:600 14px var(--font-ui);color:var(--accent-text);text-align:center;transition:background .2s}
   html[data-vermas="boton"] .strip__more::after{font-size:17px}
   html[data-vermas="boton"] .strip__more:hover,html[data-vermas="boton"] .strip__more:active{background:var(--paper-tint);color:var(--accent-text)}}
-}
 
 /* ============ v2.3 · peso de los títulos en todas las pantallas (?peso=700|800|900, default 800) ============ */
 .card h1,.card h2,.card h3,.srow h3,.art__head h1,.super--foto h2,.super--texto h2{font-weight:var(--titulo-peso)}

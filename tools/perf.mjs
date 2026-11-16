@@ -2,7 +2,7 @@
 // Uso: node perf.mjs [pagina,pagina] [query]
 import { chromium } from 'playwright';
 const BASE = process.env.BASE || 'http://localhost:8765/';
-const pages = (process.argv[2] || 'index,seccion,nota-413361,legisladores,legislador').split(',');
+const pages = (process.argv[2] || 'index,seccion,nota-413361,diputados,senadores,legislador').split(',');
 const q = process.argv[3] ? '?' + process.argv[3] : '';
 const b = await chromium.launch();
 for (const n of pages) {
