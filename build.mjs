@@ -345,7 +345,10 @@ const cleanBody = html => {
   }).replace(/<\/h4>/g, '</h3>');
   return h.replace(/<p>\s*(&nbsp;|<br>|\s)*<\/p>/g, '').replace(/\n{2,}/g, '\n').trim();
 };
-const bodyOf = n => {
+/* dateline ("LA PLATA", "LA PLATA.-", "LA PLATA (NA)") al inicio del primer párrafo: se oculta al renderizar (decisión de Juan); no queda ninguno en los datos de muestra, pero el contenido real puede traerlo */
+const sinDateline = h => h.replace(/^(\s*<p>\s*)(?:<(strong|b)>\s*)?LA PLATA\b\s*(?:\((?:NA|DIB|Télam|Agencia)\))?[\s\-–—.:]*(?:<\/\2>)?[\s\-–—.:]*/, '$1');
+const bodyOf = n => sinDateline(bodyOf0(n));
+const bodyOf0 = n => {
   if (n.id !== NOTA_ID) return cleanBody(n._html);
   const parts = cuerpo.html.match(/<p[\s\S]*?<\/p>|<h2[\s\S]*?<\/h2>|<!--IMG\d-->/g);
   return parts.map(p => {
