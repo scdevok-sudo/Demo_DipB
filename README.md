@@ -65,6 +65,14 @@ Bloques: `tapa · legis-diputados · legis-senadores · f1 · f2 · banner · li
 - **Corrección**: `adOne()` no aplicaba la clase `adz--one` y el slot lateral salía en 4 columnas de ~40 px; ahora ocupa el ancho de la columna.
 - Elementos de la nota que podrían sobrar: `capturas/nota-elementos-dudosos.md` (esperan confirmación, no se borró nada).
 
+## v2.3 · Mobile (etapa E)
+- **Sin bajadas** en ninguna tarjeta mobile (tapa, formatos, secciones y listados). La página de la nota las conserva. `?bajada=on` las vuelve a mostrar para comparar.
+- **Líneas finas** de 1 px entre tarjetas (variable `--filete-suave`) en el home, la franja final y los listados.
+- **Formato 2 compacto**: texto a la izquierda (cintillo, título, etiqueta de sección) y foto de 96×72 a la derecha. `?tapa2=chica` aplica lo mismo a las notas 2 y 3 de la tapa (default `normal`).
+- **Banners**: slot de 300×300 reales, centrado, rodante cada ~5 s, deslizable con el dedo, con pausa al tocar; sin textos y con 8 px de aire. Altura reservada (CLS 0 en 360, 390 y 412 px). El banner horizontal del flujo no se tocó.
+- **Orden propio de los legisladores en mobile**: `FLOW_MOBILE` (en `build.mjs`) pone Diputados y Senadores consecutivos; el `FLOW` de desktop no cambia. Cada bloque lleva `--o` y el CSS lo reordena solo en < 768 px.
+- **Corrección**: los títulos mobile salían en peso 400 porque la regla usaba una variable inexistente (`--titulo-peso-mobile`); ahora respetan `--titulo-peso` (default 800).
+
 ## Parámetros de variante (URL o panel; se recuerdan en la sesión; `?reset=1` los borra)
 Ejemplo: `index.html?demo=1&super=2&bajada=on`. "Copiar link de esta variante" arma la URL.
 
@@ -73,7 +81,8 @@ Ejemplo: `index.html?demo=1&super=2&bajada=on`. "Copiar link de esta variante" a
 | `super` | **off** · foto · texto · 2 · 3 | Superdestacada sobre la tapa: A foto, B solo texto, o apiladas |
 | `tapa` | **texto-izq** · foto-izq | Tapa desktop: texto a la izquierda y foto a la derecha (default), o al revés. Alias de links viejos: `izq` → `foto-izq`, `der` → `texto-izq` |
 | `vermas` | **flecha** · boton | "Ver más de X" de la franja final: texto con flecha sin borde (default) o botón con borde |
-| `bajada` | **auto** · on · off | Bajada del Formato 1. `auto`: en mobile siempre con bajada entera (sin recorte), en desktop sin bajada en F1. La nota 1 de la tapa en mobile nunca lleva bajada |
+| `bajada` | **auto** · on · off | Bajada de las tarjetas. En mobile `auto` y `off` no la muestran; `on` la muestra. En desktop, `auto` la oculta en el Formato 1 (la tapa y el Formato 2 la mantienen) |
+| `tapa2` | **normal** · chica | Mobile: las notas 2 y 3 de la tapa como tarjetas normales o compactas con foto al costado |
 | `peso` | 700 · **800** · 900 | Peso de los títulos de tarjetas y notas, en todas las pantallas (variable CSS `--titulo-peso`). `600` queda como alias de `700` |
 | `tiempo` | **off** · on | Hora relativa ("Hace 2 horas") en las tarjetas. OJO: `hora` sigue siendo la franja "Última hora" (el brief asumía que `hora` era la de las tarjetas, por eso se creó `tiempo`) |
 | `ad` | **on** · off | Banner 1180×90 (320×100 en mobile); apagado colapsa |

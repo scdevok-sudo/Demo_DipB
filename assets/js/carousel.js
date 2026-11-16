@@ -67,6 +67,10 @@
     addEventListener('resize', () => load(i), { passive: true });
     if (!reduce && n > 1) setInterval(() => { if (!z.offsetParent || Date.now() < hold || document.hidden || !seen) return; go(i + 1); }, ms);
     const pause = () => { hold = Date.now() + 12000; };
+    /* deslizar con el dedo (mobile): un gesto horizontal pasa al banner siguiente o anterior */
+    let x0 = null, y0 = 0;
+    z.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+    z.addEventListener('touchend', e => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null; if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) { hold = Date.now() + 12000; go(i + (dx < 0 ? 1 : -1)); } }, { passive: true });
     ['pointerdown', 'mouseenter', 'focusin'].forEach(ev => z.addEventListener(ev, pause, { passive: true }));
   });
 })();
