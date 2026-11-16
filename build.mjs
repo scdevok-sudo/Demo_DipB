@@ -430,7 +430,8 @@ const secTotal = catCount('Legislatura Bonaerense');
 const sRow = (n, uid) => `<article class="srow" data-uid="${uid}"><div class="srow__txt">${kick(n)}<h3><a href="${noteHref(n)}">${esc(n.titulo)}</a></h3>${secTag(n, 'sectag--t')}<p class="dek">${esc(n.extracto)}</p><div class="meta">${rel(n)}</div></div>${thumb(n, { sizes: '(min-width:768px) 280px, 100vw' })}</article>`;
 const secRows = [];
 for (let i = 0; secRows.length < SECTION_TOTAL; i++) { const base = secPool[(i % (secPool.length - 1)) + 1]; secRows.push(sRow(base, i < secPool.length - 1 ? `n${base.id}` : `n${base.id}-r${Math.floor(i / (secPool.length - 1))}`)); }
-const adM = () => `<div class="srow-ad only-m"><a class="srow-ad__in" ${adLink(ROT.find(b => !isH(b)))}><img src="${ROT.find(b => !isH(b)).file}" alt="Banner publicitario" width="300" height="300" loading="lazy"></a></div>`;
+/* mobile: el slot cada N notas es el rodante de cuadrados 300x300 (la misma pieza que el del final de la página), no un banner suelto */
+const adM = () => `<div class="srow-ad only-m">${adZone([ROT], 'adz--one adz--sq')}</div>`;
 const withAds = (rows, startIdx) => rows.map((r, i) => r + (SECTION_AD_EVERY && (startIdx + i + 1) % SECTION_AD_EVERY === 0 ? adM() : '')).join('');
 write('seccion.html', `${head('Legislatura Bonaerense · Diputados Bonaerenses', { extra: `<link rel="preload" as="image" fetchpriority="high" imagesrcset="assets/img/notas/${secLead.id}-m.webp ${D(secLead, 'm')[0]}w${D(secLead, 'full') ? `, assets/img/notas/${secLead.id}-full.webp ${D(secLead, 'full')[0]}w` : ''}" imagesizes="(min-width:1024px) 700px, 100vw">` })}
 ${header('seccion.html')}

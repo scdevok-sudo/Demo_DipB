@@ -822,3 +822,8 @@ html[data-peso="900"]{--titulo-peso:900}
   .ad-end .adz--end .adr__view{width:100%;max-width:none;aspect-ratio:auto;height:64px;background:none}
 }
 @media (min-width:768px){.ad-end .adz--h .adr__view{max-width:none}}
+
+/* ============ v2.3.3 · punto 4: slots de seccion.html (mobile, cada 10 notas) = rodante de cuadrados 300x300 ============ */
+.srow-ad .wrap{padding:0;max-width:none;margin:0}
+.srow-ad .adz{margin:0;padding:8px 0}
+.srow-ad .adr__view{background:none}
