@@ -29,9 +29,9 @@ footer
 19 notas en el flujo (3 + 4 + 4 + 8), cada nota se usa una sola vez. La secuencia es una lista en `build.mjs`:
 
 ```js
-const FLOW = ['tapa','legis-diputados','f1','banner','f1','legis-senadores','linea','f2','anunciantes','linea','secciones'];
+const FLOW = ['tapa','legis-diputados','f1','textos','banner','f1','trio','legis-senadores','linea','f2','anunciantes','linea','secciones'];
 ```
-Bloques: `tapa · legis-diputados · legis-senadores · f1 · f2 · banner · linea · anunciantes · secciones`. Para mover, sumar o sacar bloques se edita esa lista y se corre `node build.mjs`. Cada `f1` consume las 4 notas siguientes (hay dos juegos cargados: `f1a`, `f1b`); si se suma un tercer `f1` o `f2`, ampliar la cantidad en `mk(...)`.
+Bloques: `tapa · legis-diputados · legis-senadores · f1 · f2 · banner · linea · anunciantes · secciones`, más `textos` y `trio`, que solo se ven con `?ritmo=c` y `?ritmo=b` (con `ritmo=actual` quedan ocultos y el home es idéntico al anterior). `FLOW_MOBILE` define el orden propio de mobile (ver etapa E). Para mover, sumar o sacar bloques se edita esa lista y se corre `node build.mjs`. Cada `f1` consume las 4 notas siguientes (hay dos juegos cargados: `f1a`, `f1b`); si se suma un tercer `f1` o `f2`, ampliar la cantidad en `mk(...)`.
 
 **Los dos formatos** (más la tapa y la franja de secciones, no hay otros en el flujo):
 - **Formato 1 · título arriba** (`.f1`): 2×2, volanta (si corresponde) → titular serif ~22 px → hora relativa → foto 16:10 → crédito. Sin bajada (`?bajada=on` la muestra). Línea fina arriba de la 2.ª fila y filete vertical entre columnas. Fondo blanco. Las fotos de una fila quedan alineadas aunque un titular tenga volanta y el otro no.
@@ -73,6 +73,14 @@ Bloques: `tapa · legis-diputados · legis-senadores · f1 · f2 · banner · li
 - **Orden propio de los legisladores en mobile**: `FLOW_MOBILE` (en `build.mjs`) pone Diputados y Senadores consecutivos; el `FLOW` de desktop no cambia. Cada bloque lleva `--o` y el CSS lo reordena solo en < 768 px.
 - **Corrección**: los títulos mobile salían en peso 400 porque la regla usaba una variable inexistente (`--titulo-peso-mobile`); ahora respetan `--titulo-peso` (default 800).
 
+## v2.3 · Ritmo del home de escritorio (etapa F, exploración opcional)
+Parámetro `ritmo=actual|b|c` (default `actual`: sin ningún cambio; verificado con el mismo alto de página y la misma cantidad de bloques que antes en 1280, 1440 y 390 px). Solo afecta a desktop (≥ 768 px); en mobile las tres opciones se ven igual.
+- **`b`**: el 2.º Formato 1 (4 notas iguales) se reemplaza por **una nota grande y dos chicas con foto al costado** (2/3 y 1/3 del ancho, la columna de las chicas separada por un filete). Usa 3 de las 4 notas de ese bloque, así que no suma notas nuevas.
+- **`c`**: se suma un **bloque de solo texto** (cintillo, título y etiqueta de sección, sin foto; 3 columnas × 2 filas, entre dos filetes) justo después del 1.º Formato 1 y antes del banner horizontal. Usa 6 notas más del flujo, sin repetir.
+- Los dos formatos nuevos usan la misma familia tipográfica, filetes y espaciado que el resto. No se sumó la variante de columna angosta "Lo último".
+- Los bloques ocultos están siempre en el HTML (la variante se elige en el navegador, como los demás parámetros); sus fotos son `loading=lazy` y no se descargan mientras están ocultos.
+- Capturas a 1280 px: `capturas/f-ritmo-actual-d1280.png`, `f-ritmo-b-d1280.png` y `f-ritmo-c-d1280.png`.
+
 ## Parámetros de variante (URL o panel; se recuerdan en la sesión; `?reset=1` los borra)
 Ejemplo: `index.html?demo=1&super=2&bajada=on`. "Copiar link de esta variante" arma la URL.
 
@@ -83,6 +91,7 @@ Ejemplo: `index.html?demo=1&super=2&bajada=on`. "Copiar link de esta variante" a
 | `tapa` | **texto-izq** · foto-izq | Tapa desktop: texto a la izquierda y foto a la derecha (default), o al revés. Alias de links viejos: `izq` → `foto-izq`, `der` → `texto-izq` |
 | `vermas` | **flecha** · boton | "Ver más de X" de la franja final: texto con flecha sin borde (default) o botón con borde |
 | `bajada` | **auto** · on · off | Bajada de las tarjetas. En mobile `auto` y `off` no la muestran; `on` la muestra. En desktop, `auto` la oculta en el Formato 1 (la tapa y el Formato 2 la mantienen) |
+| `ritmo` | **actual** · b · c | Desktop: ritmo del flujo del home. `b` = una nota grande y dos chicas con foto al costado en lugar del 2.º Formato 1; `c` = bloque de solo texto entre dos Formato 1. `actual` no cambia nada |
 | `tapa2` | **normal** · chica | Mobile: las notas 2 y 3 de la tapa como tarjetas normales o compactas con foto al costado |
 | `peso` | 700 · **800** · 900 | Peso de los títulos de tarjetas y notas, en todas las pantallas (variable CSS `--titulo-peso`). `600` queda como alias de `700` |
 | `tiempo` | **off** · on | Hora relativa ("Hace 2 horas") en las tarjetas. OJO: `hora` sigue siendo la franja "Última hora" (el brief asumía que `hora` era la de las tarjetas, por eso se creó `tiempo`) |
@@ -138,6 +147,8 @@ Retratos de `randomuser.me` en `assets/img/fantasia/01..24.jpg`, **128×128 y no
 - **Playwright + PerformanceObserver** (`tools/perf.mjs`; 390 px, CPU ×4, red 1.6 Mbps / 150 ms, con scroll hasta el final): CLS 0.000 en las 5 páginas; LCP 1.5–2.5 s.
 - **Criterios**: CLS < 0.05 ✔ · Performance ≥ 85 ✔ · Accesibilidad ≥ 90 ✔. **LCP < 2.5 s: no se cumple en Lighthouse** para index (2.6–2.7 s) y seccion (3.0 s), cerca en las demás. El tiempo se va en el render (CSS y fuentes bloqueando, ~0,6 s de retraso con la imagen ya cargada). Pendiente si se quiere bajar: CSS crítico inline y subconjunto de fuentes.
 - Se corrigió el CLS precargando las fuentes (`<link rel=preload>`), y el scroll infinito con esqueleto de bloque. Accesibilidad: quedan avisos de `color-contrast` (secundarios) en index/seccion/legislador y `link-in-text-block` en seccion, sin corregir.
+
+**Después de la etapa F (ritmo):** index LCP 2,18 a 2,48 s en 5 corridas (con `ritmo=b` 2,42 s, con `c` 2,47 s), CLS 0,0000 a 0,0001; en una tanda de corridas seguidas con otros procesos en la máquina salieron 3,08 y 3,22 s, que no se repitieron al correrlo solo.
 
 **Medición v2.3 (16/11, `tools/perf.mjs`, mismo método):** index LCP 2,05 a 2,41 s · CLS 0; seccion 1,64 s; nota 1,98 s; diputados 1,96 s; senadores 1,96 s; legislador 1,71 s; todos con CLS 0,0000. Fuentes por defecto: Source Serif 4 (49,7 KB) + Inter (47,1 KB); alternativas Merriweather (95,3 KB) y Literata (38,1 KB). CSS minificado 46,1 KB (9,8 KB gzip). Detalle y auditoría punto por punto en `capturas/auditoria-v2-3.md` (`tools/audit-v23.mjs`).
 

@@ -745,3 +745,24 @@ html[data-peso="900"]{--titulo-peso:900}
   .adr__view{aspect-ratio:1/1;height:auto;width:300px;max-width:100%;background:var(--paper-tint)}
   .srow-ad__in{aspect-ratio:1/1}
 }
+
+/* ============ v2.3 etapa F · ritmo del home de escritorio (?ritmo=actual|b|c; default actual = sin cambios) ============ */
+.rv{display:none}
+@media (min-width:768px){
+  html[data-ritmo="b"] .rv-b{display:block}
+  html[data-ritmo="b"] .rv-a2{display:none}
+  html[data-ritmo="c"] .rv-c{display:block}
+}
+/* b: una nota grande y dos chicas con foto al costado */
+.trio{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);column-gap:var(--gap);align-items:start;padding:var(--s4) 0}
+.trio__main .card--med h2{font-size:34px;line-height:1.12}
+.trio__side{display:grid;align-content:start;border-left:1px solid var(--rule-hair);padding-left:var(--gap)}
+.trio__side .card--sm+.card--sm{margin-top:var(--s3);padding-top:var(--s3);border-top:1px solid var(--rule-hair)}
+.trio__side .card--sm h3{font-size:20px;display:block;-webkit-line-clamp:unset;overflow:visible}
+/* c: bloque de solo texto, 3 columnas x 2 filas, entre dos filetes */
+.solotxt{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:var(--gap);row-gap:var(--s3);padding:var(--s3) 0;border-top:1px solid var(--ink);border-bottom:1px solid var(--rule-hair);margin:var(--s3) 0}
+.solotxt .card--txt{position:relative}
+.solotxt .card--txt h3{font-size:22px;line-height:1.2}
+.solotxt .card--txt .cintillo{font-size:14px}
+.solotxt .card--txt{display:flex;flex-direction:column;align-items:flex-start}
+.solotxt .card--txt .sectag{align-self:flex-start;width:fit-content}

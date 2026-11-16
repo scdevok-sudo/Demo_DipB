@@ -20,10 +20,10 @@ const SHOW_FECHA_EN_NOTA = true;    // dentro de la página de la nota se conser
 const SHOW_TAPA_RELACIONADAS = false; // desktop: false oculta las 2 notas relacionadas (con guión) bajo la bajada de la nota principal; el markup se conserva, true las vuelve a mostrar
 const HEADER_MENU_MOBILE = false;   // mobile: false = las tres barritas viven solo en el zócalo; true = también arriba a la derecha
 /* Valores por defecto de cada parámetro (se pisan con ?param=valor, que se recuerda en la sesión). Ver README. */
-const DEFAULTS = { seccion: 'foto', super: 'off', tapa: 'texto-izq', vermas: 'flecha', bajada: 'auto', ad: 'on', fondos: 'on', fotos: 'ejemplo', font: 'actual', hora: 'off', diario: 'on', credito: 'on', tiempo: 'off', peso: '800', tapa2: 'normal' };
+const DEFAULTS = { seccion: 'foto', super: 'off', tapa: 'texto-izq', vermas: 'flecha', bajada: 'auto', ad: 'on', fondos: 'on', fotos: 'ejemplo', font: 'actual', hora: 'off', diario: 'on', credito: 'on', tiempo: 'off', peso: '800', tapa2: 'normal', ritmo: 'actual' };
 const OPTIONS = {
   seccion: ['foto', 'abajo'], super: ['off', 'foto', 'texto', '2', '3'], tapa: ['texto-izq', 'foto-izq'], vermas: ['flecha', 'boton'], bajada: ['auto', 'on', 'off'],
-  ad: ['on', 'off'], fondos: ['on', 'off'], fotos: ['ejemplo', 'iniciales'], font: ['actual', 'merriweather', 'literata'], hora: ['on', 'off'], diario: ['on', 'off'], credito: ['on', 'off'], tiempo: ['off', 'on'], peso: ['700', '800', '900'], tapa2: ['normal', 'chica'],
+  ad: ['on', 'off'], fondos: ['on', 'off'], fotos: ['ejemplo', 'iniciales'], font: ['actual', 'merriweather', 'literata'], hora: ['on', 'off'], diario: ['on', 'off'], credito: ['on', 'off'], tiempo: ['off', 'on'], peso: ['700', '800', '900'], tapa2: ['normal', 'chica'], ritmo: ['actual', 'b', 'c'],
 };
 
 /* Alias de valores viejos de parámetros (los links ya compartidos siguen funcionando) */
@@ -107,6 +107,7 @@ const superNotes = (() => {
 const flow = pub.filter(n => !used.has(n.id) && hasImg(n));
 const mk = k => take(flow, k, hasImg);
 const f1a = mk(4), f1b = mk(4), f2n = mk(8);   // 19 notas en el flujo: 3 (tapa) + 4 + 4 + 8
+const textoN = mk(6);   // ritmo=c: bloque de solo texto (cintillo y título, sin foto)
 const ticker = pub.slice(0, 5);
 const legPool = pub.filter(isLeg);
 // "ver también" de la tapa: notas relacionadas por etiquetas (ya existentes, sin autor)
@@ -296,9 +297,10 @@ const vermas = hero2 => `<ul class="vermas">${related(hero2, 2).map(r => `<li><a
 /* ---- Secuencia del home: lista configurable de bloques (mover, sumar o sacar sin reescribir componentes) ----
    Bloques disponibles: tapa · legis-diputados · legis-senadores · f1 · f2 · banner · linea · anunciantes · secciones
    (cada "f1"/"f2" toma las siguientes notas del flujo, en orden de fecha y sin repetir) */
-const FLOW = ['tapa', 'legis-diputados', 'f1', 'banner', 'f1', 'legis-senadores', 'linea', 'f2', 'anunciantes', 'linea', 'secciones'];
+/* 'textos' (ritmo=c) y 'trio' (ritmo=b) están siempre en el HTML pero ocultos: con ritmo=actual no se ve ningún cambio. El 2.º 'f1' se oculta con ritmo=b (lo reemplaza 'trio'). */
+const FLOW = ['tapa', 'legis-diputados', 'f1', 'textos', 'banner', 'f1', 'trio', 'legis-senadores', 'linea', 'f2', 'anunciantes', 'linea', 'secciones'];
 /* Orden propio para mobile (< 768 px): los dos módulos de legisladores van consecutivos. El FLOW de desktop no se toca: cada bloque lleva su posición mobile en --o y el CSS lo reordena solo en pantallas chicas. */
-const FLOW_MOBILE = ['tapa', 'legis-diputados', 'legis-senadores', 'f1', 'banner', 'f1', 'linea', 'f2', 'anunciantes', 'linea', 'secciones'];
+const FLOW_MOBILE = ['tapa', 'legis-diputados', 'legis-senadores', 'f1', 'textos', 'banner', 'f1', 'trio', 'linea', 'f2', 'anunciantes', 'linea', 'secciones'];
 const mobilePos = (() => { const seen = {}; return FLOW.map(k => { const nth = seen[k] = (seen[k] ?? -1) + 1; let c = -1; return FLOW_MOBILE.findIndex(m => m === k && ++c === nth) + 1; }); })();
 const F1_POOL = [f1a, f1b];
 let f1i = 0;
@@ -313,7 +315,11 @@ const BLOCKS = {
   'legis-diputados': () => legOne('Diputados', 'Diputados', 'diputados'),
   'legis-senadores': () => legOne('Senado', 'Senadores', 'senadores'),
   // Formato 1: 4 notas, 2×2, título arriba de la foto, fondo blanco
-  f1: () => band(`<div class="flow vr cols-2 f1">${(F1_POOL[f1i++] || []).map(n => card(n, { t: 'med', tf: true, dek: true, big: true, sizes: SZ.s6 })).join('')}</div>`, 'f1band'),
+  f1: () => { const k = f1i++; return band(`<div class="flow vr cols-2 f1">${(F1_POOL[k] || []).map(n => card(n, { t: 'med', tf: true, dek: true, big: true, sizes: SZ.s6 })).join('')}</div>`, 'f1band' + (k === 1 ? ' rv-a2' : '')); },
+  // ritmo=b: una nota grande y dos chicas con foto al costado (reemplaza al 2.º Formato 1; usa 3 de sus 4 notas)
+  trio: () => { const [g, c1, c2] = F1_POOL[1]; return band(`<div class="trio"><div class="trio__main">${card(g, { t: 'med', h: 2, big: true, sizes: SZ.s6 })}</div><div class="trio__side">${card(c1, { t: 'sm' })}${card(c2, { t: 'sm' })}</div></div>`, 'rv rv-b'); },
+  // ritmo=c: bloque de solo texto entre dos bloques con foto, para cortar la grilla
+  textos: () => band(`<div class="solotxt vr cols-3">${textoN.map(n => card(n, { t: 'txt' })).join('')}</div>`, 'rv rv-c'),
   // Formato 2: 8 notas, 2 columnas × 4 filas, foto a la izquierda, fondo suave
   f2: () => band(`<div class="flow vr cols-2 f2">${f2n.map(n => card(n, { t: 'med', dek: true, big: true, sizes: SZ.s6 })).join('')}</div>`, 'f2band band--alt'),
   banner: () => band(hBanner(), 'adband'),

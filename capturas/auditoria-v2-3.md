@@ -33,19 +33,32 @@ Medido con `tools/audit-v23.mjs` (Playwright sobre el DOM renderizado; resultado
 | 8d | Mobile: banner 300×300 rodante, sin textos | **cumple** | Slot de 300×300 en los tres anchos, sin título ni rótulo; rotación y swipe por JS. El swipe no se probó en un teléfono físico. | `g-home-m390.png` |
 | 8e | Mobile: sin scroll horizontal ni saltos | **cumple** | Sin scroll horizontal en home, nota y sección (360, 390, 412). CLS 0. Diputados y Senadores consecutivos. | — |
 | 9 | CLS < 0,1 y LCP medidos de nuevo | **cumple** | Ver "Mediciones" abajo. | — |
-| 10 | Panel `?demo=1`, "Copiar link" y README al día | **cumple** | El panel tiene `seccion`, `tapa2`, `tapa`, `vermas`, `bajada`, `peso`, `font` y los demás; "Copiar link" arma la URL con todos. README con parámetros y constantes. | — |
+| 10 | Panel `?demo=1`, "Copiar link" y README al día | **cumple** | El panel tiene `seccion`, `tapa2`, `tapa`, `vermas`, `bajada`, `peso`, `font`, `ritmo` y los demás; "Copiar link" arma la URL con todos. README con parámetros y constantes. | — |
+
+## Etapa F: ritmo del home de escritorio (`ritmo=actual|b|c`, opcional)
+| Criterio | Resultado | Motivo / medición | Captura |
+|---|---|---|---|
+| `ritmo=actual` no cambia nada | **cumple** | Comparado contra el `index.html` del commit anterior (etapa G): mismo alto de página y misma cantidad de bloques visibles en 1280 px (7320 px, 13 bloques), 1440 px (7320 px, 13) y 390 px (12276 px, 12). | `f-ritmo-actual-d1280.png` |
+| `b`: una nota grande y dos chicas con foto al costado | **cumple** | Reemplaza al 2.º Formato 1; usa 3 de sus 4 notas. Alto de página 6973 px a 1280 px. Foto grande de 784 px de ancho con fuente de 600 px (se ve algo blanda, es el tamaño que hay de esa foto). | `f-ritmo-b-d1280.png` |
+| `c`: bloque de solo texto entre dos bloques con foto | **cumple con una salvedad** | Bloque de 6 notas (3 × 2, cintillo, título y etiqueta, sin foto) después del 1.º Formato 1. El banner horizontal queda entre el bloque de texto y el 2.º Formato 1, así que el bloque de texto no queda literalmente entre dos Formato 1. Alto de página 7773 px a 1280 px. | `f-ritmo-c-d1280.png` |
+| Misma familia visual; no más de dos formatos nuevos | **cumple** | Mismas tipografías, filetes y espaciado; solo `trio` y `textos` son formatos nuevos. | — |
+| Mobile | **sin cambios** | Con `ritmo=b` y `c` el home mobile mide lo mismo que con `actual` (12276 px). | — |
+| Rendimiento con los bloques ocultos | **cumple** | Las fotos de los bloques ocultos son lazy y no se descargan. LCP del index con `actual`: 2,18 a 2,48 s (5 corridas); `b` 2,42 s; `c` 2,47 s; CLS 0,0000 a 0,0001. | — |
 
 ## Mediciones (`tools/perf.mjs`: 390 px, CPU ×4, red 1,6 Mbps / 150 ms, scroll hasta el final)
 | Página | LCP | CLS |
 |---|---|---|
-| index | 2,05 a 2,41 s (4 corridas: 2,41 · 2,33 · 2,05 · 2,33) | 0,0000 |
+| index | 2,05 a 2,41 s antes de F (4 corridas: 2,41 · 2,33 · 2,05 · 2,33); 2,18 a 2,48 s después de F (5 corridas: 2,38 · 2,33 · 2,18 · 2,48 · 2,38) | 0,0000 |
 | seccion | 1,64 s | 0,0000 |
 | nota-413361 | 1,98 s | 0,0000 |
 | diputados | 1,96 s | 0,0000 |
 | senadores | 1,96 s | 0,0000 |
 | legislador | 1,71 s | 0,0000 |
+| Segunda tanda, después de F (otra sesión de la máquina): seccion 2,04 s · nota 2,26 s · diputados 2,14 s | 2,04 a 2,26 s | 0,0000 |
 | index con `font=merriweather` | 2,08 s | 0,0000 |
 | index con `font=literata` | 2,06 s | 0,0029 |
+
+Nota: las páginas que F no toca (seccion, nota, diputados) también subieron 0,2 a 0,4 s entre tandas, así que la variación entre sesiones es de ese orden; todas siguen por debajo de 2,5 s salvo alguna corrida suelta del index.
 
 ## Peso de fuentes y CSS
 - Por defecto se descargan **Source Serif 4 (49,7 KB) + Inter (47,1 KB) = 96,8 KB** (woff2 variable, `font-display: swap`, las dos precargadas).
