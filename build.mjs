@@ -131,7 +131,7 @@ const adZone = (lists = SLOTS4, cls = '') => `<section class="adz ${cls}" data-i
   <div class="adz__dots"></div>
 </div></section>`;
 const adZoneH = () => adZone([HROT], 'adz--h');
-const adOne = () => adZone([ROT]).replace('<section class="adz"', '<section class="adz adz--one"');
+const adOne = () => adZone([ROT], 'adz--one');   // un solo slot rodante (antes el replace no matcheaba y salían 4 slots de 43 px)
 /* Banner horizontal 1180x90 (320x100 en mobile). Interruptor: ?ad=on|off. Si está apagado colapsa (display:none). */
 const hBanner = () => `<div class="adbanner" aria-label="Publicidad"><a class="adbanner__box" ${adLink(hB)}><img src="${hB.file}" alt="Banner publicitario" width="${hB.w}" height="${hB.h}" loading="lazy"></a></div>`;
 const topBanner = () => SHOW_TOP_BANNER ? `<div class="topbanner" aria-label="Publicidad"><div class="wrap"><a ${adLink(hB)}><img src="${hB.file}" alt="" width="${hB.w}" height="${hB.h}" loading="lazy"></a></div></div>` : '';
@@ -141,12 +141,11 @@ const adBox = cls => `<aside class="adbox ${cls}" aria-label="Publicidad"><span 
 /* ------------------------------------------------------------ legisladores (MUESTRA) */
 const NOMBRES = ['Lucía Ferrer', 'Martín Salgado', 'Valeria Ruiz', 'Gonzalo Páez', 'Camila Orellana', 'Julián Berro', 'Sofía Mansilla', 'Tomás Aguirre', 'Noelia Bravo', 'Ezequiel Lamas', 'Paula Cardozo', 'Facundo Ibarra', 'Marina Quiroga', 'Hernán Dubois', 'Agustina Roldán', 'Matías Sosa', 'Daniela Vega', 'Rodolfo Pineda', 'Carla Escobar', 'Nicolás Barrios', 'Mariana Toledo', 'Sebastián Fuentes', 'Romina Acosta', 'Leandro Cabrera'];
 const BLOQUES = ['Fuerza Patria', 'La Libertad Avanza', 'UCR', 'PRO', 'Coalición Cívica'];
-const PARTIDOS = ['Partido 1', 'Partido 2', 'Partido 3'];   // provisorio: la etapa D lo quita (las páginas muestran solo bloque)
 const SECCIONES_E = ['Primera', 'Segunda', 'Tercera', 'Cuarta', 'Quinta', 'Sexta', 'Séptima', 'Octava'];
 const CIUDADES = ['La Plata', 'Bahía Blanca', 'Mar del Plata', 'Quilmes', 'Lomas de Zamora', 'San Isidro', 'Tandil', 'Junín', 'Pergamino', 'Olavarría', 'Lanús', 'Morón'];
 const slugify = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ /g, '-');
 // `foto`: ruta del retrato de fantasía (assets/img/fantasia/NN.jpg). En el sitio real viene del registro del legislador; si falta, se ven las iniciales.
-const legs = NOMBRES.map((nombre, i) => ({ nombre, slug: slugify(nombre), bloque: BLOQUES[(i + (i >> 2)) % 5], partido: PARTIDOS[(i * 7 + (i >> 2)) % 3], cam: i % 3 === 2 ? 'Senado' : 'Diputados', mandato: i % 3 === 2 ? '2021 a 2025' : '2023 a 2027', seccion_electoral: `${SECCIONES_E[(i * 3 + 1) % 8]} sección electoral`, ciudad: CIUDADES[(i * 5 + 2) % 12], ini: nombre.split(' ').map(p => p[0]).join(''), foto: `assets/img/fantasia/${String(i + 1).padStart(2, '0')}.jpg`, file: i === 0 ? 'legislador.html' : `legislador-${slugify(nombre)}.html` }));
+const legs = NOMBRES.map((nombre, i) => ({ nombre, slug: slugify(nombre), bloque: BLOQUES[(i + (i >> 2)) % 5], cam: i % 3 === 2 ? 'Senado' : 'Diputados', mandato: i % 3 === 2 ? '2021 a 2025' : '2023 a 2027', seccion_electoral: `${SECCIONES_E[(i * 3 + 1) % 8]} sección electoral`, ciudad: CIUDADES[(i * 5 + 2) % 12], ini: nombre.split(' ').map(p => p[0]).join(''), foto: `assets/img/fantasia/${String(i + 1).padStart(2, '0')}.jpg`, file: i === 0 ? 'legislador.html' : `legislador-${slugify(nombre)}.html` }));
 const avatarIn = l => `<span class="avatar__ini">${l.ini}</span>${l.foto ? `<img class="avatar__img" src="${l.foto}" alt="" width="128" height="128" loading="lazy" decoding="async" onerror="this.remove()">` : ''}`;
 const tagEj = `<span class="tag-ejemplo"><span class="on-ej">Foto de ejemplo</span><span class="on-ini">Datos de muestra</span></span>`;
 
@@ -191,7 +190,7 @@ const card = (n, { t = 'med', dek = false, h = 3, tf = false, cap = false, eager
 };
 const secTitle = (label, href, id) => `<div class="sec-head"><h2 class="sec-title"${id ? ` id="${id}"` : ''}><span>${label}</span></h2>${href ? `<a href="${href}">Ver más</a>` : ''}</div>`;
 const ruleDouble = (cls = '') => `<div class="rule-double ${cls}" role="presentation"></div>`;
-const NAV = [['Home', 'index.html'], ['Legislatura Bonaerense', 'seccion.html'], ['Congreso', null], ['Nación', null], ['Provincia', null], ['Municipios', null], ['Diputados Bonaerenses', 'legisladores.html']];
+const NAV = [['Home', 'index.html'], ['Legislatura Bonaerense', 'seccion.html'], ['Congreso', null], ['Nación', null], ['Provincia', null], ['Municipios', null], ['Diputados', 'diputados.html'], ['Senadores', 'senadores.html']];
 const LOGO = '<img src="assets/img/logo-dark.png" alt="Diputados Bonaerenses" width="781" height="100">';
 const I = {
   search: '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
@@ -204,6 +203,10 @@ const I = {
   prev: '<svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>',
   next: '<svg viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>',
   wa: '<svg viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20.5l1.7-5A8.5 8.5 0 1 1 21 11.5Z"/><path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.5-2-1-1 .8c-1-.4-2-1.4-2.4-2.4l.8-1-1-2Z"/></svg>',
+  fb: '<svg viewBox="0 0 24 24"><path d="M14 8h3V4.5h-3A4 4 0 0 0 10 8.5V11H7.5v3.5H10V21h3.5v-6.5H16.5L17 11h-3.5V8.8c0-.5.3-.8.5-.8Z"/></svg>',
+  x: '<svg viewBox="0 0 24 24"><path d="M4 4l16 16M20 4 4 20"/></svg>',
+  ig: '<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4.5"/><circle cx="12" cy="12" r="3.6"/><path d="M16.8 7.2h.01"/></svg>',
+  tg: '<svg viewBox="0 0 24 24"><path d="M21 4 3 11l5.5 2L10 19l3-3.5 4.5 3.5L21 4Z"/><path d="m8.5 13 8-5.5"/></svg>',
   link: '<svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>',
 };
 
@@ -231,7 +234,7 @@ const dockHtml = act => `<nav class="dock" aria-label="Navegación rápida">${DO
 const header = (active, dockActive = active) => `<header class="hdr">
   <div class="topstrip"><div class="wrap topstrip__in">
     <time class="topstrip__date" data-hoy>${hoyStr}</time>${EDITION_LINE ? `<span class="topstrip__ed">${esc(EDITION_LINE)}</span>` : ''}
-    <div class="topstrip__links"><button class="topstrip__btn js-search" type="button" aria-expanded="false">${I.search}Buscar</button><a href="legisladores.html">Legisladores</a></div>
+    <div class="topstrip__links"><button class="topstrip__btn js-search" type="button" aria-expanded="false">${I.search}Buscar</button><a href="diputados.html">Diputados</a><a href="senadores.html">Senadores</a></div>
   </div></div>
   <div class="hdr__main"><div class="wrap hdr__top">
     <a class="hdr__logo" href="index.html" aria-label="Diputados Bonaerenses, inicio">${LOGO}</a>
@@ -257,7 +260,7 @@ const footer = () => `${ruleDouble('rule-double--ftr')}<footer class="ftr"><div 
     <div><h2>Secciones</h2><ul>${NAV.slice(1).map(([t, h]) => `<li><a ${h ? `href="${h}"` : 'href="#" data-stub="Sección no incluida en la maqueta."'}>${t}</a></li>`).join('')}</ul></div>
     <div><h2>Institucional</h2><ul>
       <li><a href="#" data-stub="Dato institucional a completar con el cliente.">Quiénes somos</a></li>
-      <li><a href="legisladores.html">Legisladores</a></li></ul></div>
+      </ul></div>
     <div><h2>Contacto y redes</h2><ul>
       <li><a href="#" data-stub="Datos de contacto y redes: a completar con el cliente.">Contacto <small>(a completar)</small></a></li>
       <li><a href="#" data-stub="Redes: a completar con el cliente.">Redes sociales <small>(a completar)</small></a></li></ul></div>
@@ -327,7 +330,8 @@ ${footer()}`);
 
 /* ================================================================ páginas de nota */
 const shareText = n => encodeURIComponent(`${n.titulo} ${n.url}`);
-const shareBtns = n => `<div class="share" role="group" aria-label="Compartir"><a class="btn btn--wa" href="https://wa.me/?text=${shareText(n)}" target="_blank" rel="noopener">${I.wa}Compartir por WhatsApp</a><div class="share__row"><button class="btn btn--ghost js-copy" type="button" data-url="${esc(n.url)}">${I.link}Copiar link</button><a class="btn btn--ghost" href="#" data-stub="Compartir en otras redes: se resuelve en el Hito 2.">Más redes</a></div></div>`;
+const shareLinks = n => { const u = encodeURIComponent(n.url), t = encodeURIComponent(n.titulo); return [['WhatsApp', I.wa, `https://wa.me/?text=${shareText(n)}`], ['Facebook', I.fb, `https://www.facebook.com/sharer/sharer.php?u=${u}`], ['X', I.x, `https://twitter.com/intent/tweet?text=${t}&url=${u}`], ['Instagram', I.ig, null], ['Telegram', I.tg, `https://t.me/share/url?url=${u}&text=${t}`]]; };
+const shareBtns = n => `<div class="share" role="group" aria-label="Compartir"><span class="share__lbl">Compartir</span><ul class="share__list">${shareLinks(n).map(([nm, ic, h]) => `<li><a class="share__b" ${h ? `href="${h}" target="_blank" rel="noopener"` : 'href="#" data-stub="Instagram no tiene enlace de compartir web: se resuelve en el Hito 2."'}>${ic}<span>${nm}</span></a></li>`).join('')}<li><button class="share__b js-copy" type="button" data-url="${esc(n.url)}">${I.link}<span>Copiar link</span></button></li></ul></div>`;
 const cleanBody = html => {
   let h = html.replace(/<!--[\s\S]*?-->/g, '').replace(/<(script|style|iframe|object|video|nav)[\s\S]*?<\/\1>/gi, '')
     .replace(/<figure[\s\S]*?<\/figure>/gi, '').replace(/<div[^>]*>[\s\S]*?<\/div>/gi, '');
@@ -379,9 +383,9 @@ ${header('seccion.html')}
     <p class="art__lead">${esc(n.extracto)}</p>
     ${ruleDouble('art__rule')}
    </header>
-   <div class="art__meta">${SHOW_FECHA_EN_NOTA ? `<time datetime="${n.fecha.replace(' ', 'T')}">${fechaLarga(n)} · ${n.fecha.slice(11, 16)} h</time>` : ''}${secTag(n, 'sectag--t')}<span>${mins} min de lectura</span>
-    <div class="mini-share"><a class="ibtn-sq ibtn-sq--wa" href="https://wa.me/?text=${shareText(n)}" target="_blank" rel="noopener" aria-label="Compartir por WhatsApp">${I.wa}</a><button class="ibtn-sq js-copy" type="button" data-url="${esc(n.url)}" aria-label="Copiar link">${I.link}</button></div></div>
    ${artFigure(n)}
+   <div class="art__meta">${SHOW_FECHA_EN_NOTA ? `<time datetime="${n.fecha.slice(0, 10)}">${fechaLarga(n)}</time>` : ''}${secTag(n, 'sectag--t')}<span>${mins} min de lectura</span>
+    <div class="mini-share"><a class="ibtn-sq ibtn-sq--wa" href="https://wa.me/?text=${shareText(n)}" target="_blank" rel="noopener" aria-label="Compartir por WhatsApp">${I.wa}</a><button class="ibtn-sq js-copy" type="button" data-url="${esc(n.url)}" aria-label="Copiar link">${I.link}</button></div></div>
    <div class="art__body">${bodyOf(n)}</div>
    ${shareBtns(n)}
    <div class="art__tags"><h2>Etiquetas</h2><div class="chips">${n.tags.filter(t => !/Colegios|Opini/i.test(t)).map(t => `<a class="chip" href="#" data-stub="Cada etiqueta lleva a su archivo en el sitio actual.">${esc(t)}</a>`).join('')}</div></div>
@@ -431,27 +435,27 @@ ${header('seccion.html')}
 </main>
 ${footer()}`);
 
-/* ================================================================ legisladores.html */
-const legPage = (file, tit, list, crumb) => write(file, `${head('Diputados Bonaerenses · ' + tit)}
-${header(file === 'legisladores.html' ? file : 'x', file)}
+/* ================================================================ diputados.html y senadores.html (dos páginas, pestañas cruzadas, buscador por nombre y filtro por bloque; no hay legisladores.html) */
+const legTabs = act => `<nav class="tabs" aria-label="Cámara"><a href="diputados.html"${act === 'Diputados' ? ' aria-current="page"' : ''}>Diputados</a><a href="senadores.html"${act === 'Senado' ? ' aria-current="page"' : ''}>Senadores</a></nav>`;
+const legPage = (file, tit, cam) => { const list = legs.filter(l => l.cam === cam); write(file, `${head(tit + ' · Diputados Bonaerenses')}
+${header(file)}
 <main id="main">
 <div class="wrap">
- <p class="crumbs"><a href="index.html">Home</a> › ${crumb}</p>
- <div class="sec-hero"><h1 class="sec-title sec-title--lg"><span>${tit}</span></h1><p>Perfiles de legisladores de la Provincia de Buenos Aires. ${tagEj}</p></div>
- <div class="sec" style="margin-top:24px">
-  <div class="notice"><b>Dato de muestra.</b> No se recibió el export del CPT <code>funcionario</code>: nombres, bloques y partidos son ficticios y las fotos son retratos de ejemplo (se vuelve a las iniciales con <code>?fotos=iniciales</code>). En el Hito 2 se reemplazan por los registros reales.</div>
-  <form class="filters" onsubmit="return false"><label>Bloque<select id="f-bloque"><option value="">Todos</option>${BLOQUES.map(b => `<option>${b}</option>`).join('')}</select></label>
-   <label>Partido<select id="f-partido"><option value="">Todos</option>${PARTIDOS.map(b => `<option>${b}</option>`).join('')}</select></label>
-   <div style="display:flex;gap:12px;align-items:center"><button class="btn btn--ghost" id="f-reset" type="button">Limpiar</button><span id="f-count" class="meta" role="status"></span></div></form>
-  <div class="legs" id="legs">${list.map(l => `<a class="leg" href="${l.file}" data-bloque="${l.bloque}" data-partido="${l.partido}"><div class="avatar" aria-hidden="true">${avatarIn(l)}</div><h3>${l.nombre}</h3><small>${l.cam} · ${l.bloque} · ${l.partido}</small></a>`).join('')}</div>
+ <p class="crumbs"><a href="index.html">Home</a> › ${tit}</p>
+ ${legTabs(cam)}
+ <div class="sec-hero"><h1 class="sec-title sec-title--lg"><span>${tit}</span></h1>${tagEj}</div>
+ <div class="sec" style="margin-top:16px">
+  <form class="filters" role="search" onsubmit="return false"><label>Buscar por nombre<input id="f-nombre" type="search" placeholder="Nombre o apellido" autocomplete="off"></label>
+   <label>Bloque<select id="f-bloque"><option value="">Todos</option>${BLOQUES.map(b => `<option>${b}</option>`).join('')}</select></label>
+   <div class="filters__end"><button class="btn btn--ghost" id="f-reset" type="button">Limpiar</button><span id="f-count" class="meta" role="status" aria-live="polite"></span></div></form>
+  <div class="legs" id="legs">${list.map(l => `<a class="leg" href="${l.file}" data-bloque="${l.bloque}" data-nombre="${slugify(l.nombre).replace(/-/g, ' ')}"><div class="avatar" aria-hidden="true">${avatarIn(l)}</div><h3>${l.nombre}</h3><small>${l.bloque}</small></a>`).join('')}</div>
+  <p class="legs__empty" id="legs-empty" hidden>No hay legisladores que coincidan con la búsqueda.</p>
  </div>
- <div class="sec">${adOne()}</div>
 </div>
 </main>
-${footer()}`);
-legPage('legisladores.html', 'Diputados y Senadores', legs, 'Diputados Bonaerenses');
-legPage('diputados.html', 'Diputados', legs.filter(l => l.cam === 'Diputados'), 'Diputados');
-legPage('senadores.html', 'Senadores', legs.filter(l => l.cam === 'Senado'), 'Senadores');
+${footer()}`); };
+legPage('diputados.html', 'Diputados', 'Diputados');
+legPage('senadores.html', 'Senadores', 'Senado');
 
 /* ================================================================ legislador*.html (perfil completo de prueba + 23 sin biografía) */
 const BIO = [
@@ -461,25 +465,26 @@ const BIO = [
 ];
 const linked = legPool.slice(0, 12);
 const perfil = (L, withBio) => `${head(L.nombre + ' · Diputados Bonaerenses')}
-${header('legisladores.html', L.cam === 'Senado' ? 'senadores.html' : 'diputados.html')}
+${header(L.cam === 'Senado' ? 'senadores.html' : 'diputados.html')}
 <main id="main">
 <div class="wrap">
- <p class="crumbs"><a href="index.html">Home</a> › <a href="legisladores.html">Diputados Bonaerenses</a> › ${L.nombre}</p>
+ <div class="prof-layout"><div class="prof-main">
+ <p class="crumbs"><a href="index.html">Home</a> › <a href="${L.cam === 'Senado' ? 'senadores.html' : 'diputados.html'}">${L.cam === 'Senado' ? 'Senadores' : 'Diputados'}</a> › ${L.nombre}</p>
  <section class="prof"><div class="avatar" role="img" aria-label="Foto de ${L.nombre} (muestra)">${avatarIn(L)}</div>
-  <div><h1>${L.nombre}</h1><ul class="prof__facts"><li><b>Cámara</b>${L.cam}</li><li><b>Bloque</b>${L.bloque}</li><li><b>Partido</b>${L.partido}</li></ul>
+  <div><h1>${L.nombre}</h1><ul class="prof__facts"><li><b>Bloque</b>${L.bloque}</li><li><b>Mandato</b>${L.mandato}</li><li><b>Sección electoral</b>${L.seccion_electoral.replace(' sección electoral', '')}</li><li><b>Ciudad</b>${L.ciudad}</li></ul>
    <p style="margin:10px 0 0">${tagEj}</p>
    <div class="prof__share" style="margin-top:16px"><a class="btn btn--wa" href="https://wa.me/?text=${encodeURIComponent(L.nombre + ' · Diputados Bonaerenses')}" target="_blank" rel="noopener">${I.wa}Compartir perfil</a><button class="btn btn--ghost js-copy" type="button" data-url="${L.file}">${I.link}Copiar link</button></div></div></section>
  ${ruleDouble('rule-double--wrap')}
- <div class="notice" style="margin-top:8px"><b>Dato de muestra.</b> Perfil ficticio para mostrar el diseño${withBio ? '; la biografía es texto de ejemplo' : '; este perfil no tiene biografía cargada (estado vacío)'}. Las notas vinculadas sí son reales.</div>
+ <div class="notice" style="margin-top:8px"><b>Dato de muestra.</b> Perfil ficticio para mostrar el diseño${withBio ? '; la biografía es texto de ejemplo' : '; este perfil no tiene biografía cargada, así que la sección no se muestra'}. Las notas vinculadas sí son reales.</div>
  ${withBio
     ? `<section class="bio" aria-labelledby="t-bio"><h2 class="sec-title" id="t-bio"><span>Biografía</span></h2><div class="bio__txt" id="bio-txt">${BIO.map(p => `<p>${p}</p>`).join('')}</div><button class="btn btn--ghost bio__btn js-bio" type="button" aria-expanded="false" aria-controls="bio-txt">Leer más</button></section>`
-    : `<section class="bio bio--empty" aria-labelledby="t-bio"><h2 class="sec-title" id="t-bio"><span>Biografía</span></h2><p>Todavía no hay una biografía cargada para este perfil.</p></section>`}
+    : ''}
  <section class="sec" aria-labelledby="t-nv">${secTitle('Notas vinculadas', null, 't-nv')}
-  <p class="meta" style="margin:-4px 0 16px">En el sitio final equivale al tag de la persona (ejemplo).</p>
   <div class="row vr cols-4" id="nv-grid">${linked.map((n, i) => `<div class="span-3${i >= 4 ? ' is-extra' : ''}">${card(n, { t: 'med' })}</div>`).join('')}</div>
   <div class="morebar"><button class="btn btn--ghost js-more" type="button" data-target="#nv-grid" data-step="4">Ver más</button></div>
  </section>
- <div class="sec">${adOne()}</div>
+ </div>
+ <aside class="prof-side" aria-label="Publicidad">${adOne()}</aside></div>
 </div>
 </main>
 ${footer()}`;

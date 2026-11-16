@@ -94,17 +94,18 @@
     });
   });
 
-  /* Filtros de legisladores */
-  const fb = $('#f-bloque'), fp = $('#f-partido'), grid = $('#legs');
+  /* Listado de legisladores: buscador por nombre (sin acentos ni mayúsculas) + filtro por bloque + contador */
+  const fb = $('#f-bloque'), fn = $('#f-nombre'), grid = $('#legs');
   if (grid) {
-    const cards = $$('.leg', grid), cnt = $('#f-count');
+    const cards = $$('.leg', grid), cnt = $('#f-count'), empty = $('#legs-empty');
+    const norm = t => t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
     const apply = () => {
-      let v = 0;
-      cards.forEach(c => { const ok = (!fb.value || c.dataset.bloque === fb.value) && (!fp.value || c.dataset.partido === fp.value); c.hidden = !ok; v += ok; });
-      cnt.textContent = `${v} ${v === 1 ? 'legislador' : 'legisladores'}`;
+      const q = norm(fn.value); let v = 0;
+      cards.forEach(c => { const ok = (!fb.value || c.dataset.bloque === fb.value) && (!q || c.dataset.nombre.includes(q)); c.hidden = !ok; v += ok; });
+      cnt.textContent = `${v} ${v === 1 ? 'resultado' : 'resultados'}`; if (empty) empty.hidden = v > 0;
     };
-    fb.addEventListener('change', apply); fp.addEventListener('change', apply);
-    $('#f-reset').addEventListener('click', () => { fb.value = fp.value = ''; apply(); });
+    fb.addEventListener('change', apply); fn.addEventListener('input', apply);
+    $('#f-reset').addEventListener('click', () => { fb.value = fn.value = ''; apply(); });
     apply();
   }
 
