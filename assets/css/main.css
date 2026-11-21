@@ -829,3 +829,34 @@ html[data-peso="900"]{--titulo-peso:900}
 .srow-ad .wrap{padding:0;max-width:none;margin:0}
 .srow-ad .adz{margin:0;padding:8px 0}
 .srow-ad .adr__view{background:none}
+
+/* ============ v2.4 etapa B · mobile verticalmente compacto (Juan 17/11) ============
+   Meta: entre el contenido de una tarjeta y el de la siguiente <= ~24 px con el filete de 1 px en el medio (~12 px a cada lado),
+   sin dobles margenes (padding de una + margin/gap de la otra). Bloques: doble linea y bandas con 16 px. */
+@media (max-width:767px){
+  .band{padding:16px 0}
+  .band--tapa{padding-top:12px}
+  .f1band,.f2band{padding:16px 0}
+  .rule-double{margin:16px 0}
+  .tapa{gap:0}
+  .tapa__lead{padding-bottom:12px;margin-bottom:12px}
+  .tapa__two>*+*{margin-top:12px;padding-top:12px}
+  .flow>*,.f2.flow>*{padding:12px 0}
+  .flow>:first-child,.f2.flow>:first-child{padding-top:0}
+  .flow>:last-child,.f2.flow>:last-child{padding-bottom:0}
+  .strip .card--med{margin-bottom:12px}
+  .srow{padding:12px 0;min-height:0}
+  .srow-ad{padding:12px 0}
+  /* el aire de arriba del cintillo lo da el padding de la tarjeta, no un margen propio (doble margen) */
+  .card--med .cintillo,.card--lead .cintillo,.card--super .cintillo,.srow .cintillo,.art__head .cintillo{margin:0 0 4px}
+  .card--txt{padding-block:0}
+  .strip .list{margin-top:0}
+  .strip .list>*{padding-top:12px;margin-top:0}
+}
+
+/* v2.4 etapa B · desktop: solo se recortan los espacios claramente excesivos (sin reestructurar) */
+@media (min-width:768px){
+  .f1band,.f2band{padding:24px 0}
+  .f1band+.f1band{padding-top:0}   /* dos filas de Formato 1 seguidas sumaban 64 px de aire */
+  .rule-double{margin:24px 0}
+}
