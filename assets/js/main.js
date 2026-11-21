@@ -144,7 +144,7 @@
       ['tapa', 'Tapa (desktop)', [['texto-izq', 'Texto a la izquierda'], ['foto-izq', 'Foto a la izquierda']]],
       ['vermas', 'Ver más de X', [['flecha', 'Texto con flecha'], ['boton', 'Botón con borde']]],
       ['bajada', 'Bajada (mobile: sin por defecto)', [['auto', 'Auto'], ['on', 'Con'], ['off', 'Sin']]],
-      ['peso', 'Peso de los títulos', [['700', '700'], ['800', '800'], ['900', '900']]],
+      ['peso', 'Peso de los títulos', [['600', '600'], ['700', '700'], ['800', '800'], ['900', '900']]],
       ['tiempo', 'Hora en las tarjetas', [['off', 'No'], ['on', 'Sí']]],
       ['ad', 'Banner 1180×90', [['on', 'Sí'], ['off', 'No']]],
       ['fondos', 'Fondos alternados', [['on', 'Sí'], ['off', 'No']]],

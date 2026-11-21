@@ -567,8 +567,9 @@ html[data-diario="off"] .srow:first-child{border-top-color:var(--rule-hair)}
 html[data-tiempo="off"] .card .meta,html[data-tiempo="off"] .srow .meta{display:none}
 
 /* ============ v2.2 · MOBILE (< 768 px): cintillo, título, bajada, foto, crédito ============ */
-:root{--titulo-peso:800}
-html[data-peso="700"]{--titulo-peso:700}
+:root{--titulo-peso:700}
+html[data-peso="600"]{--titulo-peso:600}
+html[data-peso="800"]{--titulo-peso:800}
 html[data-peso="900"]{--titulo-peso:900}
 @media (max-width:767px){
   /* orden vertical: texto arriba, foto abajo */
@@ -586,8 +587,9 @@ html[data-peso="900"]{--titulo-peso:900}
   .card--med .cintillo,.card--lead .cintillo,.card--super .cintillo,.srow .cintillo,.art__head .cintillo{font-size:20px;margin:10px 0 6px}
   .card--lead .card__txt{display:flex;flex-direction:column}
   /* títulos con presencia (peso: variable --titulo-peso / ?peso=700|800|900) */
-  .card--med h2,.card--med h3,.card--tapa2 h2,.card--tf h3,.f2 .card--med h3,.strip .card--med h3,.srow h3,.card--super h2,.super--foto h2{font-size:28px;line-height:1.22;font-weight:var(--titulo-peso)}
-  .card--lead h2{font-size:32px;line-height:1.2;font-weight:var(--titulo-peso)}
+  .card--med h2,.card--med h3,.card--tapa2 h2,.card--tf h3,.f2 .card--med h3,.strip .card--med h3,.srow h3{font-size:22px;line-height:1.17;font-weight:var(--titulo-peso)}
+  .card--super h2,.super--foto h2{font-size:26px;line-height:1.17;font-weight:var(--titulo-peso)}
+  .card--lead h2{font-size:27px;line-height:1.15;font-weight:var(--titulo-peso)}
   .card--txt h3,.card--sm h3{font-weight:var(--titulo-peso)}
   /* bajada entera, sin recorte */
   .dek{-webkit-line-clamp:unset!important;overflow:visible!important}
@@ -659,7 +661,7 @@ html[data-peso="900"]{--titulo-peso:900}
   html[data-vermas="boton"] .strip__more::after{font-size:17px}
   html[data-vermas="boton"] .strip__more:hover,html[data-vermas="boton"] .strip__more:active{background:var(--paper-tint);color:var(--accent-text)}}
 
-/* ============ v2.3 · peso de los títulos en todas las pantallas (?peso=700|800|900, default 800) ============ */
+/* ============ v2.3 · peso de los títulos en todas las pantallas (?peso=600|700|800|900, default 700) ============ */
 .card h1,.card h2,.card h3,.srow h3,.art__head h1,.super--foto h2,.super--texto h2{font-weight:var(--titulo-peso)}
 .strip .sectag{display:none}   /* la columna ya se titula con la sección */
 
