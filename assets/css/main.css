@@ -12,19 +12,21 @@
 .ftr{content-visibility:auto;contain-intrinsic-size:auto 700px}
 
 :root{
-  --ink:#111;--ink-2:#444;--muted:#6b6b6b;
+  --ink:#222;--ink-2:#444;--muted:#6b6b6b;
   --rule-strong:2px;--rule-hair:#d9d9d9;
-  --accent:#3daef4;--accent-text:#1673ad;
+  /* Paleta oficial (v2.4.1, tomada del sitio en producción): todos los azules salen de estos tokens */
+  --brand-sky:#3daef4;--brand-blue:#1b75bb;--brand-blue-dk:color-mix(in srgb,var(--brand-blue) 94%,#000);
+  --accent:var(--brand-sky);--accent-text:var(--brand-blue);
   --paper:#fff;--paper-tint:#f6f3ee;--tint-blue:#eef6fd;
   --font-title:"Source Serif 4","Serif Fallback",Georgia,"Times New Roman",serif;
   --font-ui:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --navy:#0b2236;--super-bg:#141414;
-  --cintillo-color:var(--accent-text);--modulo-legisladores-bg:#eeeeee;--fondo-f2:#f2f2f2;--filete-modulo:#d6d6d6;--seccion-bg:var(--navy);--seccion-fg:#fff;--seccion-texto:var(--muted);--header-bg:var(--navy);
+  --super-bg:#141414;
+  --cintillo-color:var(--accent-text);--modulo-legisladores-bg:#eeeeee;--fondo-f2:#f2f2f2;--filete-modulo:#d6d6d6;--seccion-bg:var(--brand-blue);--seccion-fg:#fff;--seccion-texto:var(--muted);--header-bg:var(--brand-sky);
   --s1:8px;--s2:16px;--s3:24px;--s4:32px;--s5:48px;--s6:64px;
   --wrap:1240px;--gut:16px;--gap:16px;
   --ease:cubic-bezier(.2,.7,.2,1);
   /* alias de la versión anterior (para no reescribir componentes que no cambian) */
-  --brand:var(--accent);--brand-ink:var(--accent-text);--brand-2:#0a7cc4;--ink-3:var(--muted);--line:var(--rule-hair);--bg-2:var(--paper-tint);
+  --brand:var(--accent);--brand-ink:var(--accent-text);--brand-2:var(--brand-blue);--ink-3:var(--muted);--line:var(--rule-hair);--bg-2:var(--paper-tint);
 }
 @media (min-width:1024px){:root{--gap:32px}}
 html[data-font="merriweather"]{--font-title:'Merriweather',Georgia,serif}
@@ -120,7 +122,7 @@ html[data-diario="off"] .topstrip{display:none!important}
 .search__row{display:flex;gap:8px}
 .search input{flex:1;min-width:0;min-height:44px;border-radius:6px;border:0;padding:0 14px;font:16px var(--font-ui)}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 20px;border:0;border-radius:4px;background:var(--accent-text);color:#fff;font:600 15px var(--font-ui);cursor:pointer;transition:background .2s}
-.btn:hover{background:#0f5a8a;color:#fff}
+.btn:hover{background:color-mix(in srgb,var(--brand-blue) 82%,#000);color:#fff}
 .btn--ghost{background:transparent;color:var(--accent-text);border:1.5px solid var(--accent-text)}
 .btn--ghost:hover{background:var(--accent-text);color:#fff}
 .btn--wa{background:#127a3e}.btn--wa:hover{background:#0e6232}
@@ -152,8 +154,11 @@ html[data-diario="off"] .topstrip{display:none!important}
   .hdr__tools{display:none}
   .nav__bar{display:none}
   .nav ul{display:flex;justify-content:space-between;gap:12px}
-  .nav a{padding:0 2px;border-bottom:3px solid transparent;margin-bottom:-3px}
-  .nav a:hover,.nav a[aria-current]{color:var(--accent-text);border-bottom-color:var(--accent)}
+  /* v2.4.1: barra de menú en --brand-blue; ítem activo en --brand-sky (texto --ink) */
+  .nav{background:var(--brand-blue)}
+  .nav a{padding:0 14px;color:#fff}
+  .nav a:hover{background:rgba(255,255,255,.16);color:#fff}
+  .nav a[aria-current]{background:var(--brand-sky);color:var(--ink)}
   .rule-double--hdr{display:block;margin:0 0 -3px;border-top-width:3px}
   html[data-diario="off"] .rule-double--hdr{margin:0;border-top:1px solid var(--rule-hair)}
 }
@@ -161,8 +166,8 @@ html[data-diario="off"] .topstrip{display:none!important}
 
 /* ============ TIPOS DE TARJETA (solo 4): lead · med · sm · txt ============ */
 .fig{margin:0}
-.thumb{position:relative;display:block;overflow:hidden;background:linear-gradient(135deg,var(--accent),#1f78b4);aspect-ratio:16/10}
-.thumb::after{content:attr(data-ph);position:absolute;inset:0;display:grid;place-items:center;color:#fff;font:700 13px var(--font-ui);opacity:.85;text-align:center;padding:8px}
+.thumb{position:relative;display:block;overflow:hidden;background:var(--brand-sky);aspect-ratio:16/10}
+.thumb::after{content:attr(data-ph);position:absolute;inset:0;display:grid;place-items:center;color:var(--ink);font:700 13px var(--font-ui);text-align:center;padding:8px}
 .thumb img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;object-position:var(--fp,50% 30%)}
 .cap{display:block;font:400 12px/1.4 var(--font-ui);color:var(--muted);margin-top:6px}
 .cap__credit{font-weight:600;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
@@ -361,7 +366,7 @@ html[data-ad="off"] .adbanner{display:none}
 .legband__head .sec-title{flex:1;min-width:0;font-size:17px;line-height:1.2;padding:0;border-bottom:0}
 .legband__head .sec-title::after{display:none}
 .legband__head>a{font:600 13px var(--font-ui);color:var(--accent-text);white-space:nowrap;min-height:44px;display:inline-flex;align-items:center}
-.avatar{position:relative;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle at 30% 25%,#7cc9fa,var(--accent) 45%,#1f78b4);color:#fff;font:800 28px var(--font-title);aspect-ratio:1/1;width:100%;overflow:hidden;box-shadow:0 0 0 3px #fff,0 0 0 4px var(--rule-hair)}
+.avatar{position:relative;display:grid;place-items:center;border-radius:50%;background:var(--brand-blue);color:#fff;font:800 28px var(--font-title);aspect-ratio:1/1;width:100%;overflow:hidden;box-shadow:0 0 0 3px #fff,0 0 0 4px var(--rule-hair)}
 .avatar__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%}
 html[data-fotos="iniciales"] .avatar__img{display:none}
 .tag-ejemplo{display:inline-block;font:600 10.5px/1 var(--font-ui);text-transform:uppercase;letter-spacing:.06em;background:#fff3c4;color:#6b4e00;padding:4px 7px;white-space:nowrap}
@@ -524,15 +529,15 @@ html[data-diario="off"] .srow:first-child{border-top-color:var(--rule-hair)}
 
 /* ============ Footer ============ */
 .rule-double--ftr{margin:var(--s6) 0 0;max-width:none}
-.ftr{background:var(--navy);color:#c8d5e2;padding:var(--s5) 0 var(--s3);font-size:14.5px}
-.ftr a{color:#e5eef6}.ftr a:hover{color:var(--accent)}
+.ftr{background:var(--brand-blue);color:#fff;padding:var(--s5) 0 var(--s3);font-size:14.5px}
+.ftr a{color:#fff}.ftr a:hover{color:#fff;text-decoration:underline}
 .ftr__grid{display:grid;gap:var(--s4)}
 .ftr h2{font:700 12px var(--font-ui);letter-spacing:.1em;text-transform:uppercase;color:#fff;margin-bottom:10px}
 .ftr ul{list-style:none;margin:0;padding:0;display:grid;gap:2px}
 .ftr li a{display:flex;align-items:center;gap:6px;min-height:44px}
 .ftr__logo{width:240px;margin-bottom:12px}
 .ftr p{margin:0}
-.ftr__legal{border-top:1px solid rgba(255,255,255,.12);margin-top:var(--s4);padding-top:var(--s2);font-size:13px;color:#a9bbcc}
+.ftr__legal{border-top:1px solid rgba(255,255,255,.3);margin-top:var(--s4);padding-top:var(--s2);font-size:13px;color:#fff}
 @media (min-width:768px){.ftr__grid{grid-template-columns:1.4fr 1fr 1fr 1fr}}
 
 /* ============ Utilidades ============ */
@@ -546,7 +551,7 @@ html[data-diario="off"] .srow:first-child{border-top-color:var(--rule-hair)}
 
 /* ============ Panel de variantes (?demo=1): botón flotante chico, tocable en el celular ============ */
 .demo{position:fixed;left:8px;bottom:calc(8px + env(safe-area-inset-bottom));z-index:80;font:13px var(--font-ui);max-width:calc(100vw - 80px)}
-.demo__btn{min-height:44px;padding:0 14px;border-radius:99px;border:0;background:#111;color:#fff;font:700 13px var(--font-ui);cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+.demo__btn{min-height:44px;padding:0 14px;border-radius:99px;border:0;background:var(--ink);color:#fff;font:700 13px var(--font-ui);cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.35)}
 .demo__box{display:none;background:#fff;border:1px solid var(--rule-hair);padding:12px;margin-bottom:8px;box-shadow:0 8px 30px rgba(0,0,0,.25);width:min(330px,calc(100vw - 24px));max-height:calc(100dvh - 90px);overflow:auto;overscroll-behavior:contain}
 .demo.is-open .demo__box{display:grid;gap:12px}
 .demo__box h2{font:700 13px var(--font-ui);text-transform:uppercase;letter-spacing:.08em}
@@ -881,8 +886,17 @@ html:not([data-etiqueta="caja"]) .art__meta .sectag--t{font-size:11px;font-weigh
 html:not([data-etiqueta="caja"]) .fig>.sectag{font-size:10px;padding:2px 6px}
 @media (max-width:767px){html:not([data-etiqueta="caja"]) .f2 .sectag--cmp,html:not([data-etiqueta="caja"]) .card--tapa2 .sectag--cmp{margin-top:6px}}
 
-/* ============ v2.4 etapa E · barra superior con el azul de marca (?header=actual|marca|marca2, default actual) ============
-   Candidatas (sin valor confirmado por Juan): marca = azul de marca de la maqueta (--accent-text, contraste con el logo blanco 5,1:1);
-   marca2 = el mismo azul mas oscuro (6,8:1). Se aplica a la barra, al buscador y a la barra del menu mobile. */
-html[data-header="marca"]{--header-bg:#1673ad}
-html[data-header="marca2"]{--header-bg:#0f5f94}
+/* ============ v2.4.1 · paleta oficial (?header=prod|actual, default prod) ============
+   prod: barra superior en --brand-sky con logo blanco, barra de menú en --brand-blue con el ítem activo en --brand-sky.
+   actual: el azul oscuro anterior, SOLO para comparar (único lugar donde sigue el hex). Las opciones marca y marca2 de v2.4 se eliminaron. */
+html[data-header="actual"]{--header-bg:#0b2236}
+@media (min-width:1024px){
+  html[data-header="actual"] .nav{background:var(--paper)}
+  html[data-header="actual"] .nav a{color:var(--ink);padding:0 2px;border-bottom:3px solid transparent;margin-bottom:-3px}
+  html[data-header="actual"] .nav a:hover,html[data-header="actual"] .nav a[aria-current]{background:none;color:var(--accent-text);border-bottom-color:var(--accent)}
+}
+.search .btn{background:var(--ink)}
+.search .btn:hover{background:#000}
+
+/* v2.4.1 · sobre los fondos grises (módulo de legisladores #eee, Formato 2 #f2f2f2) el --brand-blue solo da 4,2 a 4,35:1 con texto chico: ahí el texto azul usa --brand-blue-dk (4,6 a 4,8:1) */
+.legband,.band--alt{--accent-text:var(--brand-blue-dk);--cintillo-color:var(--brand-blue-dk)}
