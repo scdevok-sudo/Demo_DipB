@@ -20,10 +20,10 @@ const SHOW_FECHA_EN_NOTA = true;    // dentro de la página de la nota se conser
 const SHOW_TAPA_RELACIONADAS = false; // desktop: false oculta las 2 notas relacionadas (con guión) bajo la bajada de la nota principal; el markup se conserva, true las vuelve a mostrar
 const HEADER_MENU_MOBILE = false;   // mobile: false = las tres barritas viven solo en el zócalo; true = también arriba a la derecha
 /* Valores por defecto de cada parámetro (se pisan con ?param=valor, que se recuerda en la sesión). Ver README. */
-const DEFAULTS = { seccion: 'foto', super: 'off', tapa: 'texto-izq', vermas: 'flecha', bajada: 'auto', ad: 'on', fondos: 'on', fotos: 'ejemplo', font: 'actual', hora: 'off', diario: 'on', credito: 'on', tiempo: 'off', peso: '700', tapa2: 'normal', ritmo: 'actual', etiqueta: 'texto' };
+const DEFAULTS = { seccion: 'foto', super: 'off', tapa: 'texto-izq', vermas: 'flecha', bajada: 'auto', ad: 'on', fondos: 'on', fotos: 'ejemplo', font: 'actual', hora: 'off', diario: 'on', credito: 'on', tiempo: 'off', peso: '700', tapa2: 'normal', ritmo: 'actual', etiqueta: 'texto', header: 'actual' };
 const OPTIONS = {
   seccion: ['foto', 'abajo'], super: ['off', 'foto', 'texto', '2', '3'], tapa: ['texto-izq', 'foto-izq'], vermas: ['flecha', 'boton'], bajada: ['auto', 'on', 'off'],
-  ad: ['on', 'off'], fondos: ['on', 'off'], fotos: ['ejemplo', 'iniciales'], font: ['actual', 'merriweather', 'literata'], hora: ['on', 'off'], diario: ['on', 'off'], credito: ['on', 'off'], tiempo: ['off', 'on'], peso: ['600', '700', '800', '900'], tapa2: ['normal', 'chica'], ritmo: ['actual', 'b', 'c'], etiqueta: ['texto', 'caja'],
+  ad: ['on', 'off'], fondos: ['on', 'off'], fotos: ['ejemplo', 'iniciales'], font: ['actual', 'merriweather', 'literata'], hora: ['on', 'off'], diario: ['on', 'off'], credito: ['on', 'off'], tiempo: ['off', 'on'], peso: ['600', '700', '800', '900'], tapa2: ['normal', 'chica'], ritmo: ['actual', 'b', 'c'], etiqueta: ['texto', 'caja'], header: ['actual', 'marca', 'marca2'],
 };
 
 /* Alias de valores viejos de parámetros (los links ya compartidos siguen funcionando) */

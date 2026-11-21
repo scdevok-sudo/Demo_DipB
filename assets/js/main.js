@@ -141,6 +141,7 @@
       ['super', 'Superdestacada', [['off', 'Sin ella'], ['foto', 'A · foto'], ['texto', 'B · texto'], ['2', '2'], ['3', '3']]],
       ['seccion', 'Etiqueta de sección', [['foto', 'Sobre la foto'], ['abajo', 'Debajo de la foto']]],
       ['etiqueta', 'Etiqueta de sección bajo el título', [['texto', 'Texto gris'], ['caja', 'Caja oscura']]],
+      ['header', 'Barra superior (color)', [['actual', 'Actual (azul oscuro)'], ['marca', 'Marca A · #1673ad'], ['marca2', 'Marca B · #0f5f94']]],
       ['tapa2', 'Tapa mobile: notas 2 y 3', [['normal', 'Normales'], ['chica', 'Chicas con foto al costado']]],
       ['tapa', 'Tapa (desktop)', [['texto-izq', 'Texto a la izquierda'], ['foto-izq', 'Foto a la izquierda']]],
       ['vermas', 'Ver más de X', [['flecha', 'Texto con flecha'], ['boton', 'Botón con borde']]],

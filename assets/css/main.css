@@ -19,7 +19,7 @@
   --font-title:"Source Serif 4","Serif Fallback",Georgia,"Times New Roman",serif;
   --font-ui:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --navy:#0b2236;--super-bg:#141414;
-  --cintillo-color:var(--accent-text);--modulo-legisladores-bg:#eeeeee;--fondo-f2:#f2f2f2;--filete-modulo:#d6d6d6;--seccion-bg:var(--navy);--seccion-fg:#fff;--seccion-texto:var(--muted);
+  --cintillo-color:var(--accent-text);--modulo-legisladores-bg:#eeeeee;--fondo-f2:#f2f2f2;--filete-modulo:#d6d6d6;--seccion-bg:var(--navy);--seccion-fg:#fff;--seccion-texto:var(--muted);--header-bg:var(--navy);
   --s1:8px;--s2:16px;--s3:24px;--s4:32px;--s5:48px;--s6:64px;
   --wrap:1240px;--gut:16px;--gap:16px;
   --ease:cubic-bezier(.2,.7,.2,1);
@@ -105,7 +105,7 @@ html[data-diario="off"] .vermas{display:none}
 .topstrip__btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round}
 .topstrip a:hover,.topstrip__btn:hover{color:var(--accent-text)}
 html[data-diario="off"] .topstrip{display:none!important}
-.hdr__main{background:var(--navy);color:#fff}
+.hdr__main{background:var(--header-bg);color:#fff}
 .hdr__top{display:flex;align-items:center;gap:12px;min-height:60px;transition:min-height .25s var(--ease)}
 .hdr__logo{display:block;flex:0 0 auto;width:200px}
 .hdr__logo img,.ftr__logo{width:100%;height:auto;object-fit:contain}
@@ -115,7 +115,7 @@ html[data-diario="off"] .topstrip{display:none!important}
 .ibtn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
 .hdr.is-compact .hdr__top{min-height:48px}
 .hdr.is-compact .hdr__logo{width:160px}
-.search{background:var(--navy);padding:0 0 12px;display:none}
+.search{background:var(--header-bg);padding:0 0 12px;display:none}
 .search.is-open{display:block}
 .search__row{display:flex;gap:8px}
 .search input{flex:1;min-width:0;min-height:44px;border-radius:6px;border:0;padding:0 14px;font:16px var(--font-ui)}
@@ -134,7 +134,7 @@ html[data-diario="off"] .topstrip{display:none!important}
 @media (max-width:1023px){
   .nav{position:fixed;inset:0;z-index:60;overflow:auto;transform:translateY(102%);transition:transform .3s var(--ease);visibility:hidden;padding:0 var(--gut) calc(var(--s2) + env(safe-area-inset-bottom));display:flex;flex-direction:column}
   .nav.is-open{transform:none;visibility:visible}
-  .nav__bar{display:flex;align-items:center;justify-content:space-between;min-height:60px;margin:0 calc(var(--gut) * -1);padding:0 var(--gut);background:var(--navy)}
+  .nav__bar{display:flex;align-items:center;justify-content:space-between;min-height:60px;margin:0 calc(var(--gut) * -1);padding:0 var(--gut);background:var(--header-bg)}
   .nav__bar img{width:150px;height:auto}
   .nav .wrap{padding:0;max-width:none;flex:1;display:flex;flex-direction:column}
   .nav ul{margin-top:var(--s1)}
@@ -880,3 +880,9 @@ html:not([data-etiqueta="caja"]) .aside .sectag--t{font-size:10.5px}
 html:not([data-etiqueta="caja"]) .art__meta .sectag--t{font-size:11px;font-weight:700;letter-spacing:.06em;padding:3px 8px;background:var(--seccion-bg);color:var(--seccion-fg);border-radius:2px;margin-top:0}
 html:not([data-etiqueta="caja"]) .fig>.sectag{font-size:10px;padding:2px 6px}
 @media (max-width:767px){html:not([data-etiqueta="caja"]) .f2 .sectag--cmp,html:not([data-etiqueta="caja"]) .card--tapa2 .sectag--cmp{margin-top:6px}}
+
+/* ============ v2.4 etapa E · barra superior con el azul de marca (?header=actual|marca|marca2, default actual) ============
+   Candidatas (sin valor confirmado por Juan): marca = azul de marca de la maqueta (--accent-text, contraste con el logo blanco 5,1:1);
+   marca2 = el mismo azul mas oscuro (6,8:1). Se aplica a la barra, al buscador y a la barra del menu mobile. */
+html[data-header="marca"]{--header-bg:#1673ad}
+html[data-header="marca2"]{--header-bg:#0f5f94}
