@@ -47,7 +47,7 @@ Bloques: `tapa · legis-diputados · legis-senadores · f1 · f2 · banner · li
 
 ## v2.3 · Tipografía y tamaños (etapa B)
 - Fuentes variables self-hosted (latin, `font-display: swap`), peso 400 a 900 cada una: Source Serif 4 (51 KB, la actual y la única que se descarga por defecto junto con Inter, 48 KB), Merriweather (98 KB) y Literata (39 KB). Las alternativas solo se descargan si se elige esa fuente.
-- Títulos de tarjeta +2 px (grandes) o +1 px (chicos) en mobile y desktop; peso por defecto 800.
+- Títulos de tarjeta +2 px (grandes) o +1 px (chicos) en mobile y desktop; peso por defecto 800 (700 desde v2.4).
 - Cuerpo de la nota: 20 px en mobile, 21 px en tablet y 22 px en desktop, con `line-height` 1.6 (antes 18 px); bajada 20/23 px.
 
 ## v2.3 · Home desktop (etapa C)
@@ -93,7 +93,9 @@ Ejemplo: `index.html?demo=1&super=2&bajada=on`. "Copiar link de esta variante" a
 | `bajada` | **auto** · on · off | Bajada de las tarjetas. En mobile `auto` y `off` no la muestran; `on` la muestra. En desktop, `auto` la oculta en el Formato 1 (la tapa y el Formato 2 la mantienen) |
 | `ritmo` | **actual** · b · c | Desktop: ritmo del flujo del home. `b` = una nota grande y dos chicas con foto al costado en lugar del 2.º Formato 1; `c` = bloque de solo texto entre dos Formato 1. `actual` no cambia nada |
 | `tapa2` | **normal** · chica | Mobile: las notas 2 y 3 de la tapa como tarjetas normales o compactas con foto al costado |
-| `peso` | 700 · **800** · 900 | Peso de los títulos de tarjetas y notas, en todas las pantallas (variable CSS `--titulo-peso`). `600` queda como alias de `700` |
+| `peso` | 600 · **700** · 800 · 900 | Peso de los títulos de tarjetas y notas, en todas las pantallas (variable CSS `--titulo-peso`). Default 700 desde v2.4 (antes 800); 600 ya no es alias de 700 |
+| `etiqueta` | **texto** · caja | v2.4: etiqueta de sección bajo el título como texto gris chico sin caja (`--seccion-texto`), o la caja oscura de v2.3. La etiqueta sobre la foto (`seccion=foto`) baja a 10 px en el modo `texto`. La caja de la cabecera de la nota no cambia |
+| `header` | **actual** · marca · marca2 | v2.4: color de la barra superior (`--header-bg`): azul oscuro actual, `#1673ad` o `#0f5f94`. Sin valor confirmado por Juan; se puede sumar `prod` con el color real |
 | `tiempo` | **off** · on | Hora relativa ("Hace 2 horas") en las tarjetas. OJO: `hora` sigue siendo la franja "Última hora" (el brief asumía que `hora` era la de las tarjetas, por eso se creó `tiempo`) |
 | `ad` | **on** · off | Banner horizontal suelto del flujo, solo mobile (320×100); apagado colapsa. En desktop el horizontal es una slide del rodante |
 | `fondos` | **on** · off | Fondo suave del Formato 2 |
@@ -200,6 +202,15 @@ Con `tools/perf.mjs` (Playwright con Chromium, servidor local en `:8765`): viewp
 | legislador | 1,48 s | 0,0000 |
 
 CLS queda por debajo de 0,1 en todas las páginas y el LCP del index (alrededor de 2 s) está en el rango anterior o algo por debajo (la medición de v2.3.1 daba 2,08 a 2,39 s); la variación entre corridas y sesiones es de unos 0,3 s, así que no hay una mejora real que atribuir a estos cambios.
+
+## v2.4 · Feedback de Juan sobre el mobile (17/11)
+Auditoría y medidas en `capturas/auditoria-v2-4.md`. Scripts: `tools/audit-v24.mjs` y `tools/audit-v24-espaciado.mjs`.
+- **Tipografía**: `peso` default 700 (antes 800) en mobile y desktop. Títulos mobile más chicos (tapa 27 px, superdestacada 26 px, tarjetas 22 px) con interlineado 1,15 a 1,17. La tapa de Minnaard sale en 3 líneas en 360, 390 y 412 px. El cuerpo de la nota no se tocó. Probadas las 9 combinaciones fuente × peso a 390 px: ninguna se rompe; Literata en 700/800 es la más ancha y Merriweather casi no cambia entre 600 y 800.
+- **Espaciado vertical (mobile)**: entre el contenido de una tarjeta y el de la siguiente quedan 25 px (24 de aire + el filete de 1 px) en tapa, Formato 1, Formato 2 y secciones, medido en 360, 390 y 412 px; sin dobles márgenes (cintillo, tapa, `min-height` de las filas de sección). En `seccion.html` la tapa queda a ~41 px de la primera fila, con la doble línea gruesa. Desktop: solo se recortaron bandas y doble línea (32 a 24 px) y el aire doble entre dos filas de Formato 1.
+- **Formato 2 y `tapa2=chica` (mobile)**: foto cuadrada a la derecha, 32% del ancho en 390 y 412 px (115 y 122 px) y 30% en pantallas de hasta 375 px, título de 20 px (19 px en ≤ 375 px), sin bajada. Caso conocido: la nota de Nanni ("Nanni exige la finalización de la colectora…") sale en 6 líneas; no se acortó el título.
+- **Etiquetas**: ver parámetro `etiqueta`.
+- **Header**: ver parámetro `header`. El logo de la maqueta es blanco sobre transparente, así que las candidatas salen del azul de marca de la maqueta; falta el color real del sitio (se puede sumar como `header=prod`).
+- **Medición de CLS y LCP v2.4** (`tools/perf.mjs`, mismo método que arriba): index LCP 2,06 s en la tanda y 2,07 a 2,20 s en corridas sueltas; seccion 2,35 s en la tanda y 1,94 a 2,00 s en corridas sueltas; nota 1,85 s; diputados 1,80 s; senadores 1,81 s; legislador 1,52 s. CLS 0,0000 a 0,0001 en todas, también en `seccion.html` sin el `min-height` de las filas.
 
 ## Pendientes
 - **Logo**: se reemplazó por `logo-big.png` del sitio actual (781×100, blanco sobre transparente, ~2.6× a 300 px). Sigue sin ser vectorial: si Santi consigue el SVG, reemplazar `assets/img/logo-dark.png` (o ajustar `LOGO` en `build.mjs`).
