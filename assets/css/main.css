@@ -863,3 +863,9 @@ html[data-peso="900"]{--titulo-peso:900}
   .f1band+.f1band{padding-top:0}   /* dos filas de Formato 1 seguidas sumaban 64 px de aire */
   .rule-double{margin:24px 0}
 }
+
+/* v2.4 etapa C · pantallas chicas (<= 375 px): foto 30 % y titulo 19 px en el Formato 2 y tapa2=chica */
+@media (max-width:375px){
+  .f2 .card--med,html[data-tapa2="chica"] .card--tapa2{grid-template-columns:minmax(0,1fr) 30%}
+  .f2 .card--med h3,html[data-tapa2="chica"] .card--tapa2 h2{font-size:19px}
+}
