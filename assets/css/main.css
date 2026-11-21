@@ -900,3 +900,18 @@ html[data-header="actual"]{--header-bg:#0b2236}
 
 /* v2.4.1 · sobre los fondos grises (módulo de legisladores #eee, Formato 2 #f2f2f2) el --brand-blue solo da 4,2 a 4,35:1 con texto chico: ahí el texto azul usa --brand-blue-dk (4,6 a 4,8:1) */
 .legband,.band--alt{--accent-text:var(--brand-blue-dk);--cintillo-color:var(--brand-blue-dk)}
+
+/* ============ v2.5 etapa B · home=pdf: tapa y flujo ============ */
+/* Tapa: las dos notas chicas llevan cintillo y título arriba de la foto y la bajada debajo; los tres renglones (texto, foto, bajada) se alinean entre las dos columnas con subgrid */
+@media (min-width:768px){
+  .tapa__two--tf{row-gap:0;grid-template-rows:auto auto auto}
+  .tapa__two--tf>.span-6{display:grid;grid-row:span 3;grid-template-rows:subgrid}
+  .tapa__two--tf .card--tf{display:grid;grid-row:1/-1;grid-template-rows:subgrid;justify-content:stretch}
+  .tapa__two--tf .card--tf .card__txt{order:0;margin:0 0 12px;align-self:end}
+  .tapa__two--tf .card--tf .fig{order:1}
+  .tapa__two--tf .card--tf>.dek{order:2;margin-top:10px}
+}
+/* rodante horizontal como bloque propio del flujo (solo desktop; en mobile la publicidad va al final) */
+.rodh{padding:16px 0}
+.rodh .adz{margin:0;padding:0}
+@media (max-width:767px){.rodh{display:none}}

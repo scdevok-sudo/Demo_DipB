@@ -98,13 +98,16 @@ const take = (pool, k, pred = () => true) => {
 };
 const SECCIONES = ['Congreso', 'Nación', 'Provincia', 'Municipios'];
 let hero, tapa2, tapa, mods, superNotes, flow, f1a, f1b, f2n, textoN;
+let recom, unodosA, unodosB, f2d, f2s, grid3, text3, grid4;   // solo home=pdf
+let curPage = 'pdf';
 /* Reparto de notas del home. Se llama una vez por cada versión del inicio (index.html = home=pdf, index-anterior.html = home=anterior): cada una arranca con las notas libres. */
-const allocate = () => {
+const allocate = (kind = 'anterior') => {
 hero = use(all.get(413361));
 tapa2 = [take(pub.filter(n => n.categorias.includes('Nación')), 1, hasImg)[0], take(pub.filter(n => n.categorias.includes('Provincia')), 1, hasImg)[0]];
 tapa = [hero, ...tapa2];
 // franja de secciones (reservada primero para que el flujo se arme con lo que sobra, mayormente Legislatura)
 mods = SECCIONES.map(c => { const p = pub.filter(n => n.categorias.includes(c)); const ph = take(p, 1, hasImg); return [c, [...ph, ...take(p, 2)]]; });
+if (kind === 'pdf') recom = recomendadas.ids.map(id => { const n = all.get(id); if (!n || !hasImg(n)) throw new Error('recomendadas.json: la nota ' + id + ' no existe o no tiene foto'); return use(n); });   // exactamente 3, fijas
 // superdestacadas de demostración (recurso a demanda): el campo `super` de la nota manda; si no hay, se usan sobrantes con foto grande
 superNotes = (() => {
   const marked = pub.filter(n => n.super === 'foto' || n.super === 'texto');
@@ -114,8 +117,16 @@ superNotes = (() => {
 })();
 flow = pub.filter(n => !used.has(n.id) && hasImg(n));
 const mk = k => take(flow, k, hasImg);
-f1a = mk(4); f1b = mk(4); f2n = mk(8);   // 19 notas en el flujo: 3 (tapa) + 4 + 4 + 8
-textoN = mk(6);   // ritmo=c: bloque de solo texto (cintillo y título, sin foto)
+if (kind === 'pdf') {
+  /* home=pdf: Formato 2 con notas de Diputados y otro con notas del Senado (como en el PDF), y notas distintas en cada bloque */
+  const dip = n => /diputad/i.test(n.titulo) && !/senad/i.test(n.titulo), sen = n => /senad/i.test(n.titulo);
+  f2d = take(flow, 4, n => hasImg(n) && dip(n)); f2s = take(flow, 4, n => hasImg(n) && sen(n));
+  unodosA = mk(3); unodosB = mk(3); grid3 = mk(6); text3 = mk(3); grid4 = mk(8);
+  f1a = f1b = f2n = textoN = [];
+} else {
+  f1a = mk(4); f1b = mk(4); f2n = mk(8);   // 19 notas en el flujo: 3 (tapa) + 4 + 4 + 8
+  textoN = mk(6);   // ritmo=c: bloque de solo texto (cintillo y título, sin foto)
+}
 };
 const ticker = pub.slice(0, 5);
 const legPool = pub.filter(isLeg);
@@ -192,16 +203,16 @@ const fig = (n, o = {}) => { const t = thumb(n, o); return t ? `<figure class="f
 const kick = n => cintillos[n.id] ? `<span class="cintillo">${esc(cintillos[n.id])}</span>` : '';   // cintillo: texto libre de la redacción, SIEMPRE arriba del título; sin cintillo no deja hueco
 /* etiqueta de sección (chica, con fondo): sobre la foto o debajo (?seccion=foto|abajo); en tarjetas sin foto va debajo del título */
 const secTag = (n, cls = '') => (isLeg(n) && !SHOW_LEGISLATURA_LABEL) ? '' : `<span class="sectag ${cls}">${esc(sectionOf(n))}</span>`;
-const card = (n, { t = 'med', dek = false, h = 3, tf = false, cap = false, eager = false, sizes, big = false, cls = '' } = {}) => {
+const card = (n, { t = 'med', dek = false, h = 3, tf = false, cap = false, eager = false, sizes, big = false, cls = '', dekAfter = false } = {}) => {
   const title = `<h${h}><a href="${noteHref(n)}">${esc(n.titulo)}</a></h${h}>`;
   const kicker = kick(n), below = secTag(n, 'sectag--t');
   const meta = `<div class="meta">${rel(n)}</div>`;
-  const dk = dek ? `<p class="dek">${esc(n.extracto)}</p>` : '';
+  const dk = dek ? `<p class="dek">${esc(n.extracto)}</p>` : '';   // dekAfter: la bajada va después de la foto (tapa del PDF: cintillo y título, foto, bajada)
   if (t === 'txt') return `<article class="card card--txt ${cls}">${kicker}${title}${below}${meta}</article>`;
   if (t === 'sm') return `<article class="card card--sm ${cls}"><div class="card__txt">${kicker}${title}${below}${meta}</div>${thumb(n, { sizes: SZ.sm })}</article>`;
   const f = fig(n, { sizes, big, eager, cap, alt: eager ? n.titulo : '' });
-  const txt = `<div class="card__txt">${kicker}${title}${f ? secTag(n, 'sectag--t sectag--cmp') : below}${dk}${meta}</div>`;
-  return `<article class="card card--${t}${tf ? ' card--tf' : ''} ${cls}">${tf ? txt + f : f + txt}</article>`;
+  const txt = `<div class="card__txt">${kicker}${title}${f ? secTag(n, 'sectag--t sectag--cmp') : below}${dekAfter ? '' : dk}${meta}</div>`;
+  return `<article class="card card--${t}${tf ? ' card--tf' : ''} ${cls}">${tf ? txt + f + (dekAfter ? dk : '') : f + txt}</article>`;
 };
 const secTitle = (label, href, id) => `<div class="sec-head"><h2 class="sec-title"${id ? ` id="${id}"` : ''}><span>${label}</span></h2>${href ? `<a href="${href}">Ver más</a>` : ''}</div>`;
 const ruleDouble = (cls = '') => `<div class="rule-double ${cls}" role="presentation"></div>`;
@@ -230,7 +241,7 @@ const I = {
 const early = page => `<script>(function(){var PG=${JSON.stringify(page || '')},d=document.documentElement,O=${JSON.stringify(OPTIONS)},AL=${JSON.stringify(ALIAS)},P=new URLSearchParams(location.search),S={};try{S=JSON.parse(sessionStorage.getItem('dbv')||'{}')}catch(e){}if(P.get('reset')){S={};}for(var k in O){var v=P.get(k);if(v&&AL[k]&&AL[k][v])v=AL[k][v];if(v&&O[k].indexOf(v)>-1)S[k]=v;if(S[k]&&AL[k]&&AL[k][S[k]])S[k]=AL[k][S[k]];if(S[k]&&O[k].indexOf(S[k])>-1)d.setAttribute('data-'+k,S[k]);}var H=P.get('home')||S.home;if(PG==='pdf'&&H==='anterior'){location.replace('index-anterior.html'+location.search+location.hash);return}if(PG==='anterior'){if(H==='pdf'){location.replace('index.html'+location.search+location.hash);return}S.home='anterior';d.setAttribute('data-home','anterior')}try{sessionStorage.setItem('dbv',JSON.stringify(S));if(P.get('demo')==='1')sessionStorage.setItem('demo','1');}catch(e){}})()</script>`;
 
 const head = (title, { extra = '', body = '', page = '', desc = 'Maqueta del rediseño de Diputados Bonaerenses. Documento de trabajo, no indexable.' } = {}) => `<!doctype html>
-<html lang="es" ${Object.entries(DEFAULTS).map(([k, v]) => `data-${k}="${v}"`).join(' ')}><head>
+<html lang="es" ${Object.entries({ ...DEFAULTS, ...(page === 'pdf' ? { tapa: 'foto-izq' } : {}) }).map(([k, v]) => `data-${k}="${v}"`).join(' ')}><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <title>${esc(title)}</title>
@@ -316,8 +327,8 @@ const FLOW_ANTERIOR = ['tapa', 'legis-diputados', 'f1', 'textos', 'f1', 'trio', 
 /* Orden propio para mobile (< 768 px): los dos módulos de legisladores van consecutivos. El FLOW de desktop no se toca: cada bloque lleva su posición mobile en --o y el CSS lo reordena solo en pantallas chicas. */
 const FLOW_MOBILE_ANTERIOR = ['tapa', 'legis-diputados', 'legis-senadores', 'f1', 'textos', 'f1', 'trio', 'linea', 'f2', 'linea', 'secciones', 'anunciantes', 'banner'];   // toda la publicidad al final, después de la franja de secciones
 /* home=pdf (default): el diseño de Juan (PDF "DISEÑO DB"). Se arma por etapas; por ahora igual al anterior. */
-const FLOW_PDF = [...FLOW_ANTERIOR];
-const FLOW_MOBILE_PDF = [...FLOW_MOBILE_ANTERIOR];
+const FLOW_PDF = ['tapa', 'legis-diputados', 'rodante-h', 'f2d', 'anunciantes', 'legis-senadores', 'f2s', 'linea', 'secciones', 'banner'];   // se completa por etapas: franja, uno-dos, uno-dos-espejo, recomendadas y grilla3
+const FLOW_MOBILE_PDF = ['tapa', 'legis-diputados', 'legis-senadores', 'f2d', 'f2s', 'linea', 'secciones', 'anunciantes', 'banner'];   // 'rodante-h' es solo desktop
 const mobilePosOf = (FL, FM) => { const seen = {}; return FL.map(k => { const nth = seen[k] = (seen[k] ?? -1) + 1; let c = -1; return FM.findIndex(m => m === k && ++c === nth) + 1; }); };
 const F1_POOL = () => [f1a, f1b];
 let f1i = 0;
@@ -327,7 +338,7 @@ const BLOCKS = {
     ${fig(hero, { sizes: SZ.lead, big: true, eager: true, alt: hero.titulo })}
     <div class="card__txt">${kick(hero)}<h2><a href="${noteHref(hero)}">${esc(hero.titulo)}</a></h2><p class="dek">${esc(hero.extracto)}</p>${vermas(hero)}<div class="meta">${rel(hero)}</div></div>
   </article>
-  <div class="row vr cols-2 tapa__two">${tapa2.map(n => `<div class="span-6">${card(n, { t: 'med', dek: true, h: 2, big: true, sizes: SZ.s6, cls: 'card--tapa2' })}</div>`).join('')}</div>
+  <div class="row vr cols-2 tapa__two${curPage === 'pdf' ? ' tapa__two--tf' : ''}">${tapa2.map(n => `<div class="span-6">${card(n, curPage === 'pdf' ? { t: 'med', tf: true, dekAfter: true, dek: true, h: 2, big: true, sizes: SZ.s6, cls: 'card--tapa2' } : { t: 'med', dek: true, h: 2, big: true, sizes: SZ.s6, cls: 'card--tapa2' })}</div>`).join('')}</div>
 </div>`, 'band--tapa'),
   'legis-diputados': () => legOne('Diputados', 'Diputados', 'diputados'),
   'legis-senadores': () => legOne('Senado', 'Senadores', 'senadores'),
@@ -342,6 +353,9 @@ const BLOCKS = {
   textos: () => band(`<div class="solotxt vr cols-3">${textoN.map(n => card(n, { t: 'txt' })).join('')}</div>`, 'rv rv-c'),
   // Formato 2: 8 notas, 2 columnas × 4 filas, foto a la izquierda, fondo suave
   f2: () => band(`<div class="flow vr cols-2 f2">${f2n.map(n => card(n, { t: 'med', dek: true, big: true, sizes: SZ.s6 })).join('')}</div>`, 'f2band band--alt'),
+  'rodante-h': () => band(adZoneH(), 'rodh'),   // home=pdf: el rodante horizontal de 7 banners como bloque propio (solo desktop)
+  f2d: () => band(`<div class="flow vr cols-2 f2">${f2d.map(n => card(n, { t: 'med', dek: true, big: true, sizes: SZ.s6 })).join('')}</div>`, 'f2band band--alt'),   // Formato 2 con notas de Diputados
+  f2s: () => band(`<div class="flow vr cols-2 f2">${f2s.map(n => card(n, { t: 'med', dek: true, big: true, sizes: SZ.s6 })).join('')}</div>`, 'f2band band--alt'),   // Formato 2 con notas del Senado
   banner: () => band(hBanner(), 'adband'),
   linea: () => ruleDouble('rule-double--wrap'),
   anunciantes: () => adZone(),   // el rodante horizontal ya no va acá: está dentro del 1.º Formato 1 (v2.3.2)
@@ -350,7 +364,7 @@ const BLOCKS = {
 };
 /* Arma una versión del inicio: file = archivo, FL/FM = bloques desktop/mobile, page = 'pdf' | 'anterior' (para el redireccionamiento por ?home=) */
 const renderHome = (file, FL, FM, page) => {
-  used.clear(); allocate(); f1i = 0;
+  used.clear(); curPage = page; allocate(page); f1i = 0;
   const mob = mobilePosOf(FL, FM);
   write(file, `${head('Diputados Bonaerenses · Maqueta', { page, extra: `<link rel="preload" as="image" fetchpriority="high" imagesrcset="assets/img/notas/${hero.id}-m.webp ${D(hero, 'm')[0]}w, assets/img/notas/${hero.id}-full.webp ${D(hero, 'full')[0]}w" imagesizes="(min-width:1024px) 700px, 100vw">` })}
 ${header('index.html')}
