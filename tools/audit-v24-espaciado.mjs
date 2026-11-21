@@ -21,5 +21,5 @@ for (const w of widths) for (const pg of pages) {
   });
 }
 fs.writeFileSync(out, JSON.stringify(res, null, 1));
-for (const k in res) { const g = res[k].gaps.map(x => x.gap); console.log(k.padEnd(14), 'header→1.ª', res[k].header_a_primera, '| pares', g.length, '| max', Math.max(...g), '| mediana', g.sort((a, c) => a - c)[g.length >> 1], '| >24:', g.filter(x => x > 24).length); }
+for (const k in res) { const g = res[k].gaps.map(x => x.gap); console.log(k.padEnd(14), 'header→1.ª', res[k].header_a_primera, '| pares', g.length, '| max', Math.max(...g), '| mediana', g.sort((a, c) => a - c)[g.length >> 1], '| >24:', g.filter(x => x > 25).length); }
 await b.close();

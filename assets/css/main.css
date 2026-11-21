@@ -729,15 +729,15 @@ html[data-peso="900"]{--titulo-peso:900}
   .srow:first-child{border-top:2px solid var(--ink)}
   .srow-ad{border-top:1px solid var(--filete-suave)}
 
-  /* Formato 2 (y tapa2=chica): tarjeta compacta, texto a la izquierda y foto chica (96×72) a la derecha */
-  .f2 .card--med,html[data-tapa2="chica"] .card--tapa2{display:grid;grid-template-columns:minmax(0,1fr) 96px;column-gap:12px;align-items:start}
-  .f2 .card--med .fig,html[data-tapa2="chica"] .card--tapa2 .fig{grid-column:2;grid-row:1;width:96px}
+  /* Formato 2 (y tapa2=chica): tarjeta compacta, texto a la izquierda y foto cuadrada (~35 % del ancho, estilo Clarín) a la derecha (v2.4) */
+  .f2 .card--med,html[data-tapa2="chica"] .card--tapa2{display:grid;grid-template-columns:minmax(0,1fr) 32%;column-gap:10px;align-items:start}
+  .f2 .card--med .fig,html[data-tapa2="chica"] .card--tapa2 .fig{grid-column:2;grid-row:1;width:100%}
   .f2 .card--med .card__txt,html[data-tapa2="chica"] .card--tapa2 .card__txt{grid-column:1;grid-row:1;order:0;margin:0}
-  .f2 .card--med .thumb,html[data-tapa2="chica"] .card--tapa2 .thumb{aspect-ratio:4/3;width:96px}
+  .f2 .card--med .thumb,html[data-tapa2="chica"] .card--tapa2 .thumb{aspect-ratio:1/1;width:100%}
   .f2 .card--med .fig>.sectag,html[data-tapa2="chica"] .card--tapa2 .fig>.sectag{display:none}
   .f2 .sectag--cmp,html[data-tapa2="chica"] .card--tapa2 .sectag--cmp{display:inline-block;margin-top:8px}
   .f2 .card--med .cintillo,html[data-tapa2="chica"] .card--tapa2 .cintillo{font-size:15px;margin:0 0 4px}
-  .f2 .card--med h3,html[data-tapa2="chica"] .card--tapa2 h2{font-size:20px;line-height:1.2}
+  .f2 .card--med h3,html[data-tapa2="chica"] .card--tapa2 h2{font-size:20px;line-height:1.15}
   .f2 .card--med .meta,html[data-tapa2="chica"] .card--tapa2 .meta{display:none}
   .f2.flow>*{padding:var(--s2) 0}
   .f2.flow>:first-child{padding-top:0}
@@ -834,6 +834,9 @@ html[data-peso="900"]{--titulo-peso:900}
    Meta: entre el contenido de una tarjeta y el de la siguiente <= ~24 px con el filete de 1 px en el medio (~12 px a cada lado),
    sin dobles margenes (padding de una + margin/gap de la otra). Bloques: doble linea y bandas con 16 px. */
 @media (max-width:767px){
+  /* páginas de sección: de la nota de tapa a la 1.ª fila ~40 px, conservando la doble línea gruesa */
+  .sec-tapa.tapa__lead{padding-bottom:0;margin-bottom:0;border-bottom:0}
+  .sec-tapa+.rule-double{margin:12px 0}
   .band{padding:16px 0}
   .band--tapa{padding-top:12px}
   .f1band,.f2band{padding:16px 0}
