@@ -138,6 +138,7 @@
   if (demo) {
     const root = document.documentElement;
     const rows = [
+      ['home', 'Inicio (desktop)', [['pdf', 'Diseño DB (PDF de Juan)'], ['anterior', 'Anterior']]],
       ['super', 'Superdestacada', [['off', 'Sin ella'], ['foto', 'A · foto'], ['texto', 'B · texto'], ['2', '2'], ['3', '3']]],
       ['seccion', 'Etiqueta de sección', [['foto', 'Sobre la foto'], ['abajo', 'Debajo de la foto']]],
       ['etiqueta', 'Etiqueta de sección bajo el título', [['texto', 'Texto gris'], ['caja', 'Caja oscura']]],
@@ -165,7 +166,9 @@
     rows.forEach(([k, label, opts]) => {
       const row = document.createElement('div'); row.className = 'demo__row'; row.dataset.k = k;
       row.innerHTML = '<span>' + label + '</span><div class="demo__opts">' + opts.map(([v, t]) => '<button type="button" data-v="' + v + '">' + t + '</button>').join('') + '</div>';
-      row.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; root.setAttribute('data-' + k, b.dataset.v); store(); sync(); });
+      row.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; root.setAttribute('data-' + k, b.dataset.v); store(); sync();
+        /* el inicio de cada versión es un archivo distinto (index.html / index-anterior.html): al cambiar `home` se navega */
+        if (k === 'home' && /(^|\/)(index(-anterior)?\.html)?$/.test(location.pathname)) { const u = new URL(location.href); u.pathname = u.pathname.replace(/[^/]*$/, b.dataset.v === 'anterior' ? 'index-anterior.html' : 'index.html'); u.searchParams.set('home', b.dataset.v); location.href = u.href; } });
       inner.appendChild(row);
     });
     const acts = document.createElement('div'); acts.className = 'demo__acts';

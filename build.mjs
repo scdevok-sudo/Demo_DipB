@@ -20,10 +20,10 @@ const SHOW_FECHA_EN_NOTA = true;    // dentro de la página de la nota se conser
 const SHOW_TAPA_RELACIONADAS = false; // desktop: false oculta las 2 notas relacionadas (con guión) bajo la bajada de la nota principal; el markup se conserva, true las vuelve a mostrar
 const HEADER_MENU_MOBILE = false;   // mobile: false = las tres barritas viven solo en el zócalo; true = también arriba a la derecha
 /* Valores por defecto de cada parámetro (se pisan con ?param=valor, que se recuerda en la sesión). Ver README. */
-const DEFAULTS = { seccion: 'foto', super: 'off', tapa: 'texto-izq', vermas: 'flecha', bajada: 'auto', ad: 'on', fondos: 'on', fotos: 'ejemplo', font: 'actual', hora: 'off', diario: 'on', credito: 'on', tiempo: 'off', peso: '700', tapa2: 'normal', ritmo: 'actual', etiqueta: 'texto', header: 'actual' };
+const DEFAULTS = { seccion: 'foto', super: 'off', tapa: 'texto-izq', vermas: 'flecha', bajada: 'auto', ad: 'on', fondos: 'on', fotos: 'ejemplo', font: 'actual', hora: 'off', diario: 'on', credito: 'on', tiempo: 'off', peso: '700', tapa2: 'normal', ritmo: 'actual', etiqueta: 'texto', header: 'actual', home: 'pdf' };
 const OPTIONS = {
   seccion: ['foto', 'abajo'], super: ['off', 'foto', 'texto', '2', '3'], tapa: ['texto-izq', 'foto-izq'], vermas: ['flecha', 'boton'], bajada: ['auto', 'on', 'off'],
-  ad: ['on', 'off'], fondos: ['on', 'off'], fotos: ['ejemplo', 'iniciales'], font: ['actual', 'merriweather', 'literata'], hora: ['on', 'off'], diario: ['on', 'off'], credito: ['on', 'off'], tiempo: ['off', 'on'], peso: ['600', '700', '800', '900'], tapa2: ['normal', 'chica'], ritmo: ['actual', 'b', 'c'], etiqueta: ['texto', 'caja'], header: ['actual', 'marca', 'marca2'],
+  ad: ['on', 'off'], fondos: ['on', 'off'], fotos: ['ejemplo', 'iniciales'], font: ['actual', 'merriweather', 'literata'], hora: ['on', 'off'], diario: ['on', 'off'], credito: ['on', 'off'], tiempo: ['off', 'on'], peso: ['600', '700', '800', '900'], tapa2: ['normal', 'chica'], ritmo: ['actual', 'b', 'c'], etiqueta: ['texto', 'caja'], header: ['actual', 'marca', 'marca2'], home: ['pdf', 'anterior'],
 };
 
 /* Alias de valores viejos de parámetros (los links ya compartidos siguen funcionando) */
@@ -40,6 +40,10 @@ const banners = J('data/banners.json');
 const cuerpo = J('data/nota-412179-cuerpo.json');
 const dims = J('data/dims.json');
 const cintillos = J('data/cintillos.json');   // id → cintillo (texto libre). En producción: campo editable en el editor de notas de WordPress
+const autores = J('data/autores.json');            // id → autor de FANTASIA (tools/gen-autores.mjs). En producción: autor de WordPress o campo propio (Hito 2)
+const recomendadas = J('data/recomendadas.json'); // las 3 recomendadas de la semana (ids fijos, editables a mano)
+const sesiones = J('data/sesiones.json');         // contador de sesiones: DATOS DE EJEMPLO (diseño a definir)
+const encuesta = J('data/encuesta.json');         // encuesta: DATOS DE EJEMPLO (diseño a definir)
 const cats = rd('data/02_categorias.csv').trim().split('\n').slice(1).map(l => { const m = l.match(/^(\d+),"?([^",]+)"?,([^,]+),(\d+),(\d+)$/); return { name: m[2], slug: m[3], count: +m[5] }; });
 const catCount = n => (cats.find(c => c.name.toLowerCase() === n.toLowerCase()) || {}).count;
 const fmtN = n => n.toLocaleString('es-AR');
@@ -49,6 +53,7 @@ const hasImg = n => !!(D(n, 'm') || D(n, 's'));
 const all = new Map();
 [...raw.ultimas, ...Object.values(raw.por_categoria).flatMap(c => c.notas)].forEach(n => all.set(n.id, n));
 extra.forEach(n => all.set(n.id, n));
+all.forEach(n => { if (!autores[n.id]) throw new Error('Falta autor de fantasía para la nota ' + n.id + ' (node tools/gen-autores.mjs)'); n.autor = autores[n.id]; });
 const byDate = [...all.values()].sort((a, b) => b.fecha.localeCompare(a.fecha));
 const isCable = n => n.categorias.includes('Cables');
 const pub = byDate.filter(n => !isCable(n) && !n.categorias.some(c => /Colegios|Opini/.test(c)));
@@ -91,23 +96,27 @@ const take = (pool, k, pred = () => true) => {
   while (r.length < k) { const c = pool.filter(pred)[r.length % Math.max(1, pool.filter(pred).length)]; if (!c) break; recycled++; r.push(c); }
   return r;
 };
-const hero = use(all.get(413361));
-const tapa2 = [take(pub.filter(n => n.categorias.includes('Nación')), 1, hasImg)[0], take(pub.filter(n => n.categorias.includes('Provincia')), 1, hasImg)[0]];
-const tapa = [hero, ...tapa2];
-// franja de secciones (reservada primero para que el flujo se arme con lo que sobra, mayormente Legislatura)
 const SECCIONES = ['Congreso', 'Nación', 'Provincia', 'Municipios'];
-const mods = SECCIONES.map(c => { const p = pub.filter(n => n.categorias.includes(c)); const ph = take(p, 1, hasImg); return [c, [...ph, ...take(p, 2)]]; });
+let hero, tapa2, tapa, mods, superNotes, flow, f1a, f1b, f2n, textoN;
+/* Reparto de notas del home. Se llama una vez por cada versión del inicio (index.html = home=pdf, index-anterior.html = home=anterior): cada una arranca con las notas libres. */
+const allocate = () => {
+hero = use(all.get(413361));
+tapa2 = [take(pub.filter(n => n.categorias.includes('Nación')), 1, hasImg)[0], take(pub.filter(n => n.categorias.includes('Provincia')), 1, hasImg)[0]];
+tapa = [hero, ...tapa2];
+// franja de secciones (reservada primero para que el flujo se arme con lo que sobra, mayormente Legislatura)
+mods = SECCIONES.map(c => { const p = pub.filter(n => n.categorias.includes(c)); const ph = take(p, 1, hasImg); return [c, [...ph, ...take(p, 2)]]; });
 // superdestacadas de demostración (recurso a demanda): el campo `super` de la nota manda; si no hay, se usan sobrantes con foto grande
-const superNotes = (() => {
+superNotes = (() => {
   const marked = pub.filter(n => n.super === 'foto' || n.super === 'texto');
   const left = pub.filter(n => !used.has(n.id) && D(n, 'full'));
   const s = [marked[0] || left[0], marked[1] || left[1], marked[2] || left[2]];
   return s.map((n, i) => ({ n: use(n), kind: n.super || (i === 1 ? 'texto' : 'foto') }));
 })();
-const flow = pub.filter(n => !used.has(n.id) && hasImg(n));
+flow = pub.filter(n => !used.has(n.id) && hasImg(n));
 const mk = k => take(flow, k, hasImg);
-const f1a = mk(4), f1b = mk(4), f2n = mk(8);   // 19 notas en el flujo: 3 (tapa) + 4 + 4 + 8
-const textoN = mk(6);   // ritmo=c: bloque de solo texto (cintillo y título, sin foto)
+f1a = mk(4); f1b = mk(4); f2n = mk(8);   // 19 notas en el flujo: 3 (tapa) + 4 + 4 + 8
+textoN = mk(6);   // ritmo=c: bloque de solo texto (cintillo y título, sin foto)
+};
 const ticker = pub.slice(0, 5);
 const legPool = pub.filter(isLeg);
 // "ver también" de la tapa: notas relacionadas por etiquetas (ya existentes, sin autor)
@@ -218,9 +227,9 @@ const I = {
 
 /* Script que corre ANTES del primer render: lee los parámetros de la URL (o los recordados en la sesión) y los pone en <html data-*>.
    Así no hay parpadeo ni salto de layout al cambiar de variante. */
-const EARLY = `<script>(function(){var d=document.documentElement,O=${JSON.stringify(OPTIONS)},AL=${JSON.stringify(ALIAS)},P=new URLSearchParams(location.search),S={};try{S=JSON.parse(sessionStorage.getItem('dbv')||'{}')}catch(e){}if(P.get('reset')){S={};}for(var k in O){var v=P.get(k);if(v&&AL[k]&&AL[k][v])v=AL[k][v];if(v&&O[k].indexOf(v)>-1)S[k]=v;if(S[k]&&AL[k]&&AL[k][S[k]])S[k]=AL[k][S[k]];if(S[k]&&O[k].indexOf(S[k])>-1)d.setAttribute('data-'+k,S[k]);}try{sessionStorage.setItem('dbv',JSON.stringify(S));if(P.get('demo')==='1')sessionStorage.setItem('demo','1');}catch(e){}})()</script>`;
+const early = page => `<script>(function(){var PG=${JSON.stringify(page || '')},d=document.documentElement,O=${JSON.stringify(OPTIONS)},AL=${JSON.stringify(ALIAS)},P=new URLSearchParams(location.search),S={};try{S=JSON.parse(sessionStorage.getItem('dbv')||'{}')}catch(e){}if(P.get('reset')){S={};}for(var k in O){var v=P.get(k);if(v&&AL[k]&&AL[k][v])v=AL[k][v];if(v&&O[k].indexOf(v)>-1)S[k]=v;if(S[k]&&AL[k]&&AL[k][S[k]])S[k]=AL[k][S[k]];if(S[k]&&O[k].indexOf(S[k])>-1)d.setAttribute('data-'+k,S[k]);}var H=P.get('home')||S.home;if(PG==='pdf'&&H==='anterior'){location.replace('index-anterior.html'+location.search+location.hash);return}if(PG==='anterior'){if(H==='pdf'){location.replace('index.html'+location.search+location.hash);return}S.home='anterior';d.setAttribute('data-home','anterior')}try{sessionStorage.setItem('dbv',JSON.stringify(S));if(P.get('demo')==='1')sessionStorage.setItem('demo','1');}catch(e){}})()</script>`;
 
-const head = (title, { extra = '', body = '', desc = 'Maqueta del rediseño de Diputados Bonaerenses. Documento de trabajo, no indexable.' } = {}) => `<!doctype html>
+const head = (title, { extra = '', body = '', page = '', desc = 'Maqueta del rediseño de Diputados Bonaerenses. Documento de trabajo, no indexable.' } = {}) => `<!doctype html>
 <html lang="es" ${Object.entries(DEFAULTS).map(([k, v]) => `data-${k}="${v}"`).join(' ')}><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
@@ -228,7 +237,7 @@ const head = (title, { extra = '', body = '', desc = 'Maqueta del rediseño de D
 <meta name="description" content="${esc(desc)}">
 <meta name="theme-color" content="#0b2236">
 <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
-${EARLY}
+${early(page)}
 <link rel="preload" href="assets/fonts/SourceSerif4-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/Inter-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/main.min.css">${extra}
@@ -303,11 +312,14 @@ const vermas = hero2 => `<ul class="vermas">${related(hero2, 2).map(r => `<li><a
    Bloques disponibles: tapa · legis-diputados · legis-senadores · f1 · f2 · banner · linea · anunciantes · secciones
    (cada "f1"/"f2" toma las siguientes notas del flujo, en orden de fecha y sin repetir) */
 /* 'textos' (ritmo=c) y 'trio' (ritmo=b) están siempre en el HTML pero ocultos: con ritmo=actual no se ve ningún cambio. El 2.º 'f1' se oculta con ritmo=b (lo reemplaza 'trio'). */
-const FLOW = ['tapa', 'legis-diputados', 'f1', 'textos', 'f1', 'trio', 'legis-senadores', 'linea', 'f2', 'anunciantes', 'linea', 'secciones', 'banner'];   // 'banner' (horizontal suelto) solo se ve en mobile; en desktop está oculto porque ya es una slide del rodante horizontal de 'anunciantes'
+const FLOW_ANTERIOR = ['tapa', 'legis-diputados', 'f1', 'textos', 'f1', 'trio', 'legis-senadores', 'linea', 'f2', 'anunciantes', 'linea', 'secciones', 'banner'];   // 'banner' (horizontal suelto) solo se ve en mobile; en desktop está oculto porque ya es una slide del rodante horizontal de 'anunciantes'
 /* Orden propio para mobile (< 768 px): los dos módulos de legisladores van consecutivos. El FLOW de desktop no se toca: cada bloque lleva su posición mobile en --o y el CSS lo reordena solo en pantallas chicas. */
-const FLOW_MOBILE = ['tapa', 'legis-diputados', 'legis-senadores', 'f1', 'textos', 'f1', 'trio', 'linea', 'f2', 'linea', 'secciones', 'anunciantes', 'banner'];   // toda la publicidad al final, después de la franja de secciones
-const mobilePos = (() => { const seen = {}; return FLOW.map(k => { const nth = seen[k] = (seen[k] ?? -1) + 1; let c = -1; return FLOW_MOBILE.findIndex(m => m === k && ++c === nth) + 1; }); })();
-const F1_POOL = [f1a, f1b];
+const FLOW_MOBILE_ANTERIOR = ['tapa', 'legis-diputados', 'legis-senadores', 'f1', 'textos', 'f1', 'trio', 'linea', 'f2', 'linea', 'secciones', 'anunciantes', 'banner'];   // toda la publicidad al final, después de la franja de secciones
+/* home=pdf (default): el diseño de Juan (PDF "DISEÑO DB"). Se arma por etapas; por ahora igual al anterior. */
+const FLOW_PDF = [...FLOW_ANTERIOR];
+const FLOW_MOBILE_PDF = [...FLOW_MOBILE_ANTERIOR];
+const mobilePosOf = (FL, FM) => { const seen = {}; return FL.map(k => { const nth = seen[k] = (seen[k] ?? -1) + 1; let c = -1; return FM.findIndex(m => m === k && ++c === nth) + 1; }); };
+const F1_POOL = () => [f1a, f1b];
 let f1i = 0;
 const BLOCKS = {
   tapa: () => band(`<div class="tapa">
@@ -320,12 +332,12 @@ const BLOCKS = {
   'legis-diputados': () => legOne('Diputados', 'Diputados', 'diputados'),
   'legis-senadores': () => legOne('Senado', 'Senadores', 'senadores'),
   // Formato 1: 4 notas, 2×2, título arriba de la foto, fondo blanco
-  f1: () => { const k = f1i++; const cs = (F1_POOL[k] || []).map(n => card(n, { t: 'med', tf: true, dek: true, big: true, sizes: SZ.s6 }));
+  f1: () => { const k = f1i++; const cs = (F1_POOL()[k] || []).map(n => card(n, { t: 'med', tf: true, dek: true, big: true, sizes: SZ.s6 }));
     /* v2.3.2: en el 1.º Formato 1 el rodante horizontal va entre la fila de arriba (2 notas) y la de abajo (2 notas); solo desktop */
     const body = k === 0 ? [...cs.slice(0, 2), `<div class="f1__ad">${adZoneH()}</div>`, ...cs.slice(2)] : cs;
     return band(`<div class="flow vr cols-2 f1${k === 0 ? ' f1--ad' : ''}">${body.join('')}</div>`, 'f1band' + (k === 1 ? ' rv-a2' : '')); },
   // ritmo=b: una nota grande y dos chicas con foto al costado (reemplaza al 2.º Formato 1; usa 3 de sus 4 notas)
-  trio: () => { const [g, c1, c2] = F1_POOL[1]; return band(`<div class="trio"><div class="trio__main">${card(g, { t: 'med', h: 2, big: true, sizes: SZ.s6 })}</div><div class="trio__side">${card(c1, { t: 'sm' })}${card(c2, { t: 'sm' })}</div></div>`, 'rv rv-b'); },
+  trio: () => { const [g, c1, c2] = F1_POOL()[1]; return band(`<div class="trio"><div class="trio__main">${card(g, { t: 'med', h: 2, big: true, sizes: SZ.s6 })}</div><div class="trio__side">${card(c1, { t: 'sm' })}${card(c2, { t: 'sm' })}</div></div>`, 'rv rv-b'); },
   // ritmo=c: bloque de solo texto entre dos bloques con foto, para cortar la grilla
   textos: () => band(`<div class="solotxt vr cols-3">${textoN.map(n => card(n, { t: 'txt' })).join('')}</div>`, 'rv rv-c'),
   // Formato 2: 8 notas, 2 columnas × 4 filas, foto a la izquierda, fondo suave
@@ -336,14 +348,21 @@ const BLOCKS = {
   secciones: () => band(`<div class="strip vr cols-4" aria-label="Secciones">${mods.map(([cat, ns]) => `<section class="strip__col" aria-label="${cat}">${secTitle(cat, null)}
   ${card(ns[0], { t: 'med' })}<div class="list">${ns.slice(1).map(n => card(n, { t: 'txt' })).join('')}</div><a class="strip__more" href="#" data-stub="Sección no incluida en la maqueta.">Ver más de ${cat}</a></section>`).join('')}</div>`, 'stripband'),
 };
-write('index.html', `${head('Diputados Bonaerenses · Maqueta', { extra: `<link rel="preload" as="image" fetchpriority="high" imagesrcset="assets/img/notas/${hero.id}-m.webp ${D(hero, 'm')[0]}w, assets/img/notas/${hero.id}-full.webp ${D(hero, 'full')[0]}w" imagesizes="(min-width:1024px) 700px, 100vw">` })}
+/* Arma una versión del inicio: file = archivo, FL/FM = bloques desktop/mobile, page = 'pdf' | 'anterior' (para el redireccionamiento por ?home=) */
+const renderHome = (file, FL, FM, page) => {
+  used.clear(); allocate(); f1i = 0;
+  const mob = mobilePosOf(FL, FM);
+  write(file, `${head('Diputados Bonaerenses · Maqueta', { page, extra: `<link rel="preload" as="image" fetchpriority="high" imagesrcset="assets/img/notas/${hero.id}-m.webp ${D(hero, 'm')[0]}w, assets/img/notas/${hero.id}-full.webp ${D(hero, 'full')[0]}w" imagesizes="(min-width:1024px) 700px, 100vw">` })}
 ${header('index.html')}
 <main id="main" class="home">
 <h1 class="sr">Diputados Bonaerenses: noticias de la Legislatura Bonaerense</h1>
 ${superNotes.map(superBlock).join('\n')}
-${FLOW.map((k, i) => BLOCKS[k]().replace(/^<(\w+)/, `<$1 style="--o:${mobilePos[i]}"`)).join('\n')}
+${FL.map((k, i) => BLOCKS[k]().replace(/^<(\w+)/, `<$1 style="--o:${mob[i]}"`)).join('\n')}
 </main>
 ${footer()}`);
+};
+renderHome('index-anterior.html', FLOW_ANTERIOR, FLOW_MOBILE_ANTERIOR, 'anterior');
+renderHome('index.html', FLOW_PDF, FLOW_MOBILE_PDF, 'pdf');
 
 /* ================================================================ páginas de nota */
 const shareText = n => encodeURIComponent(`${n.titulo} ${n.url}`);

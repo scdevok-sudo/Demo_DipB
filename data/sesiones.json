@@ -1,0 +1,7 @@
+{
+  "_nota": "DATOS DE EJEMPLO del contador de sesiones (diseño a definir). En produccion sera un shortcode o widget propio de WordPress (Hito 2).",
+  "anio": 2026,
+  "diputados": 38,
+  "senado": 24,
+  "ultima": { "camara": "Diputados", "fecha": "2026-10-29" }
+}

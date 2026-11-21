@@ -1,0 +1,9 @@
+{
+  "_nota": "ENCUESTA DE EJEMPLO (diseño a definir). Estado solo en memoria: no se guarda el voto. En produccion sera un shortcode o widget propio de WordPress (Hito 2).",
+  "pregunta": "¿Qué tema debería priorizar la Legislatura este mes?",
+  "opciones": [
+    { "id": "seguridad", "texto": "Seguridad", "votos": 412 },
+    { "id": "salud", "texto": "Salud", "votos": 268 },
+    { "id": "educacion", "texto": "Educación", "votos": 305 }
+  ]
+}
