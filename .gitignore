@@ -1,3 +1,5 @@
 capturas-tmp/
 node_modules/
 tools/node_modules/
+capturas/
+data/09_usuarios.csv

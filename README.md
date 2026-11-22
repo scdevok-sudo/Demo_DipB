@@ -41,7 +41,7 @@ Bloques: `tapa · legis-diputados · legis-senadores · f1 · f2 · banner · li
 **Volanta de Legislatura**: `SHOW_LEGISLATURA_LABEL = false` en `build.mjs` omite el texto "Legislatura Bonaerense" en las notas de esa categoría (tapa, formatos, listas laterales y notas vinculadas); las demás categorías conservan su volanta. Ponerlo en `true` lo revierte. No hay título "Legislatura Bonaerense" encima de ningún bloque; la página de la sección sí lo lleva. El dateline "LA PLATA" se mantiene.
 
 ## v2.5 · Inicio según el PDF "DISEÑO DB" de Juan (`home=pdf`, default)
-Auditoría punto por punto contra el brief y el PDF: `capturas/auditoria-v2-5.md`.
+Auditoría punto por punto contra el brief y el PDF: `auditorias/auditoria-v2-5.md`.
 
 **Flujo desktop** (`FLOW_PDF` en `build.mjs`, una lista; mover un bloque = mover una palabra):
 ```
@@ -203,7 +203,7 @@ Retratos de `randomuser.me` en `assets/img/fantasia/01..24.jpg`, **128×128 y no
 
 **Después de la etapa F (ritmo):** index LCP 2,18 a 2,48 s en 5 corridas (con `ritmo=b` 2,42 s, con `c` 2,47 s), CLS 0,0000 a 0,0001; en una tanda de corridas seguidas con otros procesos en la máquina salieron 3,08 y 3,22 s, que no se repitieron al correrlo solo.
 
-**Medición v2.3 (16/11, `tools/perf.mjs`, mismo método):** index LCP 2,05 a 2,41 s · CLS 0; seccion 1,64 s; nota 1,98 s; diputados 1,96 s; senadores 1,96 s; legislador 1,71 s; todos con CLS 0,0000. Fuentes por defecto: Source Serif 4 (49,7 KB) + Inter (47,1 KB); alternativas Merriweather (95,3 KB) y Literata (38,1 KB). CSS minificado 46,1 KB (9,8 KB gzip). Detalle y auditoría punto por punto en `capturas/auditoria-v2-3.md` (`tools/audit-v23.mjs`).
+**Medición v2.3 (16/11, `tools/perf.mjs`, mismo método):** index LCP 2,05 a 2,41 s · CLS 0; seccion 1,64 s; nota 1,98 s; diputados 1,96 s; senadores 1,96 s; legislador 1,71 s; todos con CLS 0,0000. Fuentes por defecto: Source Serif 4 (49,7 KB) + Inter (47,1 KB); alternativas Merriweather (95,3 KB) y Literata (38,1 KB). CSS minificado 46,1 KB (9,8 KB gzip). Detalle y auditoría punto por punto en `auditorias/auditoria-v2-3.md` (`tools/audit-v23.mjs`).
 
 **Medición v2.2 (13/11, `tools/perf.mjs`, 390 px, CPU ×4, red 1,6 Mbps / 150 ms, con scroll hasta el final):** index LCP 2,04 s · CLS 0,0000; seccion LCP 1,86 s · CLS 0,0000; diputados LCP 1,78 s · CLS 0,0000. No hizo falta ajustar el esqueleto ni el espacio del zócalo.
 **404:** era `/favicon.ico` (las páginas no declaraban ícono). Se agregó `assets/img/favicon.svg` y `<link rel="icon">`; `tools/find404.mjs` recorre todas las páginas a 390 y 1280 px y ya no reporta errores.
@@ -216,7 +216,7 @@ Archivos listos: `robots.txt` (`Disallow: /`), `_headers` y `netlify.toml` (Netl
 4. No enlazar la URL desde ningún sitio público. Probar `curl -I <url>` y verificar el `X-Robots-Tag`.
 
 ## v2.3.1 · cambios posteriores a la aprobación de G y F
-Un commit por punto, sin push. Auditoría en `capturas/auditoria-v2-3.md` (sección v2.3.1) y `tools/audit-v231.mjs`.
+Un commit por punto, sin push. Auditoría en `auditorias/auditoria-v2-3.md` (sección v2.3.1) y `tools/audit-v231.mjs`.
 1. **Un solo rodante horizontal en desktop.** `HROT` ahora incluye el banner de Banco Provincia (`BANNER_HORIZ_ID`) como primera slide: 7 slides, flechas y puntos en un único módulo. Se sacó el banner suelto del flujo de desktop (el bloque `banner` quedó al final de `FLOW` y se oculta ≥ 768 px). El rodante de cuadrados es otro módulo y no cambió.
 2. **Publicidad lateral** (nota, perfil y `seccion.html`; reemplazada en v2.3.3 por un rodante, ver abajo): un solo banner (`adSide()`), 300×250 como máximo, `position: sticky`, sin placeholder beige ni rótulo y con `object-fit: contain`, así que el logo no se corta ni domina la columna. En la nota, si Leé también + banner no entran en la altura de la ventana (≤ 960 px), solo el banner queda fijo y Leé también corre con la nota. En mobile el banner del perfil queda al final y la nota usa el rodante 300×300 de `ad-end`.
 3. **Pie de foto:** sin cambios (se mantiene en la nota y no aparece en el home).
@@ -255,7 +255,7 @@ Con `tools/perf.mjs` (Playwright con Chromium, servidor local en `:8765`): viewp
 CLS queda por debajo de 0,1 en todas las páginas y el LCP del index (alrededor de 2 s) está en el rango anterior o algo por debajo (la medición de v2.3.1 daba 2,08 a 2,39 s); la variación entre corridas y sesiones es de unos 0,3 s, así que no hay una mejora real que atribuir a estos cambios.
 
 ## v2.4 · Feedback de Juan sobre el mobile (17/11)
-Auditoría y medidas en `capturas/auditoria-v2-4.md`. Scripts: `tools/audit-v24.mjs` y `tools/audit-v24-espaciado.mjs`.
+Auditoría y medidas en `auditorias/auditoria-v2-4.md`. Scripts: `tools/audit-v24.mjs` y `tools/audit-v24-espaciado.mjs`.
 - **Tipografía**: `peso` default 700 (antes 800) en mobile y desktop. Títulos mobile más chicos (tapa 27 px, superdestacada 26 px, tarjetas 22 px) con interlineado 1,15 a 1,17. La tapa de Minnaard sale en 3 líneas en 360, 390 y 412 px. El cuerpo de la nota no se tocó. Probadas las 9 combinaciones fuente × peso a 390 px: ninguna se rompe; Literata en 700/800 es la más ancha y Merriweather casi no cambia entre 600 y 800.
 - **Espaciado vertical (mobile)**: entre el contenido de una tarjeta y el de la siguiente quedan 25 px (24 de aire + el filete de 1 px) en tapa, Formato 1, Formato 2 y secciones, medido en 360, 390 y 412 px; sin dobles márgenes (cintillo, tapa, `min-height` de las filas de sección). En `seccion.html` la tapa queda a ~41 px de la primera fila, con la doble línea gruesa. Desktop: solo se recortaron bandas y doble línea (32 a 24 px) y el aire doble entre dos filas de Formato 1.
 - **Formato 2 y `tapa2=chica` (mobile)**: foto cuadrada a la derecha, 32% del ancho en 390 y 412 px (115 y 122 px) y 30% en pantallas de hasta 375 px, título de 20 px (19 px en ≤ 375 px), sin bajada. Caso conocido: la nota de Nanni ("Nanni exige la finalización de la colectora…") sale en 6 líneas; no se acortó el título.
@@ -264,7 +264,7 @@ Auditoría y medidas en `capturas/auditoria-v2-4.md`. Scripts: `tools/audit-v24.
 - **Medición de CLS y LCP v2.4** (`tools/perf.mjs`, mismo método que arriba): index LCP 2,06 s en la tanda y 2,07 a 2,20 s en corridas sueltas; seccion 2,35 s en la tanda y 1,94 a 2,00 s en corridas sueltas; nota 1,85 s; diputados 1,80 s; senadores 1,81 s; legislador 1,52 s. CLS 0,0000 a 0,0001 en todas, también en `seccion.html` sin el `min-height` de las filas.
 
 ## v2.4.1 · Paleta oficial
-Tokens en `:root` de `assets/css/main.css`: `--brand-sky` #3daef4 (barra superior, ítem activo del menú, placeholders), `--brand-blue` #1b75bb (barra de menú, cintillos y acentos, etiquetas de sección, botones, pie de página) y `--ink` #222 (texto y botón Buscar). El navy anterior (#0b2236) ya no se usa en ningún lado; solo vive dentro de `html[data-header="actual"]` para comparar. Los colores nuevos de cualquier etapa siguiente salen de estos tokens. Sobre fondos grises (#eee, #f2f2f2) el texto azul chico usa `--brand-blue-dk` para llegar a AA. Contraste AA verificado con `tools/audit-contraste.mjs` (tabla de pares en `capturas/auditoria-v2-4.md`, sección 9). Pendiente: el logo blanco sobre `--brand-sky` da 2,45:1 (ver auditoría).
+Tokens en `:root` de `assets/css/main.css`: `--brand-sky` #3daef4 (barra superior, ítem activo del menú, placeholders), `--brand-blue` #1b75bb (barra de menú, cintillos y acentos, etiquetas de sección, botones, pie de página) y `--ink` #222 (texto y botón Buscar). El navy anterior (#0b2236) ya no se usa en ningún lado; solo vive dentro de `html[data-header="actual"]` para comparar. Los colores nuevos de cualquier etapa siguiente salen de estos tokens. Sobre fondos grises (#eee, #f2f2f2) el texto azul chico usa `--brand-blue-dk` para llegar a AA. Contraste AA verificado con `tools/audit-contraste.mjs` (tabla de pares en `auditorias/auditoria-v2-4.md`, sección 9). Pendiente: el logo blanco sobre `--brand-sky` da 2,45:1 (ver auditoría).
 
 ## Pendientes
 - **Logo**: se reemplazó por `logo-big.png` del sitio actual (781×100, blanco sobre transparente, ~2.6× a 300 px). Sigue sin ser vectorial: si Santi consigue el SVG, reemplazar `assets/img/logo-dark.png` (o ajustar `LOGO` en `build.mjs`).
