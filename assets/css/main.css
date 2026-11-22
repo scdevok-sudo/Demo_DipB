@@ -950,3 +950,6 @@ html[data-header="actual"]{--header-bg:#0b2236}
 /* ============ v2.5 · lupa del buscador del header (--brand-sky): fondo propio para que no quede floja (blanco sobre celeste = 2,45:1) ============ */
 html:not([data-header="actual"]) .hdr__main .ibtn{background:var(--ink);color:#fff}
 html:not([data-header="actual"]) .hdr__main .ibtn:hover{background:#000;color:#fff}
+
+/* v2.5 etapa C ajuste · en las dos tarjetas chicas del uno-dos (y su espejo) no va etiqueta de seccion sobre la foto: el cintillo ya la dice. Excepcion solo de ese bloque */
+.ud__side .fig>.sectag{display:none}
