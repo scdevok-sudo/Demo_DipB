@@ -20,7 +20,6 @@
   --paper:#fff;--paper-tint:#f6f3ee;--tint-blue:#eef6fd;
   --font-title:"Source Serif 4","Serif Fallback",Georgia,"Times New Roman",serif;
   --font-ui:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --super-bg:#141414;
   --cintillo-color:var(--accent-text);--modulo-legisladores-bg:#eeeeee;--fondo-f2:#f2f2f2;--filete-modulo:#d6d6d6;--seccion-bg:var(--brand-blue);--seccion-fg:#fff;--seccion-texto:var(--muted);--header-bg:var(--brand-sky);--recomendadas-bg:#fbf1e3;
   --s1:8px;--s2:16px;--s3:24px;--s4:32px;--s5:48px;--s6:64px;
   --wrap:1240px;--gut:16px;--gap:16px;
@@ -210,28 +209,36 @@ html[data-seccion="abajo"] .fig>.sectag{grid-area:2/1;align-self:start;justify-s
 .strip .list>.card:first-child{padding-top:14px;border-top:1px solid var(--rule-hair)}
 html[data-diario="off"] .list>.card,html[data-diario="off"] .strip .list>.card:first-child{border-top-color:transparent}
 
-/* ---------- Superdestacada (opcional, apagada por defecto; se apila) ---------- */
+/* ---------- Superdestacada (opcional, apagada por defecto: super=1 carrusel con foto, super=2 solo texto) ---------- */
 .super{display:none;margin:0}
-html[data-super="foto"] .super[data-s="1"],html[data-super="texto"] .super[data-s="2"],
-html[data-super="2"] .super[data-s="1"],html[data-super="2"] .super[data-s="2"],html[data-super="3"] .super{display:block}
-.super--foto{padding:var(--s3) 0 0}
-.super--foto .thumb{aspect-ratio:auto;height:56svh;width:calc(100% + 2 * var(--gut));margin-inline:calc(var(--gut) * -1)}
-.super--foto .card__txt{margin-top:var(--s2)}
-.super--foto h2{font-size:34px;line-height:1.08;font-weight:800;margin-bottom:8px}
-.super--foto .cap{margin-inline:0}
-.super--texto{background:var(--super-bg);color:#fff;margin-top:var(--s3)}
-.super--foto+.super--texto,.super--texto+.super--foto{margin-top:var(--s3)}
-.super__in{display:block;text-align:center;padding:var(--s5) 0 var(--s5)}
-.super__in:hover{color:#fff}
-.super__kicker{display:inline-block;font:700 12px/1 var(--font-ui);letter-spacing:.1em;text-transform:uppercase;color:#cfe9fb;margin-bottom:16px}
-.super__kicker i{font-style:normal;margin-left:4px}
-.super--texto h2{font-size:clamp(34px,6vw,72px);line-height:1.05;font-weight:700;max-width:26ch;margin:0 auto;color:#fff}
+html[data-super="1"] .super[data-s="1"],html[data-super="2"] .super[data-s="2"]{display:block}
+.super--foto{padding:var(--s3) 0 var(--s1)}
+.scar__track{display:grid}
+.scar__slide{grid-area:1/1;visibility:hidden;min-width:0}
+.scar__slide.is-on{visibility:visible}
+.scar__slide h2{font-size:26px;line-height:1.17;margin:0 0 4px;max-width:30ch}
+.scar__slide .autor{margin:0 0 12px}
+.scar__stage{position:relative}
+.scar .thumb{aspect-ratio:16/10;height:auto;width:100%}
+.scar__btn{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border:0;border-radius:50%;background:rgba(255,255,255,.92);color:var(--ink);font:400 30px/1 var(--font-ui);padding:0 0 4px;cursor:pointer;box-shadow:0 1px 6px rgba(0,0,0,.3);z-index:3}
+.scar__btn:hover{background:#fff}
+.scar__btn--prev{left:10px}.scar__btn--next{right:10px}
+.scar__dots{display:flex;justify-content:center;gap:2px;margin-top:6px}
+.scar__dot{width:26px;height:26px;border:0;background:none;padding:0;cursor:pointer;position:relative}
+.scar__dot::after{content:"";position:absolute;inset:8px;border-radius:50%;background:#8a8a8a}
+.scar__dot[aria-current="true"]::after{background:var(--brand-blue)}
+.super--texto{padding:var(--s3) 0}
+.stext{text-align:center;border-block:1px solid var(--ink);padding:26px 0 24px}
+.stext .cintillo{display:block;margin:0 0 10px}
+.stext h2{font-size:30px;line-height:1.12;max-width:24ch;margin:0 auto 10px}
+.stext .autor{margin:0}
 @media (min-width:768px){
-  .super--foto .thumb{aspect-ratio:16/8;height:auto;width:100%;margin-inline:0;max-height:620px}
-  .super--foto h2{font-size:clamp(40px,4.4vw,56px);max-width:28ch}
-  .super--foto .dek{font-size:20px;max-width:70ch}
+  .scar .thumb{aspect-ratio:12/5;max-height:520px}
+  .scar__slide h2{font-size:clamp(34px,3.6vw,46px);line-height:1.1;max-width:32ch}
+  .scar__slide .cintillo{font-size:18px}
+  .stext{padding:38px 0 34px}
+  .stext h2{font-size:clamp(38px,4.6vw,58px);line-height:1.08}
 }
-html[data-diario="off"] .super--texto{background:#1b1b1b}
 
 /* ---------- Tapa de 3 notas ---------- */
 .band{padding:var(--s3) 0}
@@ -880,7 +887,6 @@ html[data-peso="900"]{--titulo-peso:900}
    La caja de la cabecera de la nota (.art__meta) no se toca. ?etiqueta=caja vuelve a la caja de la v2.3. */
 html:not([data-etiqueta="caja"]) .sectag--t{font-size:11.5px;font-weight:600;letter-spacing:.04em;padding:0;background:none;color:var(--seccion-texto);border-radius:0}
 html:not([data-etiqueta="caja"]) .sectag--t:not(.sectag--cmp){margin-top:6px}
-html:not([data-etiqueta="caja"]) .super--texto .sectag--t{color:rgba(255,255,255,.72)}
 html:not([data-etiqueta="caja"]) .aside .sectag--t{font-size:10.5px}
 html:not([data-etiqueta="caja"]) .art__meta .sectag--t{font-size:11px;font-weight:700;letter-spacing:.06em;padding:3px 8px;background:var(--seccion-bg);color:var(--seccion-fg);border-radius:2px;margin-top:0}
 html:not([data-etiqueta="caja"]) .fig>.sectag{font-size:10px;padding:2px 6px}
@@ -1043,3 +1049,25 @@ html[data-demo] .fr__tbd{display:block}
   html[data-demo] .fr__tbd{position:static;display:block;flex:0 0 100%;text-align:right;margin:0 0 -4px;border:0;background:none;padding:0;font-size:8.5px}
 }
 @media (max-width:380px){.fr__m{font-size:10.5px}}
+
+/* ============ v2.5 etapa G · opcionales del PDF (apagados por defecto): texto3=1 y grilla4=1 ============ */
+.optband{display:none}
+html[data-texto3="1"] .t3band,html[data-grilla4="1"] .g4band{display:block}
+.t3band{padding:22px 0}
+.t3 .card--t3{padding:0}
+.t3 h3{font-size:22px;line-height:1.17}
+.g4band{padding:22px 0}
+.g4{display:grid;gap:12px}
+.card--g4 h3{font-size:17px}
+@media (min-width:768px){
+  .t3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:calc(var(--gap) * 2);row-gap:0}
+  .t3 .card--t3{position:relative}
+  .t3 .card--t3+.card--t3::before{content:"";position:absolute;left:calc(var(--gap) * -1);top:0;bottom:0;border-left:1px solid var(--rule-hair)}
+  html[data-diario="off"] .t3 .card--t3::before{display:none}
+  .g4{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+}
+@media (max-width:767px){
+  .t3 .card--t3+.card--t3{border-top:1px solid var(--filete-suave);margin-top:12px;padding-top:12px}
+  .t3band,.g4band{padding:16px 0}
+  .g4 .card--g4:nth-child(n+4){display:none}
+}

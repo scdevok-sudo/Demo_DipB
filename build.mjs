@@ -20,14 +20,14 @@ const SHOW_FECHA_EN_NOTA = true;    // dentro de la página de la nota se conser
 const SHOW_TAPA_RELACIONADAS = false; // desktop: false oculta las 2 notas relacionadas (con guión) bajo la bajada de la nota principal; el markup se conserva, true las vuelve a mostrar
 const HEADER_MENU_MOBILE = false;   // mobile: false = las tres barritas viven solo en el zócalo; true = también arriba a la derecha
 /* Valores por defecto de cada parámetro (se pisan con ?param=valor, que se recuerda en la sesión). Ver README. */
-const DEFAULTS = { seccion: 'foto', super: 'off', tapa: 'texto-izq', vermas: 'flecha', bajada: 'auto', ad: 'on', fondos: 'on', fotos: 'ejemplo', font: 'actual', hora: 'off', diario: 'on', credito: 'on', tiempo: 'off', peso: '700', tapa2: 'normal', ritmo: 'actual', etiqueta: 'texto', header: 'prod', home: 'pdf' };
+const DEFAULTS = { seccion: 'foto', super: 'off', texto3: 'off', grilla4: 'off', tapa: 'texto-izq', vermas: 'flecha', bajada: 'auto', ad: 'on', fondos: 'on', fotos: 'ejemplo', font: 'actual', hora: 'off', diario: 'on', credito: 'on', tiempo: 'off', peso: '700', tapa2: 'normal', ritmo: 'actual', etiqueta: 'texto', header: 'prod', home: 'pdf' };
 const OPTIONS = {
-  seccion: ['foto', 'abajo'], super: ['off', 'foto', 'texto', '2', '3'], tapa: ['texto-izq', 'foto-izq'], vermas: ['flecha', 'boton'], bajada: ['auto', 'on', 'off'],
+  seccion: ['foto', 'abajo'], super: ['off', '1', '2'], texto3: ['off', '1'], grilla4: ['off', '1'], tapa: ['texto-izq', 'foto-izq'], vermas: ['flecha', 'boton'], bajada: ['auto', 'on', 'off'],
   ad: ['on', 'off'], fondos: ['on', 'off'], fotos: ['ejemplo', 'iniciales'], font: ['actual', 'merriweather', 'literata'], hora: ['on', 'off'], diario: ['on', 'off'], credito: ['on', 'off'], tiempo: ['off', 'on'], peso: ['600', '700', '800', '900'], tapa2: ['normal', 'chica'], ritmo: ['actual', 'b', 'c'], etiqueta: ['texto', 'caja'], header: ['prod', 'actual'], home: ['pdf', 'anterior'],
 };
 
 /* Alias de valores viejos de parámetros (los links ya compartidos siguen funcionando) */
-const ALIAS = { header: { marca: 'prod', marca2: 'prod' }, font: { a: 'actual', b: 'merriweather' }, tapa: { izq: 'foto-izq', der: 'texto-izq' } };
+const ALIAS = { super: { foto: '1', texto: '2', '3': '1' }, header: { marca: 'prod', marca2: 'prod' }, font: { a: 'actual', b: 'merriweather' }, tapa: { izq: 'foto-izq', der: 'texto-izq' } };
 
 /* CSS: main.css es la fuente; se minifica a main.min.css (menos bytes bloqueando el primer render). No editar el .min a mano. */
 { const css = rd('assets/css/main.css').replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s+/g, ' ').replace(/\s*([{};,>])\s*/g, '$1').replace(/;}/g, '}').trim();
@@ -97,7 +97,7 @@ const take = (pool, k, pred = () => true) => {
   return r;
 };
 const SECCIONES = ['Congreso', 'Nación', 'Provincia', 'Municipios'];
-let hero, tapa2, tapa, mods, superNotes, flow, f1a, f1b, f2n, textoN;
+let hero, tapa2, tapa, mods, superNotes, superTexto, flow, f1a, f1b, f2n, textoN;
 let recom, unodosA, unodosB, f2d, f2s, grid3, text3, grid4;   // solo home=pdf
 let curPage = 'pdf';
 /* Reparto de notas del home. Se llama una vez por cada versión del inicio (index.html = home=pdf, index-anterior.html = home=anterior): cada una arranca con las notas libres. */
@@ -108,12 +108,12 @@ tapa = [hero, ...tapa2];
 if (kind === 'pdf') recom = recomendadas.ids.map(id => { const n = all.get(id); if (!n || !hasImg(n)) throw new Error('recomendadas.json: la nota ' + id + ' no existe o no tiene foto'); return use(n); });   // exactamente 3, fijas (se reservan antes que la franja de secciones para que no se repitan ahi)
 // franja de secciones (reservada primero para que el flujo se arme con lo que sobra, mayormente Legislatura)
 mods = SECCIONES.map(c => { const p = pub.filter(n => n.categorias.includes(c)); const ph = take(p, 1, hasImg); return [c, [...ph, ...take(p, 2)]]; });
-// superdestacadas de demostración (recurso a demanda): el campo `super` de la nota manda; si no hay, se usan sobrantes con foto grande
+// superdestacadas de demostración (recurso a demanda, apagadas por defecto): super=1 es un carrusel de 3 notas con foto grande (el campo `super: "foto"` de la nota manda; si no, sobrantes);
+// super=2 es una nota de solo texto (campo `super: "texto"`, o una nota sobrante que se toma AL FINAL para no alterar el reparto del resto del home)
 superNotes = (() => {
-  const marked = pub.filter(n => n.super === 'foto' || n.super === 'texto');
-  const left = pub.filter(n => !used.has(n.id) && D(n, 'full'));
-  const s = [marked[0] || left[0], marked[1] || left[1], marked[2] || left[2]];
-  return s.map((n, i) => ({ n: use(n), kind: n.super || (i === 1 ? 'texto' : 'foto') }));
+  const marked = pub.filter(n => n.super === 'foto' && !used.has(n.id) && D(n, 'full'));
+  const left = pub.filter(n => !used.has(n.id) && D(n, 'full') && !marked.includes(n));
+  return [...marked, ...left].slice(0, 3).map(use);
 })();
 flow = pub.filter(n => !used.has(n.id) && hasImg(n));
 const mk = k => take(flow, k, hasImg);
@@ -127,6 +127,7 @@ if (kind === 'pdf') {
   f1a = mk(4); f1b = mk(4); f2n = mk(8);   // 19 notas en el flujo: 3 (tapa) + 4 + 4 + 8
   textoN = mk(6);   // ritmo=c: bloque de solo texto (cintillo y título, sin foto)
 }
+superTexto = use(pub.find(n => n.super === 'texto' && !used.has(n.id)) || pub.find(n => !used.has(n.id)));
 };
 const ticker = pub.slice(0, 5);
 const legPool = pub.filter(isLeg);
@@ -209,7 +210,7 @@ const card = (n, { t = 'med', dek = false, h = 3, tf = false, cap = false, eager
   const meta = `<div class="meta">${rel(n)}</div>`;
   const au = by ? `<span class="autor${by === 'por' ? ' autor--por' : ''}">${by === 'por' ? 'Por ' : ''}${esc(n.autor)}</span>` : '';   // autor de FANTASIA (data/autores.json): 'caps' = MAYÚSCULAS grises chicas, 'por' = "Por …"
   const dk = dek ? `<p class="dek">${esc(n.extracto)}</p>` : '';   // dekAfter: la bajada va después de la foto (tapa del PDF: cintillo y título, foto, bajada)
-  if (t === 'txt') return `<article class="card card--txt ${cls}">${kicker}${title}${below}${meta}</article>`;
+  if (t === 'txt') return `<article class="card card--txt ${cls}">${kicker}${title}${below}${au}${meta}</article>`;
   if (t === 'sm') return `<article class="card card--sm ${cls}"><div class="card__txt">${kicker}${title}${below}${meta}</div>${thumb(n, { sizes: SZ.sm })}</article>`;
   const f = fig(n, { sizes, big, eager, cap, alt: eager ? n.titulo : '' });
   const txt = `<div class="card__txt">${kicker}${title}${f ? secTag(n, 'sectag--t sectag--cmp') : below}${dekAfter ? '' : dk}${au}${meta}</div>`;
@@ -312,9 +313,12 @@ const legOne = (cam, titulo, href) => { const L = legs.filter(l => l.cam === cam
 </div></section>`; };
 
 /* ================================================================ superdestacada (recurso a demanda, apilable) */
-const superBlock = ({ n, kind }, i) => kind === 'texto'
-  ? `<section class="super super--texto" data-s="${i + 1}" aria-label="Superdestacada"><div class="wrap"><a class="super__in" href="${noteHref(n)}"><span class="super__kicker">${esc(cintillos[n.id] || '')} <i aria-hidden="true">›</i></span><h2>${esc(n.titulo)}</h2>${secTag(n, 'sectag--t')}</a></div></section>`
-  : `<section class="super super--foto" data-s="${i + 1}" aria-label="Superdestacada"><div class="wrap"><article class="card card--super">${fig(n, { sizes: SZ.full, big: true, alt: n.titulo })}<div class="card__txt">${kick(n)}<h2><a href="${noteHref(n)}">${esc(n.titulo)}</a></h2><p class="dek">${esc(n.extracto)}</p><div class="meta">${rel(n)}</div></div></article></div></section>`;
+/* super=1: carrusel de 3 notas (cintillo, titulo ARRIBA de la foto, "Por autor", foto ~2,4:1) con flechas sobre la foto y puntos; las 3 diapositivas se apilan en la misma celda de una grilla para que la altura no salte al cambiar */
+const superFoto = () => `<section class="super super--foto" data-s="1" aria-roledescription="carrusel" aria-label="Superdestacada: 3 notas"><div class="wrap"><div class="scar" data-scar><div class="scar__track">${superNotes.map((n, i) => `<article class="scar__slide${i ? '' : ' is-on'}" aria-label="${i + 1} de ${superNotes.length}"${i ? ' aria-hidden="true"' : ''}>${kick(n)}<h2><a href="${noteHref(n)}"${i ? ' tabindex="-1"' : ''}>${esc(n.titulo)}</a></h2><span class="autor autor--por">Por ${esc(n.autor)}</span>
+<div class="scar__stage">${fig(n, { sizes: SZ.full, big: true, alt: n.titulo })}<button type="button" class="scar__btn scar__btn--prev" data-d="-1" aria-label="Nota anterior">‹</button><button type="button" class="scar__btn scar__btn--next" data-d="1" aria-label="Nota siguiente">›</button></div>
+<div class="scar__dots">${superNotes.map((_, j) => `<button type="button" class="scar__dot" data-i="${j}" aria-label="Ir a la nota ${j + 1} de ${superNotes.length}"${j === i ? ' aria-current="true"' : ''}></button>`).join('')}</div></article>`).join('')}</div></div></div></section>`;
+/* super=2: solo texto, centrado, sin foto: cintillo, titulo grande, "Por autor", entre dos filetes finos */
+const superSoloTexto = () => { const n = superTexto; return `<section class="super super--texto" data-s="2" aria-label="Superdestacada"><div class="wrap"><div class="stext">${kick(n)}<h2><a href="${noteHref(n)}">${esc(n.titulo)}</a></h2><span class="autor autor--por">Por ${esc(n.autor)}</span></div></div></section>`; };
 
 /* ================================================================ index.html */
 const band = (inner, cls = '') => `<section class="band ${cls}"><div class="wrap">${inner}</div></section>`;
@@ -328,8 +332,8 @@ const FLOW_ANTERIOR = ['tapa', 'legis-diputados', 'f1', 'textos', 'f1', 'trio', 
 /* Orden propio para mobile (< 768 px): los dos módulos de legisladores van consecutivos. El FLOW de desktop no se toca: cada bloque lleva su posición mobile en --o y el CSS lo reordena solo en pantallas chicas. */
 const FLOW_MOBILE_ANTERIOR = ['tapa', 'legis-diputados', 'legis-senadores', 'f1', 'textos', 'f1', 'trio', 'linea', 'f2', 'linea', 'secciones', 'anunciantes', 'banner'];   // toda la publicidad al final, después de la franja de secciones
 /* home=pdf (default): el diseño de Juan (PDF "DISEÑO DB"). Se arma por etapas; por ahora igual al anterior. */
-const FLOW_PDF = ['tapa', 'uno-dos', 'legis-diputados', 'uno-dos-espejo', 'rodante-h', 'f2d', 'anunciantes', 'legis-senadores', 'f2s', 'recomendadas', 'grilla3', 'linea', 'secciones', 'banner'];   // se completa por etapas: franja, recomendadas y grilla3
-const FLOW_MOBILE_PDF = ['tapa', 'uno-dos', 'legis-diputados', 'legis-senadores', 'uno-dos-espejo', 'f2d', 'f2s', 'recomendadas', 'grilla3', 'linea', 'secciones', 'anunciantes', 'banner'];   // 'rodante-h' es solo desktop
+const FLOW_PDF = ['tapa', 'uno-dos', 'legis-diputados', 'uno-dos-espejo', 'rodante-h', 'f2d', 'anunciantes', 'legis-senadores', 'f2s', 'recomendadas', 'grilla3', 'texto3', 'grilla4', 'linea', 'secciones', 'banner'];   // se completa por etapas: franja, recomendadas y grilla3
+const FLOW_MOBILE_PDF = ['tapa', 'uno-dos', 'legis-diputados', 'legis-senadores', 'uno-dos-espejo', 'f2d', 'f2s', 'recomendadas', 'grilla3', 'texto3', 'grilla4', 'linea', 'secciones', 'anunciantes', 'banner'];   // 'rodante-h' es solo desktop
 const mobilePosOf = (FL, FM) => { const seen = {}; return FL.map(k => { const nth = seen[k] = (seen[k] ?? -1) + 1; let c = -1; return FM.findIndex(m => m === k && ++c === nth) + 1; }); };
 const F1_POOL = () => [f1a, f1b];
 let f1i = 0;
@@ -365,6 +369,10 @@ const BLOCKS = {
   recomendadas: () => band(`<div class="recom"><h2 class="recom__title"><span>${esc(recomendadas.titulo)}</span></h2><div class="recom__grid">${recom.map(n => card(n, { t: 'med', tf: true, sizes: SZ.s4, by: 'por', cls: 'card--recom' })).join('')}</div></div>`, 'recomband'),
   /* grilla3 (pág. 4 del PDF): noticias comunes en 3 columnas x 2 filas (6 notas), tarjeta blanca con sombra suave, foto 16:9, cintillo, título y "Por autor"; para más filas, repetir 'grilla3' en el FLOW (cada una reparte otras 6 notas desde grid3) */
   grilla3: () => band(`<div class="g3">${grid3.map(n => card(n, { t: 'med', sizes: SZ.s4, by: 'por', cls: 'card--g3' })).join('')}</div>`, 'g3band'),
+  /* texto3=1: bloque de notas solo texto en 3 columnas (cintillo, titulo, "Por autor"); apagado por defecto */
+  texto3: () => band(`<div class="t3 vr cols-3">${text3.map(n => card(n, { t: 'txt', by: 'por', cls: 'card--t3' })).join('')}</div>`, 'optband t3band'),
+  /* grilla4=1: grilla de 4 columnas con tarjetas de sombra suave (desktop: 2 filas de 4; mobile: 1 columna, maximo 3); apagada por defecto */
+  grilla4: () => band(`<div class="g4">${grid4.map(n => card(n, { t: 'med', sizes: SZ.s3, by: 'por', cls: 'card--g3 card--g4' })).join('')}</div>`, 'optband g4band'),
   banner: () => band(hBanner(), 'adband'),
   linea: () => ruleDouble('rule-double--wrap'),
   anunciantes: () => adZone(),   // el rodante horizontal ya no va acá: está dentro del 1.º Formato 1 (v2.3.2)
@@ -390,13 +398,13 @@ const franja = poOrden => {
 const renderHome = (file, FL, FM, page) => {
   used.clear(); curPage = page; allocate(page); f1i = 0;
   const mob = mobilePosOf(FL, FM);
-  const superHtml = superNotes.map(superBlock);
+  const superHtml = [superFoto(), superSoloTexto()];
   const blocksHtml = FL.map((k, i) => BLOCKS[k]().replace(/^<(\w+)/, `<$1 style="--o:${mob[i]}"`));
   /* index.html (home=pdf): el build FALLA si un mismo id de nota aparece mas de una vez en cualquier bloque (tarjetas con titulo y superdestacadas) */
   if (page === 'pdf') {
     const donde = new Map();
     const scan = (html, nombre) => { for (const m of html.matchAll(/<h[23]><a href="nota-(\d+)\.html"|class="super__in" href="nota-(\d+)\.html"/g)) { const id = m[1] || m[2]; (donde.get(id) || donde.set(id, []).get(id)).push(nombre); } };
-    superHtml.forEach((h, i) => scan(h, 'superdestacada ' + (i + 1)));
+    superHtml.forEach((h, i) => scan(h, 'super=' + (i + 1)));
     blocksHtml.forEach((h, i) => scan(h, FL[i] + ' (posicion ' + (i + 1) + ')'));
     const rep = [...donde].filter(([, v]) => v.length > 1);
     if (rep.length) throw new Error('index.html: ' + rep.length + ' nota(s) repetida(s):\n' + rep.map(([id, v]) => '  - nota ' + id + ' (' + (all.get(+id)?.titulo || '?') + ') en: ' + v.join(' | ')).join('\n'));

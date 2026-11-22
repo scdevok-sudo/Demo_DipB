@@ -139,7 +139,9 @@
     const root = document.documentElement; root.setAttribute('data-demo', '1');
     const rows = [
       ['home', 'Inicio (desktop)', [['pdf', 'Diseño DB (PDF de Juan)'], ['anterior', 'Anterior']]],
-      ['super', 'Superdestacada', [['off', 'Sin ella'], ['foto', 'A · foto'], ['texto', 'B · texto'], ['2', '2'], ['3', '3']]],
+      ['super', 'Superdestacada', [['off', 'Sin ella'], ['1', '1 · foto, 3 notas con flechas'], ['2', '2 · solo texto']]],
+      ['texto3', 'Notas de texto en 3 columnas', [['off', 'No'], ['1', 'Sí']]],
+      ['grilla4', 'Grilla de 4 columnas', [['off', 'No'], ['1', 'Sí']]],
       ['seccion', 'Etiqueta de sección', [['foto', 'Sobre la foto'], ['abajo', 'Debajo de la foto']]],
       ['etiqueta', 'Etiqueta de sección bajo el título', [['texto', 'Texto gris'], ['caja', 'Caja oscura']]],
       ['header', 'Barra superior y menú', [['prod', 'Oficial (celeste y azul)'], ['actual', 'Navy anterior']]],
@@ -193,5 +195,15 @@
       opts.hidden = true; res.hidden = false;
     };
     opts.addEventListener('click', e => { const b = e.target.closest('.fr__opt'); if (b) show(b.dataset.id); });
+  });
+  /* Carrusel de la superdestacada 1 (super=1): flechas, puntos y teclado; sin autoplay */
+  $$('[data-scar]').forEach(sc => {
+    const slides = $$('.scar__slide', sc); let cur = 0;
+    const go = n => {
+      cur = (n + slides.length) % slides.length;
+      slides.forEach((s, i) => { s.classList.toggle('is-on', i === cur); s.setAttribute('aria-hidden', i === cur ? 'false' : 'true'); $('h2 a', s).tabIndex = i === cur ? 0 : -1; $$('.scar__dot', s).forEach((d, k) => { if (k === cur) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current'); }); });
+    };
+    sc.addEventListener('click', e => { const b = e.target.closest('.scar__btn,.scar__dot'); if (!b) return; if (b.dataset.d) go(cur + +b.dataset.d); else go(+b.dataset.i); });
+    sc.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') go(cur - 1); else if (e.key === 'ArrowRight') go(cur + 1); });
   });
 })();

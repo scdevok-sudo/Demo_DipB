@@ -86,7 +86,9 @@ Ejemplo: `index.html?demo=1&super=2&bajada=on`. "Copiar link de esta variante" a
 
 | Parámetro | Valores (default **en negrita**) | Qué cambia |
 |---|---|---|
-| `super` | **off** · foto · texto · 2 · 3 | Superdestacada sobre la tapa: A foto, B solo texto, o apiladas |
+| `super` | **off** · 1 · 2 | v2.5 etapa G: superdestacada opcional sobre la tapa. `1` = carrusel de 3 notas con la foto grande (~2,4:1), el título ARRIBA de la foto y flechas y puntos de navegación; `2` = solo texto centrado (cintillo, título grande, "Por autor") entre dos filetes finos, sin foto. Alias de links viejos: `foto` → `1`, `texto` → `2`, `3` → `1`. (Antes `2` apilaba las dos; ya no) |
+| `texto3` | **off** · 1 | v2.5 etapa G: bloque de notas solo texto en 3 columnas (cintillo, título y "Por autor"), después de la grilla de 3 columnas. Mobile: 1 columna con filetes |
+| `grilla4` | **off** · 1 | v2.5 etapa G: grilla de 4 columnas (2 filas de 4) con tarjetas de sombra suave, después del bloque anterior. Mobile: 1 columna, máximo 3 tarjetas |
 | `seccion` | **foto** · abajo | Etiqueta de sección: sobre la foto (esquina inferior izquierda, default) o debajo de la foto, a la derecha. En tarjetas sin foto va debajo del título |
 | `tapa` | **texto-izq** · foto-izq | Tapa desktop: texto a la izquierda y foto a la derecha (default), o al revés. Alias de links viejos: `izq` → `foto-izq`, `der` → `texto-izq` |
 | `vermas` | **flecha** · boton | "Ver más de X" de la franja final: texto con flecha sin borde (default) o botón con borde |
@@ -122,7 +124,7 @@ Los parámetros `m1` y `m2` ya no existen. Un script inline en `<head>` pone los
 Mini tapa de 1 nota + flujo vertical (línea arriba, volanta, titular, bajada, hora, foto a la derecha) + columna lateral sticky de 300 px en desktop (rodante de cuadrados desde v2.3.3). Scroll infinito con `IntersectionObserver`, esqueleto de un bloque entero (altura reservada) y botón "Ver más notas" de respaldo; carga de a 10 hasta 120 (las notas se reutilizan con `data-uid` distinto). Mobile: slot 300×250 cada `SECTION_AD_EVERY` notas (0 lo apaga). Esta lista es independiente de los dos formatos del home.
 
 ## Superdestacada y WordPress
-Cada nota admite `super: "foto" | "texto" | null` en el JSON; si ninguna lo trae, la maqueta usa tres notas sobrantes de demostración. En WordPress: campo "Superdestacada: Foto / Solo texto / No" en la nota (viabilidad a confirmar por Santi). Componentes: `.super--foto`, `.super--texto`.
+`super=1` y `super=2` (v2.5 etapa G) están apagadas por defecto y no alteran el reparto de notas del resto del home. La 1 es un carrusel de 3 notas: usa las notas con `super: "foto"` en el JSON y, si faltan, notas sobrantes con foto grande. La 2 usa la nota con `super: "texto"` o, si no hay, una nota sobrante que se toma al final del reparto. Ambas notas (y las de `texto3` y `grilla4`) cuentan para el chequeo anti-repetidas del build. En WordPress: campo "Superdestacada: Foto / Solo texto / No" en la nota (viabilidad a confirmar por Santi). Componentes: `.super--foto` (`.scar`, con `data-scar`) y `.super--texto` (`.stext`); JS del carrusel en `assets/js/main.js` (flechas, puntos y teclado, sin autoplay; las 3 diapositivas ocupan la misma celda de una grilla para que la altura no salte).
 
 ## Fotos de fantasía (limitación de la fuente)
 Retratos de `randomuser.me` en `assets/img/fantasia/01..24.jpg`, **128×128 y no se estiran**: círculo de 128 px en el perfil, 96 px en el listado y en el carrusel. Cartel "Foto de ejemplo" visible. Reemplazo por fotos reales: campo `foto` de cada legislador (`legs` en `build.mjs`); si falta, se ven las iniciales. `?fotos=iniciales` las apaga.
