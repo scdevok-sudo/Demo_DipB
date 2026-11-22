@@ -1019,9 +1019,10 @@ html:not([data-header="actual"]) .hdr__main .ibtn:hover{background:#000;color:#f
 .fr__next{margin:0;font:500 12px var(--font-ui);color:var(--ink-2)}
 .fr__next strong{color:var(--ink);font-weight:700}
 .fr__poll{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}
-.fr__opts{display:flex;flex-wrap:wrap;gap:6px}
+.fr__opts{display:flex;flex-wrap:wrap;gap:12px 6px}
 .fr__opts[hidden],.fr__res[hidden]{display:none}
-.fr__opt{min-height:32px;padding:0 12px;border:1px solid var(--brand-blue-dk);border-radius:99px;background:#fff;color:var(--brand-blue-dk);font:700 12px var(--font-ui);cursor:pointer}
+.fr__opt{position:relative;min-height:32px;padding:0 12px;border:1px solid var(--brand-blue-dk);border-radius:99px;background:#fff;color:var(--brand-blue-dk);font:700 12px var(--font-ui);cursor:pointer}
+.fr__opt::after{content:"";position:absolute;inset:-8px 0}
 .fr__opt:hover{background:var(--brand-blue-dk);color:#fff}
 .fr__res{display:grid;gap:3px;flex:1 1 260px;min-width:0}
 .fr__row{display:grid;grid-template-columns:78px minmax(0,1fr) 34px;align-items:center;gap:8px;font:600 12px var(--font-ui);color:var(--ink)}
@@ -1074,4 +1075,16 @@ html[data-texto3="1"] .t3band,html[data-grilla4="1"] .g4band{display:block}
   .t3 .card--t3+.card--t3{border-top:1px solid var(--filete-suave);margin-top:12px;padding-top:12px}
   .t3band,.g4band{padding:16px 0}
   .g4 .card--g4:nth-child(n+4){display:none}
+}
+
+/* ============ v2.5 etapa H · pasada mobile: aire entre bloques <= 24 px (12 + 12 de padding), zonas tactiles >= 44 px ============ */
+@media (max-width:767px){
+  .band,.f1band,.f2band,.udband,.g3band,.t3band,.g4band{padding-block:12px}
+  .band--tapa{padding-top:12px}
+  .recomband{padding:12px 0}
+  .legband{padding:10px 0 8px}
+  .fr__poll{padding-block:8px}
+  .super--texto{padding:12px 0}
+  .stext{padding:16px 0 14px}
+  .rule-double,html[data-diario="off"] .rule-double{margin-block:12px}
 }
