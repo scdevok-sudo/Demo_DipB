@@ -187,14 +187,17 @@
   }
   /* Encuesta de la franja superior (diseño a definir): el voto vive solo en memoria, no se guarda */
   $$('[data-poll]').forEach(poll => {
-    const opts = $('.fr__opts', poll), res = $('.fr__res', poll);
-    const show = vote => {
-      const rows = $$('.fr__row', res).map(r => ({ r, v: +r.dataset.v + (r.dataset.id === vote ? 1 : 0) }));
+    const opts = $('.fr__opts', poll), res = $('.fr__res', poll), vote = $('.fr__vote', poll); let sel = null;
+    const show = v => {
+      const rows = $$('.fr__row', res).map(r => ({ r, v: +r.dataset.v + (r.dataset.id === v ? 1 : 0) }));
       const tot = rows.reduce((a, x) => a + x.v, 0);
-      rows.forEach(({ r, v }) => { const pct = Math.round(v * 100 / tot); $('.fr__bar i', r).style.width = pct + '%'; $('.fr__pct', r).textContent = pct + '%'; r.classList.toggle('is-mine', r.dataset.id === vote); });
-      opts.hidden = true; res.hidden = false;
+      rows.forEach(({ r, v: n }) => { const pct = Math.round(n * 100 / tot); $('.fr__bar i', r).style.width = pct + '%'; $('.fr__pct', r).textContent = pct + '%'; r.classList.toggle('is-mine', r.dataset.id === v); });
+      poll.classList.add('is-voted');   // las opciones y las barras comparten la misma celda: la franja no cambia de alto
     };
-    opts.addEventListener('click', e => { const b = e.target.closest('.fr__opt'); if (b) show(b.dataset.id); });
+    opts.addEventListener('click', e => {
+      const b = e.target.closest('.fr__opt'); if (b) { sel = b.dataset.id; $$('.fr__opt', opts).forEach(o => o.setAttribute('aria-pressed', o === b ? 'true' : 'false')); vote.disabled = false; return; }
+      if (e.target.closest('.fr__vote') && sel) show(sel);
+    });
   });
   /* Carrusel de la superdestacada 1 (super=1): flechas, puntos y teclado; sin autoplay */
   $$('[data-scar]').forEach(sc => {

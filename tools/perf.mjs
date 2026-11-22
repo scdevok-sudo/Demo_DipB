@@ -1,16 +1,20 @@
 // Mide LCP y CLS con PerformanceObserver dentro de Playwright (Chromium), con CPU 4x y red "4G lenta" emuladas por CDP.
 // Uso: node perf.mjs [pagina,pagina] [query]
+// Modo desktop (sin throttling de CPU ni de red, ventana de escritorio, sin tactil): DESKTOP=1 [W=1280|1440] node perf.mjs index   (W por defecto 1280, alto 800)
 import { chromium } from 'playwright';
 const BASE = process.env.BASE || 'http://localhost:8765/';
 const pages = (process.argv[2] || 'index,seccion,nota-413361,diputados,senadores,legislador').split(',');
 const q = process.argv[3] ? '?' + process.argv[3] : '';
+const DESK = !!process.env.DESKTOP, W = +process.env.W || 1280;
 const b = await chromium.launch();
 for (const n of pages) {
-  const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+  const ctx = await b.newContext(DESK ? { viewport: { width: W, height: 800 }, deviceScaleFactor: 1 } : { viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
   const p = await ctx.newPage(); const cdp = await ctx.newCDPSession(p);
+  if (!DESK) {
   await cdp.send('Network.enable');
   await cdp.send('Network.emulateNetworkConditions', { offline: false, latency: 150, downloadThroughput: 1.6 * 1024 * 1024 / 8, uploadThroughput: 750 * 1024 / 8 });
   await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
+  }
   await p.addInitScript(() => {
     window.__m = { lcp: 0, cls: 0 };
     new PerformanceObserver(l => { for (const e of l.getEntries()) window.__m.lcp = e.startTime; }).observe({ type: 'largest-contentful-paint', buffered: true });
@@ -23,7 +27,7 @@ for (const n of pages) {
   await p.waitForTimeout(1500);
   const m = await p.evaluate(() => window.__m);
   if (process.env.DEBUG) console.log(JSON.stringify(await p.evaluate(() => window.__s || []).then(a => a.sort((x, y) => y[0] - x[0]).slice(0, 6)), null, 1));
-  console.log(n.padEnd(14), 'LCP', (m.lcp / 1000).toFixed(2) + ' s', '· CLS', m.cls.toFixed(4));
+  console.log((DESK ? 'desktop ' + W + ' ' : 'mobile ') + n.padEnd(14), 'LCP', (m.lcp / 1000).toFixed(2) + ' s', '· CLS', m.cls.toFixed(4));
   await ctx.close();
 }
 await b.close();

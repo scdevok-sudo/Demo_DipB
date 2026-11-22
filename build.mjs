@@ -204,8 +204,9 @@ const fig = (n, o = {}) => { const t = thumb(n, o); return t ? `<figure class="f
 const kick = n => cintillos[n.id] ? `<span class="cintillo">${esc(cintillos[n.id])}</span>` : '';   // cintillo: texto libre de la redacción, SIEMPRE arriba del título; sin cintillo no deja hueco
 /* etiqueta de sección (chica, con fondo): sobre la foto o debajo (?seccion=foto|abajo); en tarjetas sin foto va debajo del título */
 const secTag = (n, cls = '') => (isLeg(n) && !SHOW_LEGISLATURA_LABEL) ? '' : `<span class="sectag ${cls}">${esc(sectionOf(n))}</span>`;
-const card = (n, { t = 'med', dek = false, h = 3, tf = false, cap = false, eager = false, sizes, big = false, cls = '', dekAfter = false, by = '' } = {}) => {
-  const title = `<h${h}><a href="${noteHref(n)}">${esc(n.titulo)}</a></h${h}>`;
+const card = (n, { t = 'med', dek = false, h = 3, tf = false, cap = false, eager = false, sizes, big = false, cls = '', dekAfter = false, by = '', lead = false } = {}) => {
+  const lt = () => { const m = n.titulo.match(/^(.{6,60}?[:.])\s+(.+)$/); if (m) return `<b class="tl">${esc(m[1])}</b> ${esc(m[2])}`; const w = n.titulo.split(' '); return `<b class="tl">${esc(w.slice(0, 4).join(' '))}</b> ${esc(w.slice(4).join(' '))}`; };   // primera frase destacada (grilla4): hasta el primer ':' o '.', o las 4 primeras palabras
+  const title = `<h${h}><a href="${noteHref(n)}">${lead ? lt() : esc(n.titulo)}</a></h${h}>`;
   const kicker = kick(n), below = secTag(n, 'sectag--t');
   const meta = `<div class="meta">${rel(n)}</div>`;
   const au = by ? `<span class="autor${by === 'por' ? ' autor--por' : ''}">${by === 'por' ? 'Por ' : ''}${esc(n.autor)}</span>` : '';   // autor de FANTASIA (data/autores.json): 'caps' = MAYÚSCULAS grises chicas, 'por' = "Por …"
@@ -372,7 +373,7 @@ const BLOCKS = {
   /* texto3=1: bloque de notas solo texto en 3 columnas (cintillo, titulo, "Por autor"); apagado por defecto */
   texto3: () => band(`<div class="t3 vr cols-3">${text3.map(n => card(n, { t: 'txt', by: 'por', cls: 'card--t3' })).join('')}</div>`, 'optband t3band'),
   /* grilla4=1: grilla de 4 columnas con tarjetas de sombra suave (desktop: 2 filas de 4; mobile: 1 columna, maximo 3); apagada por defecto */
-  grilla4: () => band(`<div class="g4">${grid4.map(n => card(n, { t: 'med', sizes: SZ.s3, by: 'por', cls: 'card--g3 card--g4' })).join('')}</div>`, 'optband g4band'),
+  grilla4: () => band(`<div class="g4">${grid4.map(n => card(n, { t: 'med', sizes: SZ.s3, by: 'por', lead: true, cls: 'card--g4' })).join('')}</div>`, 'optband g4band'),
   banner: () => band(hBanner(), 'adband'),
   linea: () => ruleDouble('rule-double--wrap'),
   anunciantes: () => adZone(),   // el rodante horizontal ya no va acá: está dentro del 1.º Formato 1 (v2.3.2)
@@ -382,15 +383,17 @@ const BLOCKS = {
 /* Franja superior (pag. 1 del PDF, "diseño a definir"): contador de sesiones (data/sesiones.json) y encuesta (data/encuesta.json); datos de fantasia. El voto vive solo en memoria (assets/js/main.js).
    Desktop: una franja con las dos zonas lado a lado. Mobile: el contador es una linea arriba de la tapa y la encuesta se muestra mas abajo (orden `poOrden`, justo despues del uno-dos). Los textos de la proxima sesion salen de la fecha del JSON. */
 const franja = poOrden => {
-  const dd = new Date(sesiones.proxima.fecha + 'T12:00:00'), pad = x => String(x).padStart(2, '0');
-  const largo = `${DIAS[dd.getDay()]} ${dd.getDate()} de ${MESL[dd.getMonth()]}`, corto = `${DIAS[dd.getDay()].slice(0, 3)} ${dd.getDate()}/${pad(dd.getMonth() + 1)}`;
-  if (new Date(sesiones.proxima.fecha + 'T23:59:59') < new Date()) console.warn('⚠ data/sesiones.json: la proxima sesion (' + sesiones.proxima.fecha + ') ya paso');
+  const pad = x => String(x).padStart(2, '0'), hoy = new Date();
+  const fmt = f => { const dd = new Date(f + 'T12:00:00'); return { largo: `${DIAS[dd.getDay()]} ${dd.getDate()} de ${MESL[dd.getMonth()]}`, corto: `${DIAS[dd.getDay()].slice(0, 3)} ${dd.getDate()}/${pad(dd.getMonth() + 1)}` }; };
+  const px = fmt(sesiones.proxima.fecha), ul = fmt(sesiones.ultima.fecha);
+  if (new Date(sesiones.proxima.fecha + 'T23:59:59') < hoy) console.warn('⚠ data/sesiones.json: la proxima sesion (' + sesiones.proxima.fecha + ') ya paso');
+  if (new Date(sesiones.ultima.fecha + 'T00:00:00') > hoy) console.warn('⚠ data/sesiones.json: la ultima sesion (' + sesiones.ultima.fecha + ') esta en el futuro');
   return `<section class="fr" aria-label="Sesiones y encuesta"><div class="wrap fr__in">
-  <div class="fr__ses"><div class="fr__d"><h2 class="fr__h">Sesiones ${sesiones.anio}</h2><dl class="fr__nums"><div><dt>Diputados</dt><dd>${sesiones.diputados}</dd></div><div><dt>Senado</dt><dd>${sesiones.senado}</dd></div></dl><p class="fr__next">Próxima: <strong>${largo}</strong> · ${esc(sesiones.proxima.camara)}</p></div>
-  <p class="fr__m"><b>Sesiones ${sesiones.anio}</b> · Diputados <b>${sesiones.diputados}</b> · Senado <b>${sesiones.senado}</b> · Próxima <b>${corto}</b></p></div>
+  <div class="fr__ses"><div class="fr__d"><h2 class="fr__h">Sesiones ${sesiones.anio}</h2><dl class="fr__nums"><div><dt>Diputados</dt><dd>${sesiones.diputados}</dd></div><div><dt>Senado</dt><dd>${sesiones.senado}</dd></div></dl><p class="fr__next">Última sesión: <strong>${ul.largo}</strong> · ${esc(sesiones.ultima.camara)}</p><p class="fr__next">Próxima sesión: <strong>${px.largo}</strong> · ${esc(sesiones.proxima.camara)}</p></div>
+  <p class="fr__m"><b>Sesiones ${sesiones.anio}</b> · Diputados <b>${sesiones.diputados}</b> · Senado <b>${sesiones.senado}</b> · Próxima <b>${px.corto}</b></p></div>
   <div class="fr__poll" data-poll style="--o:${poOrden}"><h2 class="fr__h" id="fr-q">${esc(encuesta.pregunta)}</h2>
-    <div class="fr__opts" role="group" aria-labelledby="fr-q">${encuesta.opciones.map(o => `<button type="button" class="fr__opt" data-id="${o.id}">${esc(o.texto)}</button>`).join('')}</div>
-    <div class="fr__res" hidden aria-live="polite">${encuesta.opciones.map(o => `<div class="fr__row" data-id="${o.id}" data-v="${o.votos}"><span class="fr__lbl">${esc(o.texto)}</span><span class="fr__bar"><i></i></span><b class="fr__pct"></b></div>`).join('')}</div>
+    <div class="fr__stage"><div class="fr__opts" role="group" aria-labelledby="fr-q">${encuesta.opciones.map(o => `<button type="button" class="fr__opt" data-id="${o.id}" aria-pressed="false">${esc(o.texto)}</button>`).join('')}<button type="button" class="fr__vote" disabled>Votar</button></div>
+    <div class="fr__res" aria-live="polite">${encuesta.opciones.map(o => `<div class="fr__row" data-id="${o.id}" data-v="${o.votos}"><span class="fr__lbl">${esc(o.texto)}</span><span class="fr__bar"><i></i></span><b class="fr__pct"></b></div>`).join('')}</div></div>
     <span class="fr__tbd">Diseño a definir</span>
   </div></div></section>`;
 };
