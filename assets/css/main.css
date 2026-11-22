@@ -735,15 +735,15 @@ html[data-peso="900"]{--titulo-peso:900}
   .srow-ad{border-top:1px solid var(--filete-suave)}
 
   /* Formato 2 (y tapa2=chica): tarjeta compacta, texto a la izquierda y foto cuadrada (~35 % del ancho, estilo Clarín) a la derecha (v2.4) */
-  .f2 .card--med,html[data-tapa2="chica"] .card--tapa2{display:grid;grid-template-columns:minmax(0,1fr) 32%;column-gap:10px;align-items:start}
-  .f2 .card--med .fig,html[data-tapa2="chica"] .card--tapa2 .fig{grid-column:2;grid-row:1;width:100%}
-  .f2 .card--med .card__txt,html[data-tapa2="chica"] .card--tapa2 .card__txt{grid-column:1;grid-row:1;order:0;margin:0}
-  .f2 .card--med .thumb,html[data-tapa2="chica"] .card--tapa2 .thumb{aspect-ratio:1/1;width:100%}
-  .f2 .card--med .fig>.sectag,html[data-tapa2="chica"] .card--tapa2 .fig>.sectag{display:none}
-  .f2 .sectag--cmp,html[data-tapa2="chica"] .card--tapa2 .sectag--cmp{display:inline-block;margin-top:8px}
-  .f2 .card--med .cintillo,html[data-tapa2="chica"] .card--tapa2 .cintillo{font-size:15px;margin:0 0 4px}
-  .f2 .card--med h3,html[data-tapa2="chica"] .card--tapa2 h2{font-size:20px;line-height:1.15}
-  .f2 .card--med .meta,html[data-tapa2="chica"] .card--tapa2 .meta{display:none}
+  .f2 .card--med,.ud__side .card--med,html[data-tapa2="chica"] .card--tapa2{display:grid;grid-template-columns:minmax(0,1fr) 32%;column-gap:10px;align-items:start}
+  .f2 .card--med .fig,.ud__side .card--med .fig,html[data-tapa2="chica"] .card--tapa2 .fig{grid-column:2;grid-row:1;width:100%}
+  .f2 .card--med .card__txt,.ud__side .card--med .card__txt,html[data-tapa2="chica"] .card--tapa2 .card__txt{grid-column:1;grid-row:1;order:0;margin:0}
+  .f2 .card--med .thumb,.ud__side .card--med .thumb,html[data-tapa2="chica"] .card--tapa2 .thumb{aspect-ratio:1/1;width:100%}
+  .f2 .card--med .fig>.sectag,.ud__side .card--med .fig>.sectag,html[data-tapa2="chica"] .card--tapa2 .fig>.sectag{display:none}
+  .f2 .sectag--cmp,.ud__side .sectag--cmp,html[data-tapa2="chica"] .card--tapa2 .sectag--cmp{display:inline-block;margin-top:8px}
+  .f2 .card--med .cintillo,.ud__side .card--med .cintillo,html[data-tapa2="chica"] .card--tapa2 .cintillo{font-size:15px;margin:0 0 4px}
+  .f2 .card--med h3,.ud__side .card--med h3,html[data-tapa2="chica"] .card--tapa2 h2{font-size:20px;line-height:1.15}
+  .f2 .card--med .meta,.ud__side .card--med .meta,html[data-tapa2="chica"] .card--tapa2 .meta{display:none}
   .f2.flow>*{padding:var(--s2) 0}
   .f2.flow>:first-child{padding-top:0}
 
@@ -871,8 +871,8 @@ html[data-peso="900"]{--titulo-peso:900}
 
 /* v2.4 etapa C · pantallas chicas (<= 375 px): foto 30 % y titulo 19 px en el Formato 2 y tapa2=chica */
 @media (max-width:375px){
-  .f2 .card--med,html[data-tapa2="chica"] .card--tapa2{grid-template-columns:minmax(0,1fr) 30%}
-  .f2 .card--med h3,html[data-tapa2="chica"] .card--tapa2 h2{font-size:19px}
+  .f2 .card--med,.ud__side .card--med,html[data-tapa2="chica"] .card--tapa2{grid-template-columns:minmax(0,1fr) 30%}
+  .f2 .card--med h3,.ud__side .card--med h3,html[data-tapa2="chica"] .card--tapa2 h2{font-size:19px}
 }
 
 /* ============ v2.4 etapa D · etiqueta de seccion con menos protagonismo (?etiqueta=texto|caja, default texto) ============
@@ -915,3 +915,38 @@ html[data-header="actual"]{--header-bg:#0b2236}
 .rodh{padding:16px 0}
 .rodh .adz{margin:0;padding:0}
 @media (max-width:767px){.rodh{display:none}}
+
+/* ============ v2.5 etapa C · bloque uno-dos y su espejo (home=pdf, pág. 2 del PDF) ============ */
+.autor{display:block;margin-top:8px;font:600 12px var(--font-ui);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.autor--por{text-transform:none;letter-spacing:0;font-size:13px;color:var(--accent-text)}
+@media (min-width:768px){
+  .ud{display:grid;grid-template-columns:55fr 45fr;column-gap:var(--gap);align-items:start}
+  .ud--espejo{grid-template-columns:45fr 55fr}
+  .ud--espejo .ud__big{order:2}
+  .ud__side{position:relative;display:grid;align-content:start}
+  .ud__side::before{content:"";position:absolute;left:calc(var(--gap) / -2);top:0;bottom:0;border-left:1px solid var(--rule-hair);pointer-events:none}
+  .ud--espejo .ud__side::before{left:auto;right:calc(var(--gap) / -2)}
+  html[data-diario="off"] .ud__side::before{display:none}
+  .card--udbig .thumb{aspect-ratio:2/1;height:auto}
+  .card--udbig .card__txt{margin-top:14px}
+  .card--udbig h2{font-size:29px;line-height:1.15}
+  .ud__side .card--ud{display:grid;grid-template-columns:minmax(0,1fr) 36%;column-gap:16px;align-items:start}
+  .ud__side .card--ud+.card--ud{border-top:1px solid var(--rule-hair);margin-top:20px;padding-top:20px}
+  .ud__side .card--ud .fig{grid-column:2;grid-row:1}
+  .ud__side .card--ud .card__txt{grid-column:1;grid-row:1;order:0;margin:0}
+  .ud__side .card--ud .thumb{aspect-ratio:1/1;width:100%;height:auto}
+  .ud__side .card--ud h3{font-size:22px;line-height:1.17}
+  .ud--espejo .ud__side .card--ud{grid-template-columns:36% minmax(0,1fr)}
+  .ud--espejo .ud__side .card--ud .fig{grid-column:1}
+  .ud--espejo .ud__side .card--ud .card__txt{grid-column:2}
+}
+@media (max-width:767px){
+  /* mobile: la nota grande arriba y las dos chicas debajo, con la tarjeta compacta del Formato 2 (reglas compartidas) */
+  .ud__side{border-top:1px solid var(--filete-suave);margin-top:12px;padding-top:12px}
+  .ud__side .card--ud+.card--ud{border-top:1px solid var(--filete-suave);margin-top:12px;padding-top:12px}
+  .udband{padding:16px 0}
+}
+
+/* ============ v2.5 · lupa del buscador del header (--brand-sky): fondo propio para que no quede floja (blanco sobre celeste = 2,45:1) ============ */
+html:not([data-header="actual"]) .hdr__main .ibtn{background:var(--ink);color:#fff}
+html:not([data-header="actual"]) .hdr__main .ibtn:hover{background:#000;color:#fff}

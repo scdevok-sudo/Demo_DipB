@@ -203,15 +203,16 @@ const fig = (n, o = {}) => { const t = thumb(n, o); return t ? `<figure class="f
 const kick = n => cintillos[n.id] ? `<span class="cintillo">${esc(cintillos[n.id])}</span>` : '';   // cintillo: texto libre de la redacción, SIEMPRE arriba del título; sin cintillo no deja hueco
 /* etiqueta de sección (chica, con fondo): sobre la foto o debajo (?seccion=foto|abajo); en tarjetas sin foto va debajo del título */
 const secTag = (n, cls = '') => (isLeg(n) && !SHOW_LEGISLATURA_LABEL) ? '' : `<span class="sectag ${cls}">${esc(sectionOf(n))}</span>`;
-const card = (n, { t = 'med', dek = false, h = 3, tf = false, cap = false, eager = false, sizes, big = false, cls = '', dekAfter = false } = {}) => {
+const card = (n, { t = 'med', dek = false, h = 3, tf = false, cap = false, eager = false, sizes, big = false, cls = '', dekAfter = false, by = '' } = {}) => {
   const title = `<h${h}><a href="${noteHref(n)}">${esc(n.titulo)}</a></h${h}>`;
   const kicker = kick(n), below = secTag(n, 'sectag--t');
   const meta = `<div class="meta">${rel(n)}</div>`;
+  const au = by ? `<span class="autor${by === 'por' ? ' autor--por' : ''}">${by === 'por' ? 'Por ' : ''}${esc(n.autor)}</span>` : '';   // autor de FANTASIA (data/autores.json): 'caps' = MAYÚSCULAS grises chicas, 'por' = "Por …"
   const dk = dek ? `<p class="dek">${esc(n.extracto)}</p>` : '';   // dekAfter: la bajada va después de la foto (tapa del PDF: cintillo y título, foto, bajada)
   if (t === 'txt') return `<article class="card card--txt ${cls}">${kicker}${title}${below}${meta}</article>`;
   if (t === 'sm') return `<article class="card card--sm ${cls}"><div class="card__txt">${kicker}${title}${below}${meta}</div>${thumb(n, { sizes: SZ.sm })}</article>`;
   const f = fig(n, { sizes, big, eager, cap, alt: eager ? n.titulo : '' });
-  const txt = `<div class="card__txt">${kicker}${title}${f ? secTag(n, 'sectag--t sectag--cmp') : below}${dekAfter ? '' : dk}${meta}</div>`;
+  const txt = `<div class="card__txt">${kicker}${title}${f ? secTag(n, 'sectag--t sectag--cmp') : below}${dekAfter ? '' : dk}${au}${meta}</div>`;
   return `<article class="card card--${t}${tf ? ' card--tf' : ''} ${cls}">${tf ? txt + f + (dekAfter ? dk : '') : f + txt}</article>`;
 };
 const secTitle = (label, href, id) => `<div class="sec-head"><h2 class="sec-title"${id ? ` id="${id}"` : ''}><span>${label}</span></h2>${href ? `<a href="${href}">Ver más</a>` : ''}</div>`;
@@ -327,11 +328,12 @@ const FLOW_ANTERIOR = ['tapa', 'legis-diputados', 'f1', 'textos', 'f1', 'trio', 
 /* Orden propio para mobile (< 768 px): los dos módulos de legisladores van consecutivos. El FLOW de desktop no se toca: cada bloque lleva su posición mobile en --o y el CSS lo reordena solo en pantallas chicas. */
 const FLOW_MOBILE_ANTERIOR = ['tapa', 'legis-diputados', 'legis-senadores', 'f1', 'textos', 'f1', 'trio', 'linea', 'f2', 'linea', 'secciones', 'anunciantes', 'banner'];   // toda la publicidad al final, después de la franja de secciones
 /* home=pdf (default): el diseño de Juan (PDF "DISEÑO DB"). Se arma por etapas; por ahora igual al anterior. */
-const FLOW_PDF = ['tapa', 'legis-diputados', 'rodante-h', 'f2d', 'anunciantes', 'legis-senadores', 'f2s', 'linea', 'secciones', 'banner'];   // se completa por etapas: franja, uno-dos, uno-dos-espejo, recomendadas y grilla3
-const FLOW_MOBILE_PDF = ['tapa', 'legis-diputados', 'legis-senadores', 'f2d', 'f2s', 'linea', 'secciones', 'anunciantes', 'banner'];   // 'rodante-h' es solo desktop
+const FLOW_PDF = ['tapa', 'uno-dos', 'legis-diputados', 'uno-dos-espejo', 'rodante-h', 'f2d', 'anunciantes', 'legis-senadores', 'f2s', 'linea', 'secciones', 'banner'];   // se completa por etapas: franja, recomendadas y grilla3
+const FLOW_MOBILE_PDF = ['tapa', 'uno-dos', 'legis-diputados', 'legis-senadores', 'uno-dos-espejo', 'f2d', 'f2s', 'linea', 'secciones', 'anunciantes', 'banner'];   // 'rodante-h' es solo desktop
 const mobilePosOf = (FL, FM) => { const seen = {}; return FL.map(k => { const nth = seen[k] = (seen[k] ?? -1) + 1; let c = -1; return FM.findIndex(m => m === k && ++c === nth) + 1; }); };
 const F1_POOL = () => [f1a, f1b];
 let f1i = 0;
+const unoDos = ([g, c1, c2], espejo) => band(`<div class="ud${espejo ? ' ud--espejo' : ''}"><div class="ud__big">${card(g, { t: 'med', h: 2, big: true, sizes: SZ.s6, by: 'caps', cls: 'card--udbig' })}</div><div class="ud__side">${[c1, c2].map(n => card(n, { t: 'med', sizes: SZ.s3, by: 'caps', cls: 'card--ud' })).join('')}</div></div>`, 'udband');
 const BLOCKS = {
   tapa: () => band(`<div class="tapa">
   <article class="card card--lead tapa__lead">
@@ -353,6 +355,9 @@ const BLOCKS = {
   textos: () => band(`<div class="solotxt vr cols-3">${textoN.map(n => card(n, { t: 'txt' })).join('')}</div>`, 'rv rv-c'),
   // Formato 2: 8 notas, 2 columnas × 4 filas, foto a la izquierda, fondo suave
   f2: () => band(`<div class="flow vr cols-2 f2">${f2n.map(n => card(n, { t: 'med', dek: true, big: true, sizes: SZ.s6 })).join('')}</div>`, 'f2band band--alt'),
+  /* uno-dos (pág. 2 del PDF): una nota grande (foto 2:1, cintillo, título, autor) y dos chicas apiladas con foto cuadrada a la derecha; el espejo invierte las columnas (y la foto de las chicas pasa a la izquierda) */
+  'uno-dos': () => unoDos(unodosA, false),
+  'uno-dos-espejo': () => unoDos(unodosB, true),
   'rodante-h': () => band(adZoneH(), 'rodh'),   // home=pdf: el rodante horizontal de 7 banners como bloque propio (solo desktop)
   f2d: () => band(`<div class="flow vr cols-2 f2">${f2d.map(n => card(n, { t: 'med', dek: true, big: true, sizes: SZ.s6 })).join('')}</div>`, 'f2band band--alt'),   // Formato 2 con notas de Diputados
   f2s: () => band(`<div class="flow vr cols-2 f2">${f2s.map(n => card(n, { t: 'med', dek: true, big: true, sizes: SZ.s6 })).join('')}</div>`, 'f2band band--alt'),   // Formato 2 con notas del Senado
