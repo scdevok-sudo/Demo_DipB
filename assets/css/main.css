@@ -21,7 +21,7 @@
   --font-title:"Source Serif 4","Serif Fallback",Georgia,"Times New Roman",serif;
   --font-ui:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --super-bg:#141414;
-  --cintillo-color:var(--accent-text);--modulo-legisladores-bg:#eeeeee;--fondo-f2:#f2f2f2;--filete-modulo:#d6d6d6;--seccion-bg:var(--brand-blue);--seccion-fg:#fff;--seccion-texto:var(--muted);--header-bg:var(--brand-sky);
+  --cintillo-color:var(--accent-text);--modulo-legisladores-bg:#eeeeee;--fondo-f2:#f2f2f2;--filete-modulo:#d6d6d6;--seccion-bg:var(--brand-blue);--seccion-fg:#fff;--seccion-texto:var(--muted);--header-bg:var(--brand-sky);--recomendadas-bg:#fbf1e3;
   --s1:8px;--s2:16px;--s3:24px;--s4:32px;--s5:48px;--s6:64px;
   --wrap:1240px;--gut:16px;--gap:16px;
   --ease:cubic-bezier(.2,.7,.2,1);
@@ -953,3 +953,29 @@ html:not([data-header="actual"]) .hdr__main .ibtn:hover{background:#000;color:#f
 
 /* v2.5 etapa C ajuste · en las dos tarjetas chicas del uno-dos (y su espejo) no va etiqueta de seccion sobre la foto: el cintillo ya la dice. Excepcion solo de ese bloque */
 .ud__side .fig>.sectag{display:none}
+
+/* ============ v2.5 etapa D · Las recomendadas de la semana (home=pdf, pag. 4 del PDF) ============ */
+.recomband{background:var(--recomendadas-bg);padding:22px 0 26px;--accent-text:var(--brand-blue-dk);--cintillo-color:var(--brand-blue-dk)}
+.recom__title{margin:0 0 18px;font:800 18px/1.2 var(--font-ui);color:var(--ink)}
+.recom__title span{display:inline-block;padding-bottom:7px;border-bottom:3px solid var(--brand-sky)}
+.recom__grid{display:grid;gap:0}
+.card--recom .thumb{aspect-ratio:16/10;height:auto;width:100%}
+.card--recom .card__txt{margin:0 0 12px;align-self:start}
+.card--recom h3{font-size:20px;line-height:1.17}
+.card--recom .meta{display:none}
+@media (min-width:768px){
+  .recom__grid{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:calc(var(--gap) * 2)}
+  .recom__grid{grid-template-rows:auto auto}
+  .recom__grid .card--recom{position:relative;display:grid;grid-row:span 2;grid-template-rows:subgrid}
+  .card--recom .card__txt{grid-row:1}
+  .card--recom .fig{grid-row:2}
+  .recom__grid .card--recom+.card--recom::before{content:"";position:absolute;left:calc(var(--gap) * -1);top:0;bottom:0;border-left:1px solid rgba(0,0,0,.14)}
+  html[data-diario="off"] .recom__grid .card--recom::before{display:none}
+}
+@media (max-width:767px){
+  .recomband{padding:16px 0 18px}
+  .card--recom .fig{order:-1}
+  .card--recom .card__txt{order:0;margin:12px 0 0}
+  .recom__title{margin-bottom:12px}
+  .recom__grid .card--recom+.card--recom{border-top:1px solid rgba(0,0,0,.14);margin-top:12px;padding-top:12px}
+}
