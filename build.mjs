@@ -371,16 +371,20 @@ const BLOCKS = {
   secciones: () => band(`<div class="strip vr cols-4" aria-label="Secciones">${mods.map(([cat, ns]) => `<section class="strip__col" aria-label="${cat}">${secTitle(cat, null)}
   ${card(ns[0], { t: 'med' })}<div class="list">${ns.slice(1).map(n => card(n, { t: 'txt' })).join('')}</div><a class="strip__more" href="#" data-stub="Sección no incluida en la maqueta.">Ver más de ${cat}</a></section>`).join('')}</div>`, 'stripband'),
 };
-/* Franja superior (pag. 1 del PDF, "diseño a definir"): contador de sesiones (data/sesiones.json) y encuesta (data/encuesta.json); datos de fantasia. El voto vive solo en memoria (assets/js/main.js) */
-const franja = () => {
-  const dd = new Date(sesiones.proxima.fecha + 'T12:00:00'), prox = `${DIAS[dd.getDay()]} ${dd.getDate()} de ${MESL[dd.getMonth()]}`;
+/* Franja superior (pag. 1 del PDF, "diseño a definir"): contador de sesiones (data/sesiones.json) y encuesta (data/encuesta.json); datos de fantasia. El voto vive solo en memoria (assets/js/main.js).
+   Desktop: una franja con las dos zonas lado a lado. Mobile: el contador es una linea arriba de la tapa y la encuesta se muestra mas abajo (orden `poOrden`, justo despues del uno-dos). Los textos de la proxima sesion salen de la fecha del JSON. */
+const franja = poOrden => {
+  const dd = new Date(sesiones.proxima.fecha + 'T12:00:00'), pad = x => String(x).padStart(2, '0');
+  const largo = `${DIAS[dd.getDay()]} ${dd.getDate()} de ${MESL[dd.getMonth()]}`, corto = `${DIAS[dd.getDay()].slice(0, 3)} ${dd.getDate()}/${pad(dd.getMonth() + 1)}`;
+  if (new Date(sesiones.proxima.fecha + 'T23:59:59') < new Date()) console.warn('⚠ data/sesiones.json: la proxima sesion (' + sesiones.proxima.fecha + ') ya paso');
   return `<section class="fr" aria-label="Sesiones y encuesta"><div class="wrap fr__in">
-  <div class="fr__ses"><h2 class="fr__h">Sesiones ${sesiones.anio}</h2><dl class="fr__nums"><div><dt>Diputados</dt><dd>${sesiones.diputados}</dd></div><div><dt>Senado</dt><dd>${sesiones.senado}</dd></div></dl><p class="fr__next">Próxima: <strong>${prox}</strong> · ${esc(sesiones.proxima.camara)}</p></div>
-  <div class="fr__poll" data-poll><h2 class="fr__h" id="fr-q">${esc(encuesta.pregunta)}</h2>
+  <div class="fr__ses"><div class="fr__d"><h2 class="fr__h">Sesiones ${sesiones.anio}</h2><dl class="fr__nums"><div><dt>Diputados</dt><dd>${sesiones.diputados}</dd></div><div><dt>Senado</dt><dd>${sesiones.senado}</dd></div></dl><p class="fr__next">Próxima: <strong>${largo}</strong> · ${esc(sesiones.proxima.camara)}</p></div>
+  <p class="fr__m"><b>Sesiones ${sesiones.anio}</b> · Diputados <b>${sesiones.diputados}</b> · Senado <b>${sesiones.senado}</b> · Próxima <b>${corto}</b></p></div>
+  <div class="fr__poll" data-poll style="--o:${poOrden}"><h2 class="fr__h" id="fr-q">${esc(encuesta.pregunta)}</h2>
     <div class="fr__opts" role="group" aria-labelledby="fr-q">${encuesta.opciones.map(o => `<button type="button" class="fr__opt" data-id="${o.id}">${esc(o.texto)}</button>`).join('')}</div>
     <div class="fr__res" hidden aria-live="polite">${encuesta.opciones.map(o => `<div class="fr__row" data-id="${o.id}" data-v="${o.votos}"><span class="fr__lbl">${esc(o.texto)}</span><span class="fr__bar"><i></i></span><b class="fr__pct"></b></div>`).join('')}</div>
-  </div>
-  <span class="fr__tbd">Diseño a definir</span></div></section>`;
+    <span class="fr__tbd">Diseño a definir</span>
+  </div></div></section>`;
 };
 /* Arma una versión del inicio: file = archivo, FL/FM = bloques desktop/mobile, page = 'pdf' | 'anterior' (para el redireccionamiento por ?home=) */
 const renderHome = (file, FL, FM, page) => {
@@ -401,7 +405,7 @@ const renderHome = (file, FL, FM, page) => {
 ${header('index.html')}
 <main id="main" class="home">
 <h1 class="sr">Diputados Bonaerenses: noticias de la Legislatura Bonaerense</h1>
-${page === 'pdf' ? franja() : ''}
+${page === 'pdf' ? franja((mob[FL.indexOf('uno-dos')] || 1) + 1) : ''}
 ${superHtml.join('\n')}
 ${blocksHtml.join('\n')}
 </main>

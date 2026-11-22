@@ -136,7 +136,7 @@
   let demo = new URLSearchParams(location.search).get('demo') === '1';
   try { if (demo) sessionStorage.setItem('demo', '1'); else demo = sessionStorage.getItem('demo') === '1'; } catch (e) {}
   if (demo) {
-    const root = document.documentElement;
+    const root = document.documentElement; root.setAttribute('data-demo', '1');
     const rows = [
       ['home', 'Inicio (desktop)', [['pdf', 'Diseño DB (PDF de Juan)'], ['anterior', 'Anterior']]],
       ['super', 'Superdestacada', [['off', 'Sin ella'], ['foto', 'A · foto'], ['texto', 'B · texto'], ['2', '2'], ['3', '3']]],
