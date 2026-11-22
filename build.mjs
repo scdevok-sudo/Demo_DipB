@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const R = import.meta.dirname;
-const rd = f => fs.readFileSync(path.join(R, f), 'utf8');
+const rd = f => fs.readFileSync(path.join(R, f), 'utf8').replace(/\r\n/g, '\n');   // normaliza CRLF (clon en Windows con autocrlf)
 const J = f => JSON.parse(rd(f));
 const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
