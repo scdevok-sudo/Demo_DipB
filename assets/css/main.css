@@ -979,3 +979,16 @@ html:not([data-header="actual"]) .hdr__main .ibtn:hover{background:#000;color:#f
   .recom__title{margin-bottom:12px}
   .recom__grid .card--recom+.card--recom{border-top:1px solid rgba(0,0,0,.14);margin-top:12px;padding-top:12px}
 }
+
+/* ============ v2.5 etapa E · grilla3 (home=pdf, pág. 4 del PDF): 3 columnas x 2 filas, tarjeta blanca con sombra suave ============ */
+.g3band{padding:22px 0}
+.g3{display:grid;gap:16px}
+.card--g3{background:#fff;border:1px solid rgba(0,0,0,.06);box-shadow:0 1px 2px rgba(0,0,0,.06),0 6px 18px rgba(0,0,0,.07);border-radius:3px;overflow:hidden;display:flex;flex-direction:column}
+.card--g3 .thumb{aspect-ratio:16/9;height:auto;width:100%}
+.card--g3 .card__txt{padding:12px 14px 16px;margin:0}
+.card--g3 h3{font-size:18px;line-height:1.2}
+.card--g3 .meta{display:none}
+.card--g3 .fig{order:-1}
+.card--g3 .card__txt{order:0}
+@media (min-width:768px){.g3{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}}
+@media (max-width:767px){.g3band{padding:16px 0}.g3{gap:12px}}

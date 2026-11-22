@@ -105,9 +105,9 @@ const allocate = (kind = 'anterior') => {
 hero = use(all.get(413361));
 tapa2 = [take(pub.filter(n => n.categorias.includes('Nación')), 1, hasImg)[0], take(pub.filter(n => n.categorias.includes('Provincia')), 1, hasImg)[0]];
 tapa = [hero, ...tapa2];
+if (kind === 'pdf') recom = recomendadas.ids.map(id => { const n = all.get(id); if (!n || !hasImg(n)) throw new Error('recomendadas.json: la nota ' + id + ' no existe o no tiene foto'); return use(n); });   // exactamente 3, fijas (se reservan antes que la franja de secciones para que no se repitan ahi)
 // franja de secciones (reservada primero para que el flujo se arme con lo que sobra, mayormente Legislatura)
 mods = SECCIONES.map(c => { const p = pub.filter(n => n.categorias.includes(c)); const ph = take(p, 1, hasImg); return [c, [...ph, ...take(p, 2)]]; });
-if (kind === 'pdf') recom = recomendadas.ids.map(id => { const n = all.get(id); if (!n || !hasImg(n)) throw new Error('recomendadas.json: la nota ' + id + ' no existe o no tiene foto'); return use(n); });   // exactamente 3, fijas
 // superdestacadas de demostración (recurso a demanda): el campo `super` de la nota manda; si no hay, se usan sobrantes con foto grande
 superNotes = (() => {
   const marked = pub.filter(n => n.super === 'foto' || n.super === 'texto');
@@ -328,8 +328,8 @@ const FLOW_ANTERIOR = ['tapa', 'legis-diputados', 'f1', 'textos', 'f1', 'trio', 
 /* Orden propio para mobile (< 768 px): los dos módulos de legisladores van consecutivos. El FLOW de desktop no se toca: cada bloque lleva su posición mobile en --o y el CSS lo reordena solo en pantallas chicas. */
 const FLOW_MOBILE_ANTERIOR = ['tapa', 'legis-diputados', 'legis-senadores', 'f1', 'textos', 'f1', 'trio', 'linea', 'f2', 'linea', 'secciones', 'anunciantes', 'banner'];   // toda la publicidad al final, después de la franja de secciones
 /* home=pdf (default): el diseño de Juan (PDF "DISEÑO DB"). Se arma por etapas; por ahora igual al anterior. */
-const FLOW_PDF = ['tapa', 'uno-dos', 'legis-diputados', 'uno-dos-espejo', 'rodante-h', 'f2d', 'anunciantes', 'legis-senadores', 'f2s', 'recomendadas', 'linea', 'secciones', 'banner'];   // se completa por etapas: franja, recomendadas y grilla3
-const FLOW_MOBILE_PDF = ['tapa', 'uno-dos', 'legis-diputados', 'legis-senadores', 'uno-dos-espejo', 'f2d', 'f2s', 'recomendadas', 'linea', 'secciones', 'anunciantes', 'banner'];   // 'rodante-h' es solo desktop
+const FLOW_PDF = ['tapa', 'uno-dos', 'legis-diputados', 'uno-dos-espejo', 'rodante-h', 'f2d', 'anunciantes', 'legis-senadores', 'f2s', 'recomendadas', 'grilla3', 'linea', 'secciones', 'banner'];   // se completa por etapas: franja, recomendadas y grilla3
+const FLOW_MOBILE_PDF = ['tapa', 'uno-dos', 'legis-diputados', 'legis-senadores', 'uno-dos-espejo', 'f2d', 'f2s', 'recomendadas', 'grilla3', 'linea', 'secciones', 'anunciantes', 'banner'];   // 'rodante-h' es solo desktop
 const mobilePosOf = (FL, FM) => { const seen = {}; return FL.map(k => { const nth = seen[k] = (seen[k] ?? -1) + 1; let c = -1; return FM.findIndex(m => m === k && ++c === nth) + 1; }); };
 const F1_POOL = () => [f1a, f1b];
 let f1i = 0;
@@ -363,6 +363,8 @@ const BLOCKS = {
   f2s: () => band(`<div class="flow vr cols-2 f2">${f2s.map(n => card(n, { t: 'med', dek: true, big: true, sizes: SZ.s6 })).join('')}</div>`, 'f2band band--alt'),   // Formato 2 con notas del Senado
   /* Las recomendadas de la semana (pág. 4 del PDF): 3 notas fijas (data/recomendadas.json), foto 16:10, desktop: cintillo, título y "Por autor" arriba y la foto debajo; mobile: foto arriba; fondo crema; sin bajada ni pie de foto */
   recomendadas: () => band(`<div class="recom"><h2 class="recom__title"><span>${esc(recomendadas.titulo)}</span></h2><div class="recom__grid">${recom.map(n => card(n, { t: 'med', tf: true, sizes: SZ.s4, by: 'por', cls: 'card--recom' })).join('')}</div></div>`, 'recomband'),
+  /* grilla3 (pág. 4 del PDF): noticias comunes en 3 columnas x 2 filas (6 notas), tarjeta blanca con sombra suave, foto 16:9, cintillo, título y "Por autor"; para más filas, repetir 'grilla3' en el FLOW (cada una reparte otras 6 notas desde grid3) */
+  grilla3: () => band(`<div class="g3">${grid3.map(n => card(n, { t: 'med', sizes: SZ.s4, by: 'por', cls: 'card--g3' })).join('')}</div>`, 'g3band'),
   banner: () => band(hBanner(), 'adband'),
   linea: () => ruleDouble('rule-double--wrap'),
   anunciantes: () => adZone(),   // el rodante horizontal ya no va acá: está dentro del 1.º Formato 1 (v2.3.2)
