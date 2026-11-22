@@ -746,15 +746,15 @@ html[data-peso="900"]{--titulo-peso:900}
   .srow-ad{border-top:1px solid var(--filete-suave)}
 
   /* Formato 2 (y tapa2=chica): tarjeta compacta, texto a la izquierda y foto cuadrada (~35 % del ancho, estilo Clarín) a la derecha (v2.4) */
-  .f2 .card--med,.ud__side .card--med,html[data-tapa2="chica"] .card--tapa2{display:grid;grid-template-columns:minmax(0,1fr) 32%;column-gap:10px;align-items:start}
-  .f2 .card--med .fig,.ud__side .card--med .fig,html[data-tapa2="chica"] .card--tapa2 .fig{grid-column:2;grid-row:1;width:100%}
-  .f2 .card--med .card__txt,.ud__side .card--med .card__txt,html[data-tapa2="chica"] .card--tapa2 .card__txt{grid-column:1;grid-row:1;order:0;margin:0}
-  .f2 .card--med .thumb,.ud__side .card--med .thumb,html[data-tapa2="chica"] .card--tapa2 .thumb{aspect-ratio:1/1;width:100%}
-  .f2 .card--med .fig>.sectag,.ud__side .card--med .fig>.sectag,html[data-tapa2="chica"] .card--tapa2 .fig>.sectag{display:none}
+  .f2 .card--med,.ud__side .card--med,.strip .card--med,html[data-tapa2="chica"] .card--tapa2{display:grid;grid-template-columns:minmax(0,1fr) 32%;column-gap:10px;align-items:start}
+  .f2 .card--med .fig,.ud__side .card--med .fig,.strip .card--med .fig,html[data-tapa2="chica"] .card--tapa2 .fig{grid-column:2;grid-row:1;width:100%}
+  .f2 .card--med .card__txt,.ud__side .card--med .card__txt,.strip .card--med .card__txt,html[data-tapa2="chica"] .card--tapa2 .card__txt{grid-column:1;grid-row:1;order:0;margin:0}
+  .f2 .card--med .thumb,.ud__side .card--med .thumb,.strip .card--med .thumb,html[data-tapa2="chica"] .card--tapa2 .thumb{aspect-ratio:1/1;width:100%}
+  .f2 .card--med .fig>.sectag,.ud__side .card--med .fig>.sectag,.strip .card--med .fig>.sectag,html[data-tapa2="chica"] .card--tapa2 .fig>.sectag{display:none}
   .f2 .sectag--cmp,.ud__side .sectag--cmp,html[data-tapa2="chica"] .card--tapa2 .sectag--cmp{display:inline-block;margin-top:8px}
-  .f2 .card--med .cintillo,.ud__side .card--med .cintillo,html[data-tapa2="chica"] .card--tapa2 .cintillo{font-size:15px;margin:0 0 4px}
-  .f2 .card--med h3,.ud__side .card--med h3,html[data-tapa2="chica"] .card--tapa2 h2{font-size:20px;line-height:1.15}
-  .f2 .card--med .meta,.ud__side .card--med .meta,html[data-tapa2="chica"] .card--tapa2 .meta{display:none}
+  .f2 .card--med .cintillo,.ud__side .card--med .cintillo,.strip .card--med .cintillo,html[data-tapa2="chica"] .card--tapa2 .cintillo{font-size:15px;margin:0 0 4px}
+  .f2 .card--med h3,.ud__side .card--med h3,.strip .card--med h3,html[data-tapa2="chica"] .card--tapa2 h2{font-size:20px;line-height:1.15}
+  .f2 .card--med .meta,.ud__side .card--med .meta,.strip .card--med .meta,html[data-tapa2="chica"] .card--tapa2 .meta{display:none}
   .f2.flow>*{padding:var(--s2) 0}
   .f2.flow>:first-child{padding-top:0}
 
@@ -882,8 +882,8 @@ html[data-peso="900"]{--titulo-peso:900}
 
 /* v2.4 etapa C · pantallas chicas (<= 375 px): foto 30 % y titulo 19 px en el Formato 2 y tapa2=chica */
 @media (max-width:375px){
-  .f2 .card--med,.ud__side .card--med,html[data-tapa2="chica"] .card--tapa2{grid-template-columns:minmax(0,1fr) 30%}
-  .f2 .card--med h3,.ud__side .card--med h3,html[data-tapa2="chica"] .card--tapa2 h2{font-size:19px}
+  .f2 .card--med,.ud__side .card--med,.strip .card--med,html[data-tapa2="chica"] .card--tapa2{grid-template-columns:minmax(0,1fr) 30%}
+  .f2 .card--med h3,.ud__side .card--med h3,.strip .card--med h3,html[data-tapa2="chica"] .card--tapa2 h2{font-size:19px}
 }
 
 /* ============ v2.4 etapa D · etiqueta de seccion con menos protagonismo (?etiqueta=texto|caja, default texto) ============
@@ -1087,4 +1087,12 @@ html[data-texto3="1"] .t3band,html[data-grilla4="1"] .g4band{display:block}
   .super--texto{padding:12px 0}
   .stext{padding:16px 0 14px}
   .rule-double,html[data-diario="off"] .rule-double{margin-block:12px}
+}
+
+/* ============ v2.5 recortes mobile · franja de secciones con tarjeta compacta (miniatura al costado, sin bajada) y uno-dos chica con titulo de 19 px y foto al 32 % ============ */
+@media (max-width:767px){
+  .strip .card--med .dek{display:none}
+  .strip .card--med{margin-bottom:0}
+  .ud__side .card--ud{grid-template-columns:minmax(0,1fr) 32%}
+  .ud__side .card--ud h3{font-size:19px;line-height:1.17}
 }
