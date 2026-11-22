@@ -992,3 +992,7 @@ html:not([data-header="actual"]) .hdr__main .ibtn:hover{background:#000;color:#f
 .card--g3 .card__txt{order:0}
 @media (min-width:768px){.g3{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}}
 @media (max-width:767px){.g3band{padding:16px 0}.g3{gap:12px}}
+
+/* v2.5 ajustes grilla3 · sin etiqueta de seccion sobre la foto (excepcion de este bloque; el cintillo ya diferencia cada nota) y en mobile solo 3 tarjetas (la 2.ª fila es solo de desktop) */
+.card--g3 .fig>.sectag{display:none}
+@media (max-width:767px){.g3 .card--g3:nth-child(n+4){display:none}}

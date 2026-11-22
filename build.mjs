@@ -375,12 +375,23 @@ const BLOCKS = {
 const renderHome = (file, FL, FM, page) => {
   used.clear(); curPage = page; allocate(page); f1i = 0;
   const mob = mobilePosOf(FL, FM);
+  const superHtml = superNotes.map(superBlock);
+  const blocksHtml = FL.map((k, i) => BLOCKS[k]().replace(/^<(\w+)/, `<$1 style="--o:${mob[i]}"`));
+  /* index.html (home=pdf): el build FALLA si un mismo id de nota aparece mas de una vez en cualquier bloque (tarjetas con titulo y superdestacadas) */
+  if (page === 'pdf') {
+    const donde = new Map();
+    const scan = (html, nombre) => { for (const m of html.matchAll(/<h[23]><a href="nota-(\d+)\.html"|class="super__in" href="nota-(\d+)\.html"/g)) { const id = m[1] || m[2]; (donde.get(id) || donde.set(id, []).get(id)).push(nombre); } };
+    superHtml.forEach((h, i) => scan(h, 'superdestacada ' + (i + 1)));
+    blocksHtml.forEach((h, i) => scan(h, FL[i] + ' (posicion ' + (i + 1) + ')'));
+    const rep = [...donde].filter(([, v]) => v.length > 1);
+    if (rep.length) throw new Error('index.html: ' + rep.length + ' nota(s) repetida(s):\n' + rep.map(([id, v]) => '  - nota ' + id + ' (' + (all.get(+id)?.titulo || '?') + ') en: ' + v.join(' | ')).join('\n'));
+  }
   write(file, `${head('Diputados Bonaerenses · Maqueta', { page, extra: `<link rel="preload" as="image" fetchpriority="high" imagesrcset="assets/img/notas/${hero.id}-m.webp ${D(hero, 'm')[0]}w, assets/img/notas/${hero.id}-full.webp ${D(hero, 'full')[0]}w" imagesizes="(min-width:1024px) 700px, 100vw">` })}
 ${header('index.html')}
 <main id="main" class="home">
 <h1 class="sr">Diputados Bonaerenses: noticias de la Legislatura Bonaerense</h1>
-${superNotes.map(superBlock).join('\n')}
-${FL.map((k, i) => BLOCKS[k]().replace(/^<(\w+)/, `<$1 style="--o:${mob[i]}"`)).join('\n')}
+${superHtml.join('\n')}
+${blocksHtml.join('\n')}
 </main>
 ${footer()}`);
 };
