@@ -208,7 +208,16 @@ Retratos de `randomuser.me` en `assets/img/fantasia/01..24.jpg`, **128×128 y no
 **Medición v2.2 (13/11, `tools/perf.mjs`, 390 px, CPU ×4, red 1,6 Mbps / 150 ms, con scroll hasta el final):** index LCP 2,04 s · CLS 0,0000; seccion LCP 1,86 s · CLS 0,0000; diputados LCP 1,78 s · CLS 0,0000. No hizo falta ajustar el esqueleto ni el espacio del zócalo.
 **404:** era `/favicon.ico` (las páginas no declaraban ícono). Se agregó `assets/img/favicon.svg` y `<link rel="icon">`; `tools/find404.mjs` recorre todas las páginas a 390 y 1280 px y ya no reporta errores.
 
-## Publicar en una URL privada (todavía no desplegado)
+## Publicar en GitHub Pages (rama `gh-pages`)
+`main` nunca se sirve: Pages publica la rama **`gh-pages`**, que solo lleva los `*.html`, `assets/`, `robots.txt` y un `.nojekyll` (~16 MB). Quedan afuera `tools/`, `data/`, `build.mjs`, `auditorias/`, el README y los briefs. `capturas/`, `tools/node_modules/`, `capturas-tmp/` y `data/09_usuarios.csv` ni siquiera están versionados (están en `.gitignore`).
+```
+node build.mjs                       # 1. regenera el HTML
+node tools/publish.mjs               # 2. arma la rama local gh-pages con un unico commit (no toca el remoto)
+git push --force origin gh-pages     # 3. la sube (o: node tools/publish.mjs --push, que hace 2 y 3)
+```
+Cambio único en GitHub: Settings → Pages → Source = "Deploy from a branch", branch `gh-pages`, carpeta `/ (root)`. Pages ignora `_headers`, `netlify.toml` y `vercel.json`: solo valen `robots.txt` y el meta noindex de cada página (no es privado: cualquiera con la URL lo ve).
+
+## Publicar en una URL privada en Netlify o Vercel (alternativa, no usada)
 Archivos listos: `robots.txt` (`Disallow: /`), `_headers` y `netlify.toml` (Netlify), `vercel.json` y `.vercelignore` (Vercel), todos con `X-Robots-Tag: noindex, nofollow`; además cada HTML lleva `<meta name="robots" content="noindex,nofollow">`.
 1. `node build.mjs` (regenera HTML y `main.min.css`).
 2. **Netlify**: arrastrar la carpeta en app.netlify.com/drop, o `netlify deploy --prod --dir .`. Desde el panel, poner protección con contraseña o dominio con nombre no adivinable.
