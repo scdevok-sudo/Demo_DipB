@@ -40,6 +40,46 @@ Bloques: `tapa · legis-diputados · legis-senadores · f1 · f2 · banner · li
 
 **Volanta de Legislatura**: `SHOW_LEGISLATURA_LABEL = false` en `build.mjs` omite el texto "Legislatura Bonaerense" en las notas de esa categoría (tapa, formatos, listas laterales y notas vinculadas); las demás categorías conservan su volanta. Ponerlo en `true` lo revierte. No hay título "Legislatura Bonaerense" encima de ningún bloque; la página de la sección sí lo lleva. El dateline "LA PLATA" se mantiene.
 
+## v2.5 · Inicio según el PDF "DISEÑO DB" de Juan (`home=pdf`, default)
+Auditoría punto por punto contra el brief y el PDF: `capturas/auditoria-v2-5.md`.
+
+**Flujo desktop** (`FLOW_PDF` en `build.mjs`, una lista; mover un bloque = mover una palabra):
+```
+[super opcional] · franja (contador de sesiones + encuesta) · tapa de 3 · uno-dos · módulo Diputados · uno-dos espejado ·
+rodante horizontal (7 banners) · Formato 2 (notas de Diputados) · anunciantes · módulo Senadores · Formato 2 (Senado) ·
+recomendadas de la semana · grilla de 3 · [texto3] · [grilla4] · doble línea · franja de secciones · banner
+```
+Los bloques entre corchetes están apagados por defecto (`super`, `texto3`, `grilla4`). **Flujo mobile** (`FLOW_MOBILE_PDF`): contador en una línea arriba de la tapa, tapa, uno-dos, encuesta, Diputados, Senadores, espejo, Formato 2 (los dos), recomendadas, grilla de 3 (máx. 3 tarjetas), [opcionales], secciones, anunciantes y banner al final. El rodante horizontal es solo desktop. `home=anterior` (`index-anterior.html`) conserva el flujo previo a v2.5.
+
+**Bloques nuevos** (clases en `assets/css/main.css`, sección "v2.5 etapa …"):
+- **Tapa** (`tapa=foto-izq` por defecto): foto a la izquierda; las dos chicas llevan cintillo y título ARRIBA de la foto y la bajada debajo, con un filete fino entre la grande y la fila (interpretación de las marcas rojas del PDF).
+- **`uno-dos` y `uno-dos-espejo`** (`.ud`): una grande (foto 2:1, título 29 px, autor) a 55 % y dos chicas apiladas (texto + foto cuadrada) a 45 %, filete vertical; el espejo invierte los lados. Mobile: la grande arriba y las chicas compactas (título 19 px, foto 32 %).
+- **Recomendadas** (`.recomband`, `data/recomendadas.json`): exactamente 3 notas fijas, fondo `--recomendadas-bg`, título de bloque con filete de acento, "Por autor" y foto 16:10 debajo.
+- **Grilla de 3** (`.g3`): 3 × 2 tarjetas blancas con sombra suave, foto 16:9, cintillo, título y "Por autor". Mobile: 1 columna, 3 tarjetas.
+- **Franja superior** ("diseño a definir"; la marca solo se ve con `?demo=1`): contador de sesiones (`data/sesiones.json`) y encuesta (`data/encuesta.json`, el voto vive solo en memoria). Desktop: una franja de ~70 px con las dos zonas; mobile: contador de una línea arriba de la tapa y la encuesta como tarjeta después del uno-dos. En producción serán un shortcode o widget de WordPress (Hito 2).
+- **Opcionales** (apagados): `super=1` (carrusel de 3 notas, título arriba de la foto, flechas y puntos), `super=2` (solo texto centrado), `texto3=1` (3 columnas solo texto), `grilla4=1` (4 columnas × 2 filas, tarjetas con sombra suave). Ver la tabla de parámetros y "Superdestacada y WordPress".
+- **Franja de secciones**: 1 nota con foto + 2 de texto por columna; en mobile la nota con foto es una tarjeta compacta (miniatura cuadrada al costado, sin bajada).
+
+**Datos de fantasía y cómo cambiarlos** (todo en `data/`, se edita a mano y se corre `node build.mjs`):
+| Archivo | Qué es | Notas |
+|---|---|---|
+| `autores.json` | id de nota → autor ("Por …") | Nombres de fantasía; `node tools/gen-autores.mjs` completa los que falten. El build falla si una nota publicable no tiene autor. En producción: autor de WordPress o campo propio (Hito 2) |
+| `recomendadas.json` | `titulo` y `ids` (3) | Las 3 notas fijas de las recomendadas; no se generan solas |
+| `sesiones.json` | `anio`, `diputados`, `senado`, `proxima` (`camara`, `fecha` AAAA-MM-DD) | El texto de la próxima sesión ("jueves 26 de noviembre" / "jue 26/11") se arma desde la fecha. Si la fecha ya pasó, el build avisa por consola |
+| `encuesta.json` | `pregunta` y 2 o 3 `opciones` (`id`, `texto`, `votos`) | Pregunta neutra, sin nombres de políticos, medios ni encuestadoras |
+| `cintillos.json` | id de nota → cintillo | Texto libre de la redacción, hasta ~34 caracteres para que entre en una línea. No usar lugares tipo dateline ("La Plata") como cintillo |
+Las notas con `"super": "foto"` o `"super": "texto"` en el JSON mandan en `super=1`/`super=2`; hoy ninguna está marcada y se usan notas sobrantes.
+
+**Chequeo anti-repetidas**: al armar `index.html` el build recorre los títulos de todos los bloques (incluidos `super`, `texto3` y `grilla4`, aunque estén apagados) y **falla** si un mismo id de nota aparece más de una vez, listando las notas y los bloques. La última línea del build confirma "sin notas repetidas en el home". Las recomendadas se reservan antes de la franja de secciones por eso.
+
+**Panel `?demo=1`**: filas para `home`, `tapa`, `super`, `texto3`, `grilla4` y el resto; "Copiar link de esta variante" arma la URL con todos los parámetros.
+
+**Mobile (v2.5 etapa H y recortes)**: aire entre bloques ≤ ~24 px (12 + 12), filetes de 1 px, zonas tocables ≥ 44 px (opciones de la encuesta y puntos del carrusel incluidos), sin scroll horizontal a 360, 390, 412, 1280 y 1440. Altura del home mobile a 390 px: 11 619 px al empezar la etapa H, 10 568 px al cierre (con los recortes).
+
+**Rendimiento v2.5** (`tools/perf.mjs`, mobile con CPU 4x y red 4G lenta): home por defecto LCP 2,19 s, CLS 0,0000; con `super=1` LCP 3,04 s (la foto del carrusel pasa a ser la imagen mayor), CLS 0,0000. El LCP de desktop no se mide con esta herramienta.
+
+**Contenido**: el home por defecto usa solo notas, fotos y banners de la muestra del propio sitio y autores de fantasía; no hay notas, fotos, títulos ni autores de otros medios (el PDF los usa solo como referencia de estructura) ni nombres de encuestadoras. Sin pie de foto, sin "Anunciantes" ni "PUBLICIDAD".
+
 ## v2.3 · Cintillo y sección (etapa A)
 - **Cintillo** (texto libre de la redacción, siempre arriba del título) vive en `data/cintillos.json` (id de nota → texto; `tools/gen-cintillos.mjs` lo generó con frases de ejemplo y ahora se edita a mano). Si una nota no tiene cintillo, la tarjeta arranca con el título. En producción es **un campo editable en el editor de notas de WordPress** (requisito del Hito 2). Color: variable `--cintillo-color`.
 - **Sección** (categoría) es una etiqueta chica con fondo (`--seccion-bg`, `--seccion-fg`). Parámetro `seccion=foto|abajo` (default `foto`: sobre la foto, esquina inferior izquierda; `abajo`: debajo de la foto, a la derecha). En tarjetas sin foto va debajo del título.
@@ -90,7 +130,7 @@ Ejemplo: `index.html?demo=1&super=2&bajada=on`. "Copiar link de esta variante" a
 | `texto3` | **off** · 1 | v2.5 etapa G: bloque de notas solo texto en 3 columnas (cintillo, título y "Por autor"), después de la grilla de 3 columnas. Mobile: 1 columna con filetes |
 | `grilla4` | **off** · 1 | v2.5 etapa G: grilla de 4 columnas (2 filas de 4) con tarjetas de sombra suave, después del bloque anterior. Mobile: 1 columna, máximo 3 tarjetas |
 | `seccion` | **foto** · abajo | Etiqueta de sección: sobre la foto (esquina inferior izquierda, default) o debajo de la foto, a la derecha. En tarjetas sin foto va debajo del título |
-| `tapa` | **texto-izq** · foto-izq | Tapa desktop: texto a la izquierda y foto a la derecha (default), o al revés. Alias de links viejos: `izq` → `foto-izq`, `der` → `texto-izq` |
+| `tapa` | **texto-izq** · foto-izq | Tapa desktop: texto a la izquierda y foto a la derecha, o al revés. OJO: el default depende del archivo: `index.html` (home=pdf) sale con `foto-izq` (como el PDF); `index-anterior.html` con `texto-izq`. Alias de links viejos: `izq` → `foto-izq`, `der` → `texto-izq` |
 | `vermas` | **flecha** · boton | "Ver más de X" de la franja final: texto con flecha sin borde (default) o botón con borde |
 | `bajada` | **auto** · on · off | Bajada de las tarjetas. En mobile `auto` y `off` no la muestran; `on` la muestra. En desktop, `auto` la oculta en el Formato 1 (la tapa y el Formato 2 la mantienen) |
 | `ritmo` | **actual** · b · c | Desktop: ritmo del flujo del home. `b` = una nota grande y dos chicas con foto al costado en lugar del 2.º Formato 1; `c` = bloque de solo texto entre dos Formato 1. `actual` no cambia nada |
@@ -98,7 +138,7 @@ Ejemplo: `index.html?demo=1&super=2&bajada=on`. "Copiar link de esta variante" a
 | `peso` | 600 · **700** · 800 · 900 | Peso de los títulos de tarjetas y notas, en todas las pantallas (variable CSS `--titulo-peso`). Default 700 desde v2.4 (antes 800); 600 ya no es alias de 700 |
 | `etiqueta` | **texto** · caja | v2.4: etiqueta de sección bajo el título como texto gris chico sin caja (`--seccion-texto`), o la caja oscura de v2.3. La etiqueta sobre la foto (`seccion=foto`) baja a 10 px en el modo `texto`. La caja de la cabecera de la nota no cambia |
 | `header` | **prod** · actual | v2.4.1: paleta oficial del sitio en producción (`prod`, default): barra superior en `--brand-sky`, barra de menú en `--brand-blue` con el ítem activo en `--brand-sky`. `actual` = el azul oscuro anterior, solo para comparar. `marca` y `marca2` (v2.4) se eliminaron y redirigen a `prod` |
-| `home` | **pdf** · anterior | v2.5, solo desktop: el inicio es el diseño del PDF "DISEÑO DB" de Juan (`pdf`, default; se arma por etapas) o el flujo anterior a v2.5 (`anterior`, con el rodante horizontal en el medio del 1.º Formato 1). Son dos archivos: `index.html` e `index-anterior.html`; `?home=` redirige al que corresponde (el valor se recuerda en la sesión, así que el logo y el menú vuelven a la versión elegida). El panel `?demo=1` tiene la fila "Inicio (desktop)" |
+| `home` | **pdf** · anterior | v2.5, solo desktop: el inicio es el diseño del PDF "DISEÑO DB" de Juan (`pdf`, default) o el flujo anterior a v2.5 (`anterior`, con el rodante horizontal en el medio del 1.º Formato 1). Son dos archivos: `index.html` e `index-anterior.html`; `?home=` redirige al que corresponde (el valor se recuerda en la sesión, así que el logo y el menú vuelven a la versión elegida). El panel `?demo=1` tiene la fila "Inicio (desktop)" |
 | `tiempo` | **off** · on | Hora relativa ("Hace 2 horas") en las tarjetas. OJO: `hora` sigue siendo la franja "Última hora" (el brief asumía que `hora` era la de las tarjetas, por eso se creó `tiempo`) |
 | `ad` | **on** · off | Banner horizontal suelto del flujo, solo mobile (320×100); apagado colapsa. En desktop el horizontal es una slide del rodante |
 | `fondos` | **on** · off | Fondo suave del Formato 2 |
@@ -141,7 +181,7 @@ Retratos de `randomuser.me` en `assets/img/fantasia/01..24.jpg`, **128×128 y no
 | Real | Muestra / placeholder |
 |---|---|
 | Notas (titulares, bajadas, fotos, tags, fechas), 44 cuerpos, 32 banners | Legisladores (nombres, bloques, partidos) y retratos |
-| Menú de 7 ítems, logo | Biografía del perfil; pie de foto y crédito ("Foto: Archivo", `is-ph`); contacto del footer |
+| Menú de 7 ítems, logo | **Autores de las notas, contador de sesiones, encuesta y recomendadas (v2.5, fantasía en `data/`)**; biografía del perfil; pie de foto y crédito ("Foto: Archivo", `is-ph`); contacto del footer |
 
 **Horas relativas**: ("Hace 2 horas", "Ayer") se calculan contra `NOW_REF` = 2/11/2026 20:00 (el momento de la muestra de notas), no contra el reloj real, para que no digan "hace 6 días". La fecha de la cabecera sí es la del día. Si la maqueta se rehace con notas nuevas, actualizar `NOW_REF`.
 
