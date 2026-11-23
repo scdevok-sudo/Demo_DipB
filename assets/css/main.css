@@ -1170,3 +1170,11 @@ html:not([data-franja="1"]) .fr{display:none}
   .card--g3 .card__txt{flex:1}
   .card--recom .autor,.card--g3 .autor{margin-top:auto;padding-top:8px}
 }
+
+/* ============ v2.5.2 punto 2 · mas aire alrededor de la publicidad (solo desktop; mobile queda compacto, <= 24 px entre bloques) ============
+   Rodante horizontal: 24 px arriba (se suman los 24 del bloque de notas blanco de arriba) y 40 abajo (el bloque de abajo tiene fondo gris: el aire se mide hasta el borde del fondo).
+   Rodante de cuadrados: 40 px arriba y abajo. Los banners sueltos (.adband) no se muestran en desktop. */
+@media (min-width:768px){
+  .rodh{padding:24px 0 40px}
+  main.home>.adz{margin:0;padding:40px 0}
+}
