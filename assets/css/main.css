@@ -1179,3 +1179,16 @@ html:not([data-franja="1"]) .fr{display:none}
   html:not([data-home="anterior"]) main.home>.adz{margin:0;padding:40px 0}
   html:not([data-home="anterior"]) main.home>:is(.g3band,.g4band,.t3band)+.adz{padding:24px 0 16px}   /* v2.5.2 punto 3: antes de la doble linea de la franja de secciones; arriba se suman los 22 px del bloque blanco, abajo la doble linea (margen de 24) */
 }
+
+/* ============ v2.5.3 · nota principal de las paginas de seccion (desktop): misma receta que la tapa (v2.5.1 puntos 2 y 4) ============
+   Texto a la izquierda y foto a la derecha ~63 % del bloque en 5:3, para que la foto no sea mucho mas alta que el texto (antes: 82 px de aire arriba y abajo);
+   aire de la bajada de la seccion a la nota ~20 px y de la nota a la doble linea ~20 px. Mobile sin cambios. */
+@media (min-width:1024px){
+  .sec-hero{padding-bottom:4px}
+  html[data-tapa] .sec-tapa.tapa__lead{grid-template-columns:37fr 63fr;align-items:center;padding-bottom:0}
+  html[data-tapa="foto-izq"] .sec-tapa.tapa__lead{grid-template-columns:63fr 37fr}
+  .sec-tapa .thumb{aspect-ratio:15/8}
+  .sec-tapa h2{font-size:46px;line-height:1.08}
+  .sec-tapa .dek{font-size:22px;line-height:1.35}
+  .sec-tapa+.rule-double{margin-top:20px}
+}

@@ -122,3 +122,20 @@ Capturas en `capturas/v252-*.png`: tapa 1280 y 1440, recomendadas 1280, grilla d
 | 3 · Rodante de cuadrados | Sale de entre el Formato 2 de Diputados y el módulo Senadores y va después de la grilla de 3 (y de `texto3` / `grilla4` si están encendidas), justo antes de la doble línea y la franja de secciones. `FLOW_PDF` y el README actualizados; `FLOW_MOBILE_PDF` no cambia | Orden a 1280: … recomendadas > grilla3 > publicidad > doble línea > franja de secciones. Mobile: …> franja de secciones > publicidad > banner. `index-anterior.html`: orden y espacios idénticos a antes, 0 overflow a 360 y 1280 y 0 errores de consola (las reglas nuevas se acotaron con `html:not([data-home="anterior"])`) |
 
 **Controles de siempre** (`tools/audit-v251.mjs`, por defecto y con `franja=1&unodos=alterna&texto3=1&grilla4=1`) en 360, 390, 412, 1280 y 1440: 0 px de overflow horizontal, 0 `figcaption`, sin rótulos "PUBLICIDAD" ni "Anunciantes", contraste mínimo 4,59:1 (ningún texto bajo AA), 0 zonas tocables menores de 44 px en mobile, aire entre bloques en mobile ≤ 24 px, build con "sin notas repetidas en el home". Rendimiento (`tools/perf.mjs`): mobile LCP 1,97 y 2,04 s, CLS 0,0000; desktop 1280 LCP 0,40 y 0,41 s, CLS 0,0021; 1440 LCP 0,38 y 0,40 s, CLS 0,0018.
+
+## v2.5.3 · nota principal de las páginas de sección (un commit, sin push)
+
+`seccion.html` es la única página con este componente (`.sec-tapa`: la nota principal con texto a la izquierda y foto a la derecha); los perfiles, `diputados.html`, `senadores.html` y los listados no lo usan, así que no se tocó nada ahí. Se aplicó la receta de la tapa (v2.5.1) solo en desktop (≥ 1024 px). Capturas: `capturas/v253-seccion-d1280.png` y `v253-seccion-d1440.png`.
+
+| Medida (px) | 1280 antes | 1280 después | 1440 antes | 1440 después | 390 antes y después |
+|---|---|---|---|---|---|
+| Bajada de la sección → nota principal | 32 | 20 | 32 | 20 | 32 |
+| Foto → doble línea de abajo | 49 | 21 | 49 | 21 | 12 |
+| Aire del texto arriba / abajo de la foto | 82 / 82 | 23 / 23 | 82 / 82 | 23 / 23 | — |
+| Foto (ancho × alto) | 686 × 457 (57 %, 3:2) | 741 × 395 (61 % del bloque, 63 % sin la separación) | igual | igual | 390 × 244 |
+| Título | 46 px, 4 líneas | 46 px, 5 líneas | igual | igual | 27 px, 3 líneas |
+| Alto del bloque | 482 | 396 | 482 | 396 | 525 |
+
+**Decisiones por conflicto entre pedidos.** Con la foto al 63 % y en 5:3 (445 px de alto) el texto de esta nota ("Minnaard reclamó obras para Bahía Blanca ante la amenaza de El Niño") queda con 48 px de aire arriba y abajo, no 24. Para llegar a ~24 se llevó la foto a 15:8 (en vez de 5:3) y la bajada a 22 px, como en la tapa. Y la columna de texto, al ser más angosta (37 %), parte el título en 5 líneas a 46 px; a 44 px da 4 líneas pero el aire sube a 80 px. Se dejó 46 px y 5 líneas. Si se prefiere 4 líneas o 5:3 exactos, es un ajuste de una línea en el CSS.
+
+Mobile: idéntico a antes (mismas medidas, 0 px de overflow horizontal a 360, 390 y 412). Controles de siempre en `seccion.html` a 360, 390, 412, 1280 y 1440: 0 px de overflow, 0 `figcaption`, contraste mínimo 4,87:1; rendimiento (`tools/perf.mjs`): mobile LCP 2,02 y 2,05 s, CLS 0,0000; desktop 1280 LCP 0,24 s, CLS 0,0038; 1440 LCP 0,28 s, CLS 0,0018. El home sigue con "sin notas repetidas en el home" (el build no cambió su reparto).
