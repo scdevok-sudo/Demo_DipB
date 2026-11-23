@@ -340,7 +340,7 @@ const F1_POOL = () => [f1a, f1b];
 let f1i = 0;
 const unoDos = ([g, c1, c2], espejo) => band(`<div class="ud${espejo ? ' ud--espejo' : ''}"><div class="ud__big">${card(g, { t: 'med', h: 2, big: true, sizes: SZ.s6, by: 'caps', cls: 'card--udbig' })}</div><div class="ud__side">${[c1, c2].map(n => card(n, { t: 'med', sizes: SZ.s3, by: 'caps', cls: 'card--ud' })).join('')}</div></div>`, 'udband');
 const BLOCKS = {
-  tapa: () => band(`<div class="tapa">
+  tapa: () => band(`<div class="tapa${curPage === 'pdf' ? ' tapa--pdf' : ''}">
   <article class="card card--lead tapa__lead">
     ${fig(hero, { sizes: SZ.lead, big: true, eager: true, alt: hero.titulo })}
     <div class="card__txt">${kick(hero)}<h2><a href="${noteHref(hero)}">${esc(hero.titulo)}</a></h2><p class="dek">${esc(hero.extracto)}</p>${vermas(hero)}<div class="meta">${rel(hero)}</div></div>

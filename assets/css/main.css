@@ -1125,3 +1125,16 @@ html[data-texto3="1"] .t3band,html[data-grilla4="1"] .g4band{display:block}
 @media (max-width:411px){:root{--chica-foto:36%}}
 @media (max-width:389px){:root{--chica-foto:34%}}
 @media (max-width:374px){:root{--chica-foto:32%}}
+
+/* ============ v2.5.1 punto 2 · nota principal de la tapa con mas protagonismo (solo home=pdf: .tapa--pdf) ============
+   Mobile: foto a ancho completo 4:3, titulo 28 px (peso 700, interlineado 1.15). Desktop: foto ~63 % del bloque, titulo 50 px, bajada 22 px, texto centrado respecto de la foto. */
+@media (max-width:767px){
+  .tapa--pdf .card--lead .thumb{aspect-ratio:4/3;height:auto}
+  .tapa--pdf .card--lead h2{font-size:28px;line-height:1.15;font-weight:var(--titulo-peso)}
+}
+@media (min-width:1024px){
+  .tapa--pdf .tapa__lead{grid-template-columns:63fr 37fr;align-items:center}
+  html[data-tapa="texto-izq"] .tapa--pdf .tapa__lead{grid-template-columns:37fr 63fr}
+  .tapa--pdf .card--lead h1,.tapa--pdf .card--lead h2{font-size:50px;line-height:1.08}
+  .tapa--pdf .card--lead .dek{font-size:22px;line-height:1.35}
+}
