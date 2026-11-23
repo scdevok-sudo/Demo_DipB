@@ -17,10 +17,10 @@
   /* Paleta oficial (v2.4.1, tomada del sitio en producción): todos los azules salen de estos tokens */
   --brand-sky:#3daef4;--brand-blue:#1b75bb;--brand-blue-dk:color-mix(in srgb,var(--brand-blue) 94%,#000);
   --accent:var(--brand-sky);--accent-text:var(--brand-blue);
-  --paper:#fff;--paper-tint:#f6f3ee;--tint-blue:#eef6fd;
+  --paper:#fff;--paper-tint:#f3f5f7;--tint-blue:#eef6fd;
   --font-title:"Source Serif 4","Serif Fallback",Georgia,"Times New Roman",serif;
   --font-ui:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --cintillo-color:var(--accent-text);--modulo-legisladores-bg:#eeeeee;--fondo-f2:#f2f2f2;--filete-modulo:#d6d6d6;--seccion-bg:var(--brand-blue);--seccion-fg:#fff;--seccion-texto:var(--muted);--header-bg:var(--brand-sky);--recomendadas-bg:#fbf1e3;
+  --cintillo-color:var(--accent-text);--modulo-legisladores-bg:#eeeeee;--fondo-f2:#f2f2f2;--filete-modulo:#d6d6d6;--seccion-bg:var(--brand-blue);--seccion-fg:#fff;--seccion-texto:var(--muted);--header-bg:var(--brand-sky);--recomendadas-bg:#edf3f8;
   --s1:8px;--s2:16px;--s3:24px;--s4:32px;--s5:48px;--s6:64px;
   --wrap:1240px;--gut:16px;--gap:16px;
   --ease:cubic-bezier(.2,.7,.2,1);
@@ -380,7 +380,7 @@ html[data-ad="off"] .adbanner{display:none}
 .avatar{position:relative;display:grid;place-items:center;border-radius:50%;background:var(--brand-blue);color:#fff;font:800 28px var(--font-title);aspect-ratio:1/1;width:100%;overflow:hidden;box-shadow:0 0 0 3px #fff,0 0 0 4px var(--rule-hair)}
 .avatar__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%}
 html[data-fotos="iniciales"] .avatar__img{display:none}
-.tag-ejemplo{display:inline-block;font:600 10.5px/1 var(--font-ui);text-transform:uppercase;letter-spacing:.06em;background:#fff3c4;color:#6b4e00;padding:4px 7px;white-space:nowrap}
+.tag-ejemplo{display:inline-block;font:600 10.5px/1 var(--font-ui);text-transform:uppercase;letter-spacing:.06em;background:#d7e6f2;color:var(--ink);padding:4px 7px;white-space:nowrap}
 html[data-fotos="iniciales"] .on-ej,html:not([data-fotos="iniciales"]) .on-ini{display:none}
 .lcar{position:relative}
 .lcar__track{display:flex;gap:var(--s2);overflow-x:auto;scroll-snap-type:x mandatory;margin:0 calc(var(--gut) * -1);padding:8px var(--gut) 12px;scrollbar-width:none;touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
@@ -412,7 +412,7 @@ html[data-fotos="iniciales"] .on-ej,html:not([data-fotos="iniciales"]) .on-ini{d
 .filters label{font:600 13px var(--font-ui);color:var(--ink-2);display:grid;gap:4px}
 .filters select{min-height:44px;border:1px solid var(--rule-hair);border-radius:4px;padding:0 10px;font:16px var(--font-ui);background:#fff}
 @media (min-width:600px){.filters{grid-template-columns:1fr 1fr auto;align-items:end}}
-.notice{background:#fff8dc;border:1px solid #f1dc86;color:#5b4500;padding:12px 14px;font:14px var(--font-ui);margin:0 0 var(--s3)}
+.notice{background:#edf3f8;border:1px solid #c5d8e8;color:var(--ink);padding:12px 14px;font:14px var(--font-ui);margin:0 0 var(--s3)}
 
 /* ============ Nota interna ============ */
 .crumbs{font:400 13px var(--font-ui);color:var(--muted);padding:var(--s2) 0 0}
