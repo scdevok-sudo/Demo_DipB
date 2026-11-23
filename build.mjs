@@ -17,12 +17,13 @@ const SECTION_AD_EVERY = 10;        // mobile, secciones internas: un slot 300x2
 const SECTION_TOTAL = 120;          // notas que se pueden "scrollear" en la sección (se reutilizan con ids distintos)
 const SECTION_CHUNK = 10;
 const SHOW_FECHA_EN_NOTA = true;    // dentro de la página de la nota se conserva la fecha de publicación (false la saca)
+const SHOW_AUTOR = false;           // v2.5.4 (pedido de Santi): sin autores en ninguna parte del sitio. false = el parametro autores arranca en off y el CSS oculta todo .autor; true = arranca en 1. data/autores.json y la opcion `by` de las tarjetas se conservan; ?autores=1 los muestra
 const SHOW_TAPA_RELACIONADAS = false; // desktop: false oculta las 2 notas relacionadas (con guión) bajo la bajada de la nota principal; el markup se conserva, true las vuelve a mostrar
 const HEADER_MENU_MOBILE = false;   // mobile: false = las tres barritas viven solo en el zócalo; true = también arriba a la derecha
 /* Valores por defecto de cada parámetro (se pisan con ?param=valor, que se recuerda en la sesión). Ver README. */
-const DEFAULTS = { seccion: 'foto', super: 'off', texto3: 'off', grilla4: 'off', franja: 'off', unodos: 'derecha', tapa: 'texto-izq', vermas: 'flecha', bajada: 'auto', ad: 'on', fondos: 'on', fotos: 'ejemplo', font: 'actual', hora: 'off', diario: 'on', credito: 'on', tiempo: 'off', peso: '700', tapa2: 'normal', ritmo: 'actual', etiqueta: 'texto', header: 'prod', home: 'pdf' };
+const DEFAULTS = { seccion: 'foto', super: 'off', texto3: 'off', grilla4: 'off', autores: SHOW_AUTOR ? '1' : 'off', franja: 'off', unodos: 'derecha', tapa: 'texto-izq', vermas: 'flecha', bajada: 'auto', ad: 'on', fondos: 'on', fotos: 'ejemplo', font: 'actual', hora: 'off', diario: 'on', credito: 'on', tiempo: 'off', peso: '700', tapa2: 'normal', ritmo: 'actual', etiqueta: 'texto', header: 'prod', home: 'pdf' };
 const OPTIONS = {
-  seccion: ['foto', 'abajo'], super: ['off', '1', '2'], texto3: ['off', '1'], grilla4: ['off', '1'], franja: ['off', '1'], unodos: ['derecha', 'alterna'], tapa: ['texto-izq', 'foto-izq'], vermas: ['flecha', 'boton'], bajada: ['auto', 'on', 'off'],
+  seccion: ['foto', 'abajo'], super: ['off', '1', '2'], texto3: ['off', '1'], grilla4: ['off', '1'], franja: ['off', '1'], autores: ['off', '1'], unodos: ['derecha', 'alterna'], tapa: ['texto-izq', 'foto-izq'], vermas: ['flecha', 'boton'], bajada: ['auto', 'on', 'off'],
   ad: ['on', 'off'], fondos: ['on', 'off'], fotos: ['ejemplo', 'iniciales'], font: ['actual', 'merriweather', 'literata'], hora: ['on', 'off'], diario: ['on', 'off'], credito: ['on', 'off'], tiempo: ['off', 'on'], peso: ['600', '700', '800', '900'], tapa2: ['normal', 'chica'], ritmo: ['actual', 'b', 'c'], etiqueta: ['texto', 'caja'], header: ['prod', 'actual'], home: ['pdf', 'anterior'],
 };
 

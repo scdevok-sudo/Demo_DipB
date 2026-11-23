@@ -1192,3 +1192,7 @@ html:not([data-franja="1"]) .fr{display:none}
   .sec-tapa .dek{font-size:22px;line-height:1.35}
   .sec-tapa+.rule-double{margin-top:20px}
 }
+
+/* ============ v2.5.4 · sin autores en ninguna parte del sitio (pedido de Santi); ?autores=1 los vuelve a mostrar ============
+   El markup queda en el HTML (display:none: no se ve ni lo leen los lectores de pantalla). Los datos siguen en data/autores.json. */
+html:not([data-autores="1"]) .autor{display:none}
