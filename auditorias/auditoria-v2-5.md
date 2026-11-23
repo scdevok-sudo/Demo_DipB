@@ -80,3 +80,33 @@ Resultado: **cumple** en todo. Lo único que sigue pendiente depende de Juan (ve
 
 - Los valores de `super` son `1` y `2` en lugar de `foto` y `texto` (con alias para los links viejos); `super=2` cambió de significado.
 - El título de la tarjeta chica del uno-dos "Nanni exige la finalización de la colectora…" ocupa 6 líneas a 360 y 390 px y 5 a 412 px; Santi decidió dejarlo así, sin acortar el título.
+
+## v2.5.1 · cambios de Santi sobre la v2.5 (un commit por punto, sin push)
+
+Estos cambios reemplazan lo que dicen las tablas de arriba sobre la franja de sesiones y encuesta (ahora apagada por defecto), el fondo crema de las recomendadas, la pastilla amarilla y la posición de la nota grande del primer uno-dos. Capturas nuevas en `capturas/v251-*.png` (tapa mobile 390, tapa desktop 1280, recomendadas, módulo Diputados, uno-dos 1 y 2, franja de secciones mobile 390).
+
+| Punto | Qué se hizo | Medición |
+|---|---|---|
+| 1 · Foto de la tarjeta compacta mobile (franja de secciones, Formato 2, uno-dos chica) | Foto por ancho de pantalla con la variable `--chica-foto`: 38 % desde 412 px, 36 % de 390 a 411, 34 % de 375 a 389, 32 % hasta 374. Un 36 % único o 38 % único hacían que el título de Nanni pasara de 6 líneas en 360 y 390 | Líneas máximas de título a 360 / 390 / 412: franja de secciones 5 / 5 / 5, Formato 2 5 / 5 / 5, uno-dos chica 6 / 6 / 6 (Nanni 6 / 6 / 6). `tools/audit-v251-fotochica.mjs` |
+| 2 · Nota principal de la tapa | Mobile: foto a ancho completo 4:3, título 28 px, peso 700, interlineado 1,15. Desktop (1280 y 1440): foto 65/35 (63 % del bloque), título 52 px (46 px entre 1024 y 1263), bajada 22 px (20 px), texto centrado respecto de la foto | `tools/audit-v251-aire.mjs` |
+| 3 · Franja de sesiones y encuesta | Apagada por defecto en desktop y mobile (también la encuesta mobile); `franja=1` la enciende. Código y JSON intactos; está en el panel `?demo=1`, en "Copiar link" y en el README | `tools/test-v251-franja.mjs`: elegir, "Votar", barras 42 / 27 / 31 %, alto de la encuesta estable (72 → 72 px mobile, 33 → 33 desktop). El build sigue diciendo "sin notas repetidas en el home" |
+| 4 · Menos blanco en la tapa | Ver la tabla de abajo | |
+| 5 · Sin amarillo | `--recomendadas-bg` #fbf1e3 → **#edf3f8**; pastilla "FOTO DE EJEMPLO" #fff3c4 → #d7e6f2 con texto `--ink`; además el aviso `.notice` de los perfiles (amarillo), `--paper-tint` #f6f3ee (crema, ahora #f3f5f7) y los puntos del rodante (#b9b3a8, ahora #b8bec4). Ya no queda ningún amarillo ni crema en CSS, JS, build ni HTML | Contraste sobre el fondo elegido (cintillo y "Por autor" con `--brand-blue-dk`, 16 y 13 px, peso 600): **4,82:1**; etiqueta de sección sobre la foto 4,87:1; título 14,23:1. Con #e8f0f6 daba 4,68:1 (también pasaba). Se eligió #edf3f8 por el margen. Pastilla 12,49:1. `tools/audit-v251-contraste.mjs` |
+| 6 · Uno-dos | Las dos instancias con la nota grande a la derecha, con notas distintas en cada una (413216, 412334, 413203 y 413192, 413105, 412689); `unodos=alterna` vuelve al PDF. Mobile sin cambios (grande arriba) | `tools/test-v251-unodos.mjs` |
+
+**Aire de la tapa, antes (v2.5) y después (v2.5.1):**
+
+| Medida | 390 px antes | 390 px después | 1280 px antes | 1280 px después |
+|---|---|---|---|---|
+| Padding superior del bloque | 12 | 12 | 24 | 12 |
+| Padding inferior del bloque | 12 | 12 | 24 | 12 |
+| Padding bajo la nota principal (hasta el filete) | 12 | 12 | 24 | 16 |
+| Aire arriba del cintillo (desde el elemento anterior) | 12 | 11 | — | — |
+| Cintillo → título | 4 | 4 | — | — |
+| Título → foto | 12 | 12 | — | — |
+| Margen lateral de la foto | 0 (a ancho completo) | 0 | 36 | 20 |
+| Aire del texto respecto de la foto, arriba y abajo | — | — | 82 y 82 | 17 y 17 |
+
+(En mobile el aire ya cumplía ≤ 12 px; se dejó fijado. En desktop el bloque de la tapa sale 16 px a cada lado solo desde 1264 px de ancho, y la foto pasó de 3:2 a 5:3.)
+
+**Controles de siempre** (`tools/audit-v251.mjs`, default y con `franja=1`, `unodos=alterna`, `super=1` y `super=2&texto3=1&grilla4=1`) en 360, 390, 412, 1280 y 1440: sin scroll horizontal; 0 `figcaption`, sin "LA PLATA", "PUBLICIDAD" ni "Anunciantes"; contraste mínimo del texto del home 4,59:1 (ningún texto bajo AA); en mobile 0 zonas tocables menores de 44 px (se corrigieron las flechas y los puntos del rodante de anunciantes, que medían 32 y 22 × 20 px) y ningún espacio entre bloques sobre 24 px. Rendimiento (`tools/perf.mjs`): mobile LCP 2,03 a 2,05 s y CLS 0,0000; desktop 1280 LCP 0,36 a 0,41 s y CLS 0,0021; 1440 LCP 0,38 a 0,42 s y CLS 0,0018.

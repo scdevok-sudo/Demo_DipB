@@ -364,7 +364,7 @@ html[data-ad="off"] .adbanner{display:none}
 .adr__arrow:hover{color:var(--ink)}
 .adr__arrow svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .adr__dot{width:24px;height:32px;border:0;background:transparent;cursor:pointer;display:grid;place-items:center;padding:0}
-.adr__dot::before{content:"";width:8px;height:8px;border-radius:50%;background:#b9b3a8;transition:all .2s}
+.adr__dot::before{content:"";width:8px;height:8px;border-radius:50%;background:#b8bec4;transition:all .2s}
 .adr__dot[aria-current="true"]::before{background:var(--ink);width:20px;border-radius:6px}
 .adbox{margin:0}
 .adbox__in{display:block;aspect-ratio:300/250;background:var(--paper-tint)}
@@ -1155,3 +1155,9 @@ html:not([data-franja="1"]) .fr{display:none}
   .tapa--pdf .card--lead .thumb{aspect-ratio:5/3}
 }
 @media (min-width:1264px){.tapa--pdf{margin-inline:calc(var(--gut) * -1)}}   /* solo cuando el bloque ya esta centrado con margen blanco a los lados */
+
+/* ============ v2.5.1 · controles del rodante de anunciantes: zonas tocables de 44 px en mobile (el aire visual no cambia: el area extra se superpone con margen negativo) ============ */
+@media (max-width:767px){
+  .adr__arrow{width:44px;height:44px;margin:-12px -6px}
+  .adr__dot{width:44px;height:44px;margin:-12px 0}
+}
