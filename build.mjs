@@ -20,9 +20,9 @@ const SHOW_FECHA_EN_NOTA = true;    // dentro de la página de la nota se conser
 const SHOW_TAPA_RELACIONADAS = false; // desktop: false oculta las 2 notas relacionadas (con guión) bajo la bajada de la nota principal; el markup se conserva, true las vuelve a mostrar
 const HEADER_MENU_MOBILE = false;   // mobile: false = las tres barritas viven solo en el zócalo; true = también arriba a la derecha
 /* Valores por defecto de cada parámetro (se pisan con ?param=valor, que se recuerda en la sesión). Ver README. */
-const DEFAULTS = { seccion: 'foto', super: 'off', texto3: 'off', grilla4: 'off', franja: 'off', tapa: 'texto-izq', vermas: 'flecha', bajada: 'auto', ad: 'on', fondos: 'on', fotos: 'ejemplo', font: 'actual', hora: 'off', diario: 'on', credito: 'on', tiempo: 'off', peso: '700', tapa2: 'normal', ritmo: 'actual', etiqueta: 'texto', header: 'prod', home: 'pdf' };
+const DEFAULTS = { seccion: 'foto', super: 'off', texto3: 'off', grilla4: 'off', franja: 'off', unodos: 'derecha', tapa: 'texto-izq', vermas: 'flecha', bajada: 'auto', ad: 'on', fondos: 'on', fotos: 'ejemplo', font: 'actual', hora: 'off', diario: 'on', credito: 'on', tiempo: 'off', peso: '700', tapa2: 'normal', ritmo: 'actual', etiqueta: 'texto', header: 'prod', home: 'pdf' };
 const OPTIONS = {
-  seccion: ['foto', 'abajo'], super: ['off', '1', '2'], texto3: ['off', '1'], grilla4: ['off', '1'], franja: ['off', '1'], tapa: ['texto-izq', 'foto-izq'], vermas: ['flecha', 'boton'], bajada: ['auto', 'on', 'off'],
+  seccion: ['foto', 'abajo'], super: ['off', '1', '2'], texto3: ['off', '1'], grilla4: ['off', '1'], franja: ['off', '1'], unodos: ['derecha', 'alterna'], tapa: ['texto-izq', 'foto-izq'], vermas: ['flecha', 'boton'], bajada: ['auto', 'on', 'off'],
   ad: ['on', 'off'], fondos: ['on', 'off'], fotos: ['ejemplo', 'iniciales'], font: ['actual', 'merriweather', 'literata'], hora: ['on', 'off'], diario: ['on', 'off'], credito: ['on', 'off'], tiempo: ['off', 'on'], peso: ['600', '700', '800', '900'], tapa2: ['normal', 'chica'], ritmo: ['actual', 'b', 'c'], etiqueta: ['texto', 'caja'], header: ['prod', 'actual'], home: ['pdf', 'anterior'],
 };
 
@@ -338,7 +338,7 @@ const FLOW_MOBILE_PDF = ['tapa', 'uno-dos', 'legis-diputados', 'legis-senadores'
 const mobilePosOf = (FL, FM) => { const seen = {}; return FL.map(k => { const nth = seen[k] = (seen[k] ?? -1) + 1; let c = -1; return FM.findIndex(m => m === k && ++c === nth) + 1; }); };
 const F1_POOL = () => [f1a, f1b];
 let f1i = 0;
-const unoDos = ([g, c1, c2], espejo) => band(`<div class="ud${espejo ? ' ud--espejo' : ''}"><div class="ud__big">${card(g, { t: 'med', h: 2, big: true, sizes: SZ.s6, by: 'caps', cls: 'card--udbig' })}</div><div class="ud__side">${[c1, c2].map(n => card(n, { t: 'med', sizes: SZ.s3, by: 'caps', cls: 'card--ud' })).join('')}</div></div>`, 'udband');
+const unoDos = ([g, c1, c2], espejo) => band(`<div class="ud ${espejo ? 'ud--espejo' : 'ud--a'}"><div class="ud__big">${card(g, { t: 'med', h: 2, big: true, sizes: SZ.s6, by: 'caps', cls: 'card--udbig' })}</div><div class="ud__side">${[c1, c2].map(n => card(n, { t: 'med', sizes: SZ.s3, by: 'caps', cls: 'card--ud' })).join('')}</div></div>`, 'udband');
 const BLOCKS = {
   tapa: () => band(`<div class="tapa${curPage === 'pdf' ? ' tapa--pdf' : ''}">
   <article class="card card--lead tapa__lead">

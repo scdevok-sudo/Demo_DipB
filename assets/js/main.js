@@ -143,6 +143,7 @@
       ['texto3', 'Notas de texto en 3 columnas', [['off', 'No'], ['1', 'Sí']]],
       ['grilla4', 'Grilla de 4 columnas', [['off', 'No'], ['1', 'Sí']]],
       ['franja', 'Franja de sesiones y encuesta', [['off', 'No'], ['1', 'Sí']]],
+      ['unodos', 'Uno-dos (grande a la derecha en ambos)', [['derecha', 'Ambos con la grande a la derecha'], ['alterna', 'Alterna (como el PDF)']]],
       ['seccion', 'Etiqueta de sección', [['foto', 'Sobre la foto'], ['abajo', 'Debajo de la foto']]],
       ['etiqueta', 'Etiqueta de sección bajo el título', [['texto', 'Texto gris'], ['caja', 'Caja oscura']]],
       ['header', 'Barra superior y menú', [['prod', 'Oficial (celeste y azul)'], ['actual', 'Navy anterior']]],

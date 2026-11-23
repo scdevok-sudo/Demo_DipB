@@ -931,11 +931,11 @@ html[data-header="actual"]{--header-bg:#0b2236}
 .autor--por{text-transform:none;letter-spacing:0;font-size:13px;color:var(--accent-text)}
 @media (min-width:768px){
   .ud{display:grid;grid-template-columns:55fr 45fr;column-gap:var(--gap);align-items:start}
-  .ud--espejo{grid-template-columns:45fr 55fr}
-  .ud--espejo .ud__big{order:2}
+  .ud--espejo,html:not([data-unodos="alterna"]) .ud--a{grid-template-columns:45fr 55fr}
+  .ud--espejo .ud__big,html:not([data-unodos="alterna"]) .ud--a .ud__big{order:2}
   .ud__side{position:relative;display:grid;align-content:start}
   .ud__side::before{content:"";position:absolute;left:calc(var(--gap) / -2);top:0;bottom:0;border-left:1px solid var(--rule-hair);pointer-events:none}
-  .ud--espejo .ud__side::before{left:auto;right:calc(var(--gap) / -2)}
+  .ud--espejo .ud__side::before,html:not([data-unodos="alterna"]) .ud--a .ud__side::before{left:auto;right:calc(var(--gap) / -2)}
   html[data-diario="off"] .ud__side::before{display:none}
   .card--udbig .thumb{aspect-ratio:2/1;height:auto}
   .card--udbig .card__txt{margin-top:14px}
@@ -946,9 +946,9 @@ html[data-header="actual"]{--header-bg:#0b2236}
   .ud__side .card--ud .card__txt{grid-column:1;grid-row:1;order:0;margin:0}
   .ud__side .card--ud .thumb{aspect-ratio:1/1;width:100%;height:auto}
   .ud__side .card--ud h3{font-size:22px;line-height:1.17}
-  .ud--espejo .ud__side .card--ud{grid-template-columns:36% minmax(0,1fr)}
-  .ud--espejo .ud__side .card--ud .fig{grid-column:1}
-  .ud--espejo .ud__side .card--ud .card__txt{grid-column:2}
+  .ud--espejo .ud__side .card--ud,html:not([data-unodos="alterna"]) .ud--a .ud__side .card--ud{grid-template-columns:36% minmax(0,1fr)}
+  .ud--espejo .ud__side .card--ud .fig,html:not([data-unodos="alterna"]) .ud--a .ud__side .card--ud .fig{grid-column:1}
+  .ud--espejo .ud__side .card--ud .card__txt,html:not([data-unodos="alterna"]) .ud--a .ud__side .card--ud .card__txt{grid-column:2}
 }
 @media (max-width:767px){
   /* mobile: la nota grande arriba y las dos chicas debajo, con la tarjeta compacta del Formato 2 (reglas compartidas) */
