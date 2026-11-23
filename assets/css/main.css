@@ -1138,3 +1138,6 @@ html[data-texto3="1"] .t3band,html[data-grilla4="1"] .g4band{display:block}
   .tapa--pdf .card--lead h1,.tapa--pdf .card--lead h2{font-size:50px;line-height:1.08}
   .tapa--pdf .card--lead .dek{font-size:22px;line-height:1.35}
 }
+
+/* ============ v2.5.1 punto 3 · franja de sesiones y encuesta apagada por defecto (?franja=1 la enciende; el codigo y los JSON siguen) ============ */
+html:not([data-franja="1"]) .fr{display:none}

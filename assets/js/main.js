@@ -142,6 +142,7 @@
       ['super', 'Superdestacada', [['off', 'Sin ella'], ['1', '1 · foto, 3 notas con flechas'], ['2', '2 · solo texto']]],
       ['texto3', 'Notas de texto en 3 columnas', [['off', 'No'], ['1', 'Sí']]],
       ['grilla4', 'Grilla de 4 columnas', [['off', 'No'], ['1', 'Sí']]],
+      ['franja', 'Franja de sesiones y encuesta', [['off', 'No'], ['1', 'Sí']]],
       ['seccion', 'Etiqueta de sección', [['foto', 'Sobre la foto'], ['abajo', 'Debajo de la foto']]],
       ['etiqueta', 'Etiqueta de sección bajo el título', [['texto', 'Texto gris'], ['caja', 'Caja oscura']]],
       ['header', 'Barra superior y menú', [['prod', 'Oficial (celeste y azul)'], ['actual', 'Navy anterior']]],
