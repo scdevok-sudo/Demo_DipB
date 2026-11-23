@@ -917,7 +917,7 @@ html[data-header="actual"]{--header-bg:#0b2236}
   .tapa__two--tf{row-gap:0;grid-template-rows:auto auto auto}
   .tapa__two--tf>.span-6{display:grid;grid-row:span 3;grid-template-rows:subgrid}
   .tapa__two--tf .card--tf{display:grid;grid-row:1/-1;grid-template-rows:subgrid;justify-content:stretch}
-  .tapa__two--tf .card--tf .card__txt{order:0;margin:0 0 12px;align-self:end}
+  .tapa__two--tf .card--tf .card__txt{order:0;margin:0 0 12px;align-self:start}
   .tapa__two--tf .card--tf .fig{order:1}
   .tapa__two--tf .card--tf>.dek{order:2;margin-top:10px}
 }
@@ -1160,4 +1160,13 @@ html:not([data-franja="1"]) .fr{display:none}
 @media (max-width:767px){
   .adr__arrow{width:44px;height:44px;margin:-12px -6px}
   .adr__dot{width:44px;height:44px;margin:-12px 0}
+}
+
+/* ============ v2.5.2 punto 1 · alineacion arriba entre columnas (desktop) ============
+   Tapa (dos notas chicas): cintillo y titulo arrancan arriba de su celda de la subgrid (antes quedaban pegados abajo); el aire extra queda debajo del titulo mas corto.
+   Recomendadas y grilla3: cintillo y titulo arriba y "Por autor" en la misma linea del fondo del texto (margin-top:auto), igual entre columnas. */
+@media (min-width:768px){
+  .card--recom .card__txt,.card--g3 .card__txt{display:flex;flex-direction:column}
+  .card--g3 .card__txt{flex:1}
+  .card--recom .autor,.card--g3 .autor{margin-top:auto;padding-top:8px}
 }
