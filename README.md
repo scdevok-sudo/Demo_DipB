@@ -46,9 +46,10 @@ Auditoría punto por punto contra el brief y el PDF: `auditorias/auditoria-v2-5.
 **Flujo desktop** (`FLOW_PDF` en `build.mjs`, una lista; mover un bloque = mover una palabra):
 ```
 [super opcional] · [franja: contador de sesiones + encuesta, apagada] · tapa de 3 · uno-dos · módulo Diputados · uno-dos espejado ·
-rodante horizontal (7 banners) · Formato 2 (notas de Diputados) · anunciantes · módulo Senadores · Formato 2 (Senado) ·
-recomendadas de la semana · grilla de 3 · [texto3] · [grilla4] · doble línea · franja de secciones · banner
+rodante horizontal (7 banners) · Formato 2 (notas de Diputados) · módulo Senadores · Formato 2 (Senado) ·
+recomendadas de la semana · grilla de 3 · [texto3] · [grilla4] · anunciantes (rodante de cuadrados) · doble línea · franja de secciones · banner
 ```
+**v2.5.2:** el rodante de cuadrados (`anunciantes`) pasó de entre el Formato 2 de Diputados y el módulo Senadores a justo antes de la franja de secciones (después de la grilla de 3); el rodante horizontal de arriba no se movió. En desktop hay ≥ 40 px de aire entre cada bloque de publicidad y las notas (el rodante horizontal 24 arriba y 40 abajo, hasta el borde del fondo gris; los cuadrados 24 arriba y 16 + la doble línea abajo). Mobile no cambia: la publicidad sigue al final, después de las secciones, con el espaciado compacto. `index-anterior.html` no se tocó (su `FLOW_ANTERIOR` y sus espacios son los de antes; las reglas nuevas están acotadas con `html:not([data-home="anterior"])`). Alineación: en la tapa, el uno-dos, las recomendadas y la grilla de 3 el cintillo y el título arrancan a la misma altura entre columnas (el aire extra queda debajo del título más corto) y "Por autor" se alinea al pie del texto.
 Los bloques entre corchetes están apagados por defecto (`super`, `franja`, `texto3`, `grilla4`). **Flujo mobile** (`FLOW_MOBILE_PDF`): [contador en una línea arriba de la tapa, apagado], tapa, uno-dos, [encuesta, apagada], Diputados, Senadores, espejo, Formato 2 (los dos), recomendadas, grilla de 3 (máx. 3 tarjetas), [opcionales], secciones, anunciantes y banner al final. El rodante horizontal es solo desktop. `home=anterior` (`index-anterior.html`) conserva el flujo previo a v2.5.
 
 **Bloques nuevos** (clases en `assets/css/main.css`, sección "v2.5 etapa …"):

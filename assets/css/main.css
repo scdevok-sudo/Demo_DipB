@@ -1176,5 +1176,6 @@ html:not([data-franja="1"]) .fr{display:none}
    Rodante de cuadrados: 40 px arriba y abajo. Los banners sueltos (.adband) no se muestran en desktop. */
 @media (min-width:768px){
   .rodh{padding:24px 0 40px}
-  main.home>.adz{margin:0;padding:40px 0}
+  html:not([data-home="anterior"]) main.home>.adz{margin:0;padding:40px 0}
+  html:not([data-home="anterior"]) main.home>:is(.g3band,.g4band,.t3band)+.adz{padding:24px 0 16px}   /* v2.5.2 punto 3: antes de la doble linea de la franja de secciones; arriba se suman los 22 px del bloque blanco, abajo la doble linea (margen de 24) */
 }

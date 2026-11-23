@@ -3,7 +3,7 @@ import { chromium } from 'playwright';
 const b = await chromium.launch();
 for (const w of (process.argv.slice(2).length ? process.argv.slice(2) : ['1280', '1440', '390']).map(Number)) {
   const mob = w < 768; const p = await (await b.newContext({ viewport: { width: w, height: 900 }, isMobile: mob, hasTouch: mob })).newPage();
-  await p.goto((process.env.BASE || 'http://127.0.0.1:8765/') + 'index.html' + (process.env.Q ? '?' + process.env.Q : '')); await p.waitForTimeout(500);
+  await p.goto((process.env.BASE || 'http://127.0.0.1:8765/') + (process.env.PAGE || 'index') + '.html' + (process.env.Q ? '?' + process.env.Q : '')); await p.waitForTimeout(500);
   const r = await p.evaluate(() => {
     const kids = [...document.querySelectorAll('main.home>*')].filter(e => e.offsetParent && e.getBoundingClientRect().height > 0 && !e.classList.contains('sr'));
     const info = kids.map(e => { const r = e.getBoundingClientRect(), cs = getComputedStyle(e); const isAd = e.matches('.rodh,.adz,.adband');
