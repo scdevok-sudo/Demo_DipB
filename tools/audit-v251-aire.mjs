@@ -4,7 +4,7 @@ const BASE = process.env.BASE || 'http://127.0.0.1:8765/';
 const q = process.argv[2] ? '?' + process.argv[2] : '';
 const b = await chromium.launch();
 const R = e => e.getBoundingClientRect();
-for (const [w, h, mob] of [[390, 844, true], [1280, 800, false]]) {
+for (const [w, h, mob] of (process.env.VPS || '390,844,1;1280,800,0').split(';').map(v => v.split(',').map(Number)).map(([a, b2, c]) => [a, b2, !!c])) {
   const ctx = await b.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, isMobile: mob, hasTouch: mob });
   const p = await ctx.newPage(); await p.goto(BASE + 'index.html' + q); await p.waitForTimeout(600);
   const r = await p.evaluate(() => {

@@ -1133,11 +1133,25 @@ html[data-texto3="1"] .t3band,html[data-grilla4="1"] .g4band{display:block}
   .tapa--pdf .card--lead h2{font-size:28px;line-height:1.15;font-weight:var(--titulo-peso)}
 }
 @media (min-width:1024px){
-  .tapa--pdf .tapa__lead{grid-template-columns:63fr 37fr;align-items:center}
-  html[data-tapa="texto-izq"] .tapa--pdf .tapa__lead{grid-template-columns:37fr 63fr}
-  .tapa--pdf .card--lead h1,.tapa--pdf .card--lead h2{font-size:50px;line-height:1.08}
-  .tapa--pdf .card--lead .dek{font-size:22px;line-height:1.35}
+  .tapa--pdf .tapa__lead{grid-template-columns:65fr 35fr;align-items:center}
+  html[data-tapa="texto-izq"] .tapa--pdf .tapa__lead{grid-template-columns:35fr 65fr}
+  .tapa--pdf .card--lead h1,.tapa--pdf .card--lead h2{font-size:46px;line-height:1.08}
+  .tapa--pdf .card--lead .dek{font-size:20px;line-height:1.35}
+}
+@media (min-width:1264px){
+  .tapa--pdf .card--lead h1,.tapa--pdf .card--lead h2{font-size:52px}
+  .tapa--pdf .card--lead .dek{font-size:22px}
 }
 
 /* ============ v2.5.1 punto 3 · franja de sesiones y encuesta apagada por defecto (?franja=1 la enciende; el codigo y los JSON siguen) ============ */
 html:not([data-franja="1"]) .fr{display:none}
+
+/* ============ v2.5.1 punto 4 · menos blanco en la tapa (home=pdf) ============
+   Desktop: menos padding arriba y abajo del bloque, el bloque sale 16 px a cada lado (la foto queda a 20 px del borde en vez de 36) y la foto 5:3, para que el texto
+   quede a <= 24 px de aire arriba y abajo respecto de la foto. Mobile: aire cintillo / titulo / foto <= 12 px (ya cumplia; se fija aca). */
+@media (min-width:1024px){
+  .band--tapa{padding-top:12px;padding-bottom:12px}
+  .tapa--pdf .tapa__lead{padding-bottom:16px}
+  .tapa--pdf .card--lead .thumb{aspect-ratio:5/3}
+}
+@media (min-width:1264px){.tapa--pdf{margin-inline:calc(var(--gut) * -1)}}   /* solo cuando el bloque ya esta centrado con margen blanco a los lados */
