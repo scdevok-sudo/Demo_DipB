@@ -945,7 +945,7 @@ html[data-header="actual"]{--header-bg:#0b2236}
   .ud__side .card--ud .fig{grid-column:2;grid-row:1}
   .ud__side .card--ud .card__txt{grid-column:1;grid-row:1;order:0;margin:0}
   .ud__side .card--ud .thumb{aspect-ratio:1/1;width:100%;height:auto}
-  .ud__side .card--ud h3{font-size:22px;line-height:1.17}
+  .ud__side .card--ud h3{font-size:23px;line-height:1.28}   /* v2.5.5: antes 22 px / 1,17 */
   .ud--espejo .ud__side .card--ud,html:not([data-unodos="alterna"]) .ud--a .ud__side .card--ud{grid-template-columns:36% minmax(0,1fr)}
   .ud--espejo .ud__side .card--ud .fig,html:not([data-unodos="alterna"]) .ud--a .ud__side .card--ud .fig{grid-column:1}
   .ud--espejo .ud__side .card--ud .card__txt,html:not([data-unodos="alterna"]) .ud--a .ud__side .card--ud .card__txt{grid-column:2}

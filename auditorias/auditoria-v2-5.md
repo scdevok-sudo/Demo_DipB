@@ -149,3 +149,19 @@ Se sacó todo autor visible del sitio: "Por autor" y el autor en mayúsculas gri
 - **Controles** en 360, 390, 412, 1280 y 1440 (`tools/audit-v251.mjs`, con autores apagados y con `autores=1`): 0 px de overflow horizontal, 0 `figcaption`, contraste mínimo 4,59:1, 0 zonas tocables menores de 44 px y aire entre bloques ≤ 24 px en mobile, "sin notas repetidas en el home". Rendimiento: mobile LCP 2,03 y 2,02 s, CLS 0,0000; desktop 1280 con CLS 0,0021. Capturas: `capturas/v254-tapa-d1280.png`, `v254-recomendadas-d1280.png` y `v254-home-m390.png`.
 
 **v2.5.4 (ajuste): autores fuera del HTML publicado.** Con `SHOW_AUTOR = false` el build ya no emite el markup `.autor` (antes quedaba oculto con CSS). `node tools/check-autores.mjs` revisa los 73 HTML y los archivos de `assets/` (79 archivos): 0 coincidencias con los 103 nombres de `autores.json` y 0 `class="autor`. `tools/publish.mjs` copia solo los `.html`, `assets/`, `robots.txt` y `.nojekyll`, así que `data/autores.json` no se publica. Un build de prueba con `SHOW_AUTOR = true` muestra los autores, con `autores=off` desaparecen y la fila "Autores" aparece en el panel `?demo=1`. Alineación a 1280 y 1440: 0 px de diferencia en cintillo, título y foto en tapa, uno-dos, recomendadas y grilla de 3.
+
+## v2.5.5 · título de las tarjetas chicas del uno-dos (desktop)
+
+Solo las dos tarjetas chicas de cada uno-dos (normal y espejo), solo desde 768 px: título de 22 px / interlineado 1,17 a **23 px / 1,28**. Mobile (19 px) y el ancho de la foto, la nota grande y las demás tarjetas no cambian. Se probaron 23 px con 1,22, 1,25 y 1,28 y se eligió 1,28, que deja el texto más parejo con la foto sin pasarla. Capturas: `capturas/v255-unodos-{1,2}-d{1280,1440}.png`.
+
+| Tarjeta (1280 y 1440, idéntico) | Antes: texto / foto (px) | Después: texto / foto (px) | Líneas de título después |
+|---|---|---|---|
+| Uno-dos normal, chica 1 | 103 / 191 | 114 / 191 | 3 |
+| Uno-dos normal, chica 2 | 129 / 191 | 144 / 191 | 4 |
+| Uno-dos espejo, chica 1 (Nanni) | 129 / 191 | 173 / 191 | 5 |
+| Uno-dos espejo, chica 2 | 129 / 191 | 144 / 191 | 4 |
+
+- **Condición "el texto no supera la foto":** prueba de estrés (`tools/stress-v255.mjs`) que pone en cada una de las 4 tarjetas cada uno de los 125 títulos distintos de `data/`: máximo 5 líneas y 173 px de texto contra 191 px de foto, 0 casos con el texto más alto que la foto, a 1280 y a 1440. No hizo falta bajar a 22 px.
+- **Alineación:** 0 px de diferencia entre el cintillo, el título y la foto de cada fila (el texto arranca arriba, como estaba) y entre la foto de la grande y el cintillo de la chica 1. Las dos tarjetas apiladas quedan parejas (cada una usa su propia celda).
+- **Otras tarjetas horizontales:** Formato 2 (22 px, texto 180 contra foto 176) ya llena la foto: no se tocó. La franja de secciones no es horizontal en desktop.
+- **Controles** (`tools/audit-v251.mjs`, 360 a 1440): sin scroll horizontal, 0 `figcaption`, contraste mínimo 4,59:1, "sin notas repetidas en el home".
