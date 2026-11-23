@@ -142,7 +142,6 @@
       ['super', 'Superdestacada', [['off', 'Sin ella'], ['1', '1 · foto, 3 notas con flechas'], ['2', '2 · solo texto']]],
       ['texto3', 'Notas de texto en 3 columnas', [['off', 'No'], ['1', 'Sí']]],
       ['grilla4', 'Grilla de 4 columnas', [['off', 'No'], ['1', 'Sí']]],
-      ['autores', 'Autores ("Por autor") en las notas', [['off', 'No'], ['1', 'Sí']]],
       ['franja', 'Franja de sesiones y encuesta', [['off', 'No'], ['1', 'Sí']]],
       ['unodos', 'Uno-dos (grande a la derecha en ambos)', [['derecha', 'Ambos con la grande a la derecha'], ['alterna', 'Alterna (como el PDF)']]],
       ['seccion', 'Etiqueta de sección', [['foto', 'Sobre la foto'], ['abajo', 'Debajo de la foto']]],
@@ -163,6 +162,7 @@
       ['diario', 'Detalles de diario', [['on', 'Con'], ['off', 'Sin']]],
       ['credito', 'Crédito de foto', [['on', 'Sí'], ['off', 'No']]],
     ];
+    if (document.querySelector('.autor')) rows.splice(3, 0, ['autores', 'Autores ("Por autor") en las notas', [['off', 'No'], ['1', 'Sí']]]);   // solo si el HTML se construyo con SHOW_AUTOR=true
     const box = document.createElement('div'); box.className = 'demo';
     box.innerHTML = '<div class="demo__box" id="demo-box"><h2>Variantes</h2></div><button class="demo__btn" type="button" aria-expanded="false" aria-controls="demo-box">Variantes</button>';
     const inner = $('.demo__box', box);

@@ -17,7 +17,7 @@ const SECTION_AD_EVERY = 10;        // mobile, secciones internas: un slot 300x2
 const SECTION_TOTAL = 120;          // notas que se pueden "scrollear" en la sección (se reutilizan con ids distintos)
 const SECTION_CHUNK = 10;
 const SHOW_FECHA_EN_NOTA = true;    // dentro de la página de la nota se conserva la fecha de publicación (false la saca)
-const SHOW_AUTOR = false;           // v2.5.4 (pedido de Santi): sin autores en ninguna parte del sitio. false = el parametro autores arranca en off y el CSS oculta todo .autor; true = arranca en 1. data/autores.json y la opcion `by` de las tarjetas se conservan; ?autores=1 los muestra
+const SHOW_AUTOR = false;           // v2.5.4 (pedido de Santi): sin autores en ninguna parte del sitio. false = el build NO emite el markup .autor (el HTML publicado no contiene ningun nombre de autores.json); true = lo emite y autores arranca en 1 (build de demo). data/autores.json y la opcion `by` de las tarjetas se conservan; ?autores=1 los muestra
 const SHOW_TAPA_RELACIONADAS = false; // desktop: false oculta las 2 notas relacionadas (con guión) bajo la bajada de la nota principal; el markup se conserva, true las vuelve a mostrar
 const HEADER_MENU_MOBILE = false;   // mobile: false = las tres barritas viven solo en el zócalo; true = también arriba a la derecha
 /* Valores por defecto de cada parámetro (se pisan con ?param=valor, que se recuerda en la sesión). Ver README. */
@@ -210,7 +210,7 @@ const card = (n, { t = 'med', dek = false, h = 3, tf = false, cap = false, eager
   const title = `<h${h}><a href="${noteHref(n)}">${lead ? lt() : esc(n.titulo)}</a></h${h}>`;
   const kicker = kick(n), below = secTag(n, 'sectag--t');
   const meta = `<div class="meta">${rel(n)}</div>`;
-  const au = by ? `<span class="autor${by === 'por' ? ' autor--por' : ''}">${by === 'por' ? 'Por ' : ''}${esc(n.autor)}</span>` : '';   // autor de FANTASIA (data/autores.json): 'caps' = MAYÚSCULAS grises chicas, 'por' = "Por …"
+  const au = SHOW_AUTOR && by ? `<span class="autor${by === 'por' ? ' autor--por' : ''}">${by === 'por' ? 'Por ' : ''}${esc(n.autor)}</span>` : '';   // autor de FANTASIA (data/autores.json): 'caps' = MAYÚSCULAS grises chicas, 'por' = "Por …"
   const dk = dek ? `<p class="dek">${esc(n.extracto)}</p>` : '';   // dekAfter: la bajada va después de la foto (tapa del PDF: cintillo y título, foto, bajada)
   if (t === 'txt') return `<article class="card card--txt ${cls}">${kicker}${title}${below}${au}${meta}</article>`;
   if (t === 'sm') return `<article class="card card--sm ${cls}"><div class="card__txt">${kicker}${title}${below}${meta}</div>${thumb(n, { sizes: SZ.sm })}</article>`;
@@ -316,11 +316,11 @@ const legOne = (cam, titulo, href) => { const L = legs.filter(l => l.cam === cam
 
 /* ================================================================ superdestacada (recurso a demanda, apilable) */
 /* super=1: carrusel de 3 notas (cintillo, titulo ARRIBA de la foto, "Por autor", foto ~2,4:1) con flechas sobre la foto y puntos; las 3 diapositivas se apilan en la misma celda de una grilla para que la altura no salte al cambiar */
-const superFoto = () => `<section class="super super--foto" data-s="1" aria-roledescription="carrusel" aria-label="Superdestacada: 3 notas"><div class="wrap"><div class="scar" data-scar><div class="scar__track">${superNotes.map((n, i) => `<article class="scar__slide${i ? '' : ' is-on'}" aria-label="${i + 1} de ${superNotes.length}"${i ? ' aria-hidden="true"' : ''}>${kick(n)}<h2><a href="${noteHref(n)}"${i ? ' tabindex="-1"' : ''}>${esc(n.titulo)}</a></h2><span class="autor autor--por">Por ${esc(n.autor)}</span>
+const superFoto = () => `<section class="super super--foto" data-s="1" aria-roledescription="carrusel" aria-label="Superdestacada: 3 notas"><div class="wrap"><div class="scar" data-scar><div class="scar__track">${superNotes.map((n, i) => `<article class="scar__slide${i ? '' : ' is-on'}" aria-label="${i + 1} de ${superNotes.length}"${i ? ' aria-hidden="true"' : ''}>${kick(n)}<h2><a href="${noteHref(n)}"${i ? ' tabindex="-1"' : ''}>${esc(n.titulo)}</a></h2>${SHOW_AUTOR ? `<span class="autor autor--por">Por ${esc(n.autor)}</span>` : ''}
 <div class="scar__stage">${fig(n, { sizes: SZ.full, big: true, alt: n.titulo })}<button type="button" class="scar__btn scar__btn--prev" data-d="-1" aria-label="Nota anterior">‹</button><button type="button" class="scar__btn scar__btn--next" data-d="1" aria-label="Nota siguiente">›</button></div>
 <div class="scar__dots">${superNotes.map((_, j) => `<button type="button" class="scar__dot" data-i="${j}" aria-label="Ir a la nota ${j + 1} de ${superNotes.length}"${j === i ? ' aria-current="true"' : ''}></button>`).join('')}</div></article>`).join('')}</div></div></div></section><script>if(document.documentElement.getAttribute('data-super')==='1'){var i=document.querySelector('.scar__slide img');if(i){i.setAttribute('fetchpriority','high');i.loading='eager'}}</script>`;
 /* super=2: solo texto, centrado, sin foto: cintillo, titulo grande, "Por autor", entre dos filetes finos */
-const superSoloTexto = () => { const n = superTexto; return `<section class="super super--texto" data-s="2" aria-label="Superdestacada"><div class="wrap"><div class="stext">${kick(n)}<h2><a href="${noteHref(n)}">${esc(n.titulo)}</a></h2><span class="autor autor--por">Por ${esc(n.autor)}</span></div></div></section>`; };
+const superSoloTexto = () => { const n = superTexto; return `<section class="super super--texto" data-s="2" aria-label="Superdestacada"><div class="wrap"><div class="stext">${kick(n)}<h2><a href="${noteHref(n)}">${esc(n.titulo)}</a></h2>${SHOW_AUTOR ? `<span class="autor autor--por">Por ${esc(n.autor)}</span>` : ''}</div></div></section>`; };
 
 /* ================================================================ index.html */
 const band = (inner, cls = '') => `<section class="band ${cls}"><div class="wrap">${inner}</div></section>`;
